@@ -1,11 +1,21 @@
-body {
+/* ===== Reset básico ===== */
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
   font-family: Arial, sans-serif;
   background: #f4f4f4;
   color: #333;
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
+/* ===== Hero da página inicial ===== */
 header.hero {
   background: linear-gradient(to bottom, #60036e, #430244);
   color: white;
@@ -26,6 +36,7 @@ p {
   font-size: 1.1rem;
 }
 
+/* ===== Conteúdo principal ===== */
 main.conteudo {
   margin: 30px auto;
   max-width: 800px;
@@ -33,26 +44,33 @@ main.conteudo {
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  flex: 1; /* empurra o rodapé pra baixo */
 }
 
+/* ===== Rodapé ===== */
 footer {
-  margin-top: 30px;
   background: #222;
   color: #aaa;
   padding: 10px;
   font-size: 0.9rem;
+  text-align: center;
+  position: fixed;   /* sempre fixo */
+  bottom: 0;         /* gruda no fundo */
+  left: 0;
+  width: 100%;
 }
 
 /* ===== Navbar ===== */
 .navbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start; /* <<< AGORA ALINHA PRA ESQUERDA */
   align-items: center;
-  background: #200025; /* azul estilo NFL Fantasy */
+  background: #200025;
   padding: 12px 30px;
   position: sticky;
   top: 0;
   z-index: 1000;
+  gap: 40px; /* espaço entre o logo/título e os links */
 }
 
 /* Lado esquerdo (logo + nome) */
@@ -93,6 +111,10 @@ footer {
 }
 
 /* Lado direito (botão login, etc) */
+.nav-right {
+  margin-left: auto; /* mantém botão login à direita */
+}
+
 .nav-right .btn-login {
   background: #fff;
   color: #00a2ff;
