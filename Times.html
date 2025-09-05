@@ -1,55 +1,58 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>SuperCopa B.C.F.C</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8" />
+    <title>SuperCopa B.C.F.C</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="nav-left">
-      <img src="img/logoBCFC.png" alt="Logo do BCFC" class="logo" />
-      <span class="titulo-site">SuperCopa B.C.F.C</span>
-    </div>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <img src="img/logoBCFC.png" alt="Logo do BCFC" class="logo" />
+            <span class="titulo-site">SuperCopa B.C.F.C</span>
+        </div>
 
-    <button class="nav-toggle" aria-expanded="false" aria-label="Abrir menu">☰</button>
+        <button class="nav-toggle" aria-expanded="false" aria-label="Abrir menu">☰</button>
 
-    <ul class="nav-center">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="MinhaLiga.html">Minha Liga</a></li>
-      <li><a href="Times.html" class="ativo">Times</a></li>
-      <li><a href="Jogadores.html">Jogadores</a></li>
-    </ul>
-  </nav>
+        <ul class="nav-center">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="MinhaLiga.html">Minha Liga</a></li>
+            <li><a href="Times.html" class="ativo">Times</a></li>
+            <li><a href="Jogadores.html">Jogadores</a></li>
+        </ul>
+    </nav>
 
-  <!-- Hero -->
-  <header class="hero"></header>
+    <!-- Hero -->
+    <header class="hero"></header>
 
-  <!-- Conteúdo -->
-  <main class="conteudo">
-    <section>
-      <h2>Times</h2>
-      <p>Em breve: lista de times, cores, jogadores e estatísticas.</p>
-    </section>
-  </main>
+    <!-- Conteúdo -->
+    <main class="conteudo">
+        <section>
+            <h2>Times</h2>
+            <p>Em breve: lista de times, cores, jogadores e estatísticas.</p>
+        </section>
+    </main>
 
-  <!-- Rodapé -->
-  <footer>
-    <p>&copy; 2025 SuperCopa B.C.F.C - Todos os direitos reservados</p>
-  </footer>
+    <!-- Rodapé -->
+    <footer>
+        <p>&copy; 2025 SuperCopa B.C.F.C - Todos os direitos reservados</p>
+    </footer>
 
-  <!-- JS: menu mobile -->
-  <script>
-    const nav = document.querySelector('.navbar');
-    const btn = document.querySelector('.nav-toggle');
-    if (nav && btn) {
-      btn.addEventListener('click', () => {
-        const open = nav.classList.toggle('open');
-        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-      });
-    }
-  </script>
+    <!-- JS: menu mobile -->
+    <script>
+        const nav = document.querySelector('.navbar');
+        const btn = document.querySelector('.nav-toggle');
+        if (nav && btn) {
+            btn.addEventListener('click', () => {
+                const open = nav.classList.toggle('open');
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+        }
+    </script>
 </body>
+
 </html>

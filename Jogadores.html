@@ -1,173 +1,258 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>SuperCopa B.C.F.C</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8" />
+    <title>SuperCopa B.C.F.C</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body class="interna">
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="nav-left">
-      <img src="img/logoBCFC.png" alt="Logo do BCFC" class="logo" />
-      <span class="titulo-site">SuperCopa B.C.F.C</span>
-    </div>
-
-    <button class="nav-toggle" aria-expanded="false" aria-label="Abrir menu">☰</button>
-
-    <ul class="nav-center">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="MinhaLiga.html">Minha Liga</a></li>
-      <li><a href="Times.html">Times</a></li>
-      <li><a href="Jogadores.html" class="ativo">Jogadores</a></li>
-    </ul>
-  </nav>
-
-  <!-- Hero (oculto em páginas internas via CSS body.interna .hero {display:none}) -->
-  <header class="hero"></header>
-
-  <!-- Conteúdo -->
-  <main class="conteudo">
-    <section class="lista-container">
-      <h2 class="lista-titulo">Lista de Jogadores</h2>
-
-      <!-- Barra de filtros -->
-      <div class="filtros">
-        <div class="filtro-esq">
-          <input id="busca" type="search" placeholder="Buscar por nome ou time…" aria-label="Buscar jogador" />
-          <select id="posicao" aria-label="Filtrar por posição">
-            <option value="">Todas as posições</option>
-            <option value="LINHA">Linha</option>
-            <option value="GOLEIRO">Goleiro</option>
-          </select>
-          <select id="time" aria-label="Filtrar por time">
-            <option value="">Todos os times</option>
-            <option value="Preto">Preto</option>
-            <option value="Azul">Azul</option>
-            <option value="Branco">Branco</option>
-            <option value="Amarelo">Amarelo</option>
-
-          </select>
-        </div>
-        <div class="filtro-dir">
-          <label class="lbl-ordenar" for="ordenar">Ordenar:</label>
-          <select id="ordenar" aria-label="Ordenar por">
-            <option value="nome-asc">Nome (A–Z)</option>
-            <option value="nome-desc">Nome (Z–A)</option>
-            <option value="datas-desc">Datas (↓)</option>
-            <option value="datas-asc">Datas (↑)</option>
-            <option value="gols-desc">Gols (↓)</option>
-            <option value="gols-asc">Gols (↑)</option>
-          </select>
-          <button id="limpar" type="button">Limpar</button>
-        </div>
-      </div>
-
-      <div class="tabela-jogadores">
-        <!-- Cabeçalho -->
-        <div class="tabela-head">
-          <button class="th sort" data-sort="nome">Jogador</button>
-          <button class="th sort center" data-sort="datas">Datas</button>
-          <button class="th sort center" data-sort="gols">Gols</button>
-          <div class="col col-dia">Dia 1</div>
-          <div class="col col-dia">Dia 2</div>
-          <div class="col col-dia">Dia 3</div>
-          <div class="col col-dia">Dia 4</div>
-          <div class="col col-dia">Final</div>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <img src="img/logoBCFC.png" alt="Logo do BCFC" class="logo" />
+            <span class="titulo-site">SuperCopa B.C.F.C</span>
         </div>
 
-        <!-- Corpo da tabela: jogadores reais -->
-        <div class="tabela-body">
-          <!-- Thiago -->
-          <div class="tabela-row"
-               data-nome="Thiago"
-               data-posicao="LINHA"
-               data-time="Preto"
-               data-datas="1"
-               data-gols="5">
-            <div class="col col-jogador">
-              <div class="jogador-cell">
-                <div class="avatar"><img src="img/Thiago.png" alt="Thiago" /></div>
-                <div class="jogador-info">
-                  <div class="jogador-nome">Thiago</div>
-                  <div class="jogador-sub">LINHA • Preto</div>
+        <button class="nav-toggle" aria-expanded="false" aria-label="Abrir menu">☰</button>
+
+        <ul class="nav-center">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="MinhaLiga.html">Minha Liga</a></li>
+            <li><a href="Times.html">Times</a></li>
+            <li><a href="Jogadores.html" class="ativo">Jogadores</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero (oculto em páginas internas via CSS body.interna .hero {display:none}) -->
+    <header class="hero"></header>
+
+    <!-- Conteúdo -->
+    <main class="conteudo">
+        <section class="lista-container">
+            <h2 class="lista-titulo">Lista de Jogadores</h2>
+
+            <!-- Barra de filtros -->
+            <div class="filtros">
+                <div class="filtro-esq">
+                    <input id="busca" type="search" placeholder="Buscar por nome ou time…"
+                        aria-label="Buscar jogador" />
+                    <select id="posicao" aria-label="Filtrar por posição">
+                        <option value="">Todas as posições</option>
+                        <option value="LINHA">Linha</option>
+                        <option value="GOLEIRO">Goleiro</option>
+                    </select>
+                    <select id="time" aria-label="Filtrar por time">
+                        <option value="">Todos os times</option>
+                        <option value="Preto">Preto</option>
+                        <option value="Azul">Azul</option>
+                        <option value="Branco">Branco</option>
+                        <option value="Amarelo">Amarelo</option>
+
+                    </select>
                 </div>
-              </div>
-            </div>
-            
-
-            <!-- Painel KPI (mobile only) -->
-            <div class="kpi-panel mobile-only">
-              <div class="kpi-item"><span class="kpi-label">Datas</span><span class="kpi">1</span></div>
-              <div class="kpi-item"><span class="kpi-label">Gols</span><span class="kpi">5</span></div>
-            </div>
-
-            <!-- Colunas desktop -->
-            <div class="col col-datas" data-label="Datas"><span class="kpi">1</span></div>
-            <div class="col col-gols"  data-label="Gols"><span class="kpi">5</span></div>
-            <div class="col col-dia"   data-label="Dia 1"><span class="status status-ok">✓</span></div>
-            <div class="col col-dia"   data-label="Dia 2"><span class="status status-null">—</span></div>
-            <div class="col col-dia"   data-label="Dia 3"><span class="status status-null">—</span></div>
-            <div class="col col-dia"   data-label="Dia 4"><span class="status status-null">—</span></div>
-            <div class="col col-dia"   data-label="Final"><span class="status status-null">—</span></div>
-          </div>
-
-          <!-- Medina -->
-          <div class="tabela-row"
-               data-nome="Medina"
-               data-posicao="Goleiro"
-               data-time="Preto"
-               data-datas="0"
-               data-gols="0">
-            <div class="col col-jogador">
-              <div class="jogador-cell">
-                <div class="avatar"><img src="img/Placeholder.png" alt="Medina" /></div>
-                <div class="jogador-info">
-                  <div class="jogador-nome">Medina</div>
-                  <div class="jogador-sub">GOLEIRO • Preto</div>
+                <div class="filtro-dir">
+                    <label class="lbl-ordenar" for="ordenar">Ordenar:</label>
+                    <select id="ordenar" aria-label="Ordenar por">
+                        <option value="nome-asc">Nome (A–Z)</option>
+                        <option value="nome-desc">Nome (Z–A)</option>
+                        <option value="datas-desc">Datas (↓)</option>
+                        <option value="datas-asc">Datas (↑)</option>
+                        <option value="gols-desc">Gols (↓)</option>
+                        <option value="gols-asc">Gols (↑)</option>
+                    </select>
+                    <button id="limpar" type="button">Limpar</button>
                 </div>
-              </div>
-            </div>
-            
-
-            <!-- Painel KPI (mobile only) -->
-            <div class="kpi-panel mobile-only">
-              <div class="kpi-item"><span class="kpi-label">Datas</span><span class="kpi">1</span></div>
-              <div class="kpi-item"><span class="kpi-label">Gols</span><span class="kpi">0</span></div>
             </div>
 
-            <!-- Colunas desktop -->
-            <div class="col col-datas" data-label="Datas"><span class="kpi">0</span></div>
-            <div class="col col-gols"  data-label="Gols"><span class="kpi">0</span></div>
-            <div class="col col-dia"   data-label="Dia 1"><span class="status status-bad">✗</span></div>
-            <div class="col col-dia"   data-label="Dia 2"><span class="status status-null">—</span></div>
-            <div class="col col-dia"   data-label="Dia 3"><span class="status status-null">—</span></div>
-            <div class="col col-dia"   data-label="Dia 4"><span class="status status-null">—</span></div>
-            <div class="col col-dia"   data-label="Final"><span class="status status-null">—</span></div>
-          </div>
-        </div>
+            <div class="tabela-jogadores">
+                <!-- Cabeçalho -->
+                <div class="tabela-head">
+                    <button class="th sort" data-sort="nome">Jogador</button>
+                    <button class="th sort center" data-sort="datas">Datas</button>
+                    <button class="th sort center" data-sort="gols">Gols</button>
+                    <div class="col col-dia">Dia 1</div>
+                    <div class="col col-dia">Dia 2</div>
+                    <div class="col col-dia">Dia 3</div>
+                    <div class="col col-dia">Dia 4</div>
+                    <div class="col col-dia">Final</div>
+                </div>
 
-        <!-- Placeholders -->
-        <div class="tabela-row placeholder"><div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div></div>
-        <div class="tabela-row placeholder"><div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div></div>
-        <div class="tabela-row placeholder"><div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div></div>
-        <div class="tabela-row placeholder"><div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div></div>
-        <div class="tabela-row placeholder"><div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div></div>
-        <div class="tabela-row placeholder"><div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div></div>
-        <div class="tabela-row placeholder"><div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div></div>
-        <div class="tabela-row placeholder"><div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div></div>
-        <div class="tabela-row placeholder"><div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div></div>
-        <div class="tabela-row placeholder"><div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div></div>
-      </div>
+                <!-- Corpo da tabela: jogadores reais -->
+                <div class="tabela-body">
+                    <!-- Thiago -->
+                    <div class="tabela-row" data-nome="Thiago" data-posicao="LINHA" data-time="Preto" data-datas="1"
+                        data-gols="5">
+                        <div class="col col-jogador">
+                            <div class="jogador-cell">
+                                <div class="avatar"><img src="img/Thiago.png" alt="Thiago" /></div>
+                                <div class="jogador-info">
+                                    <div class="jogador-nome">Thiago</div>
+                                    <div class="jogador-sub">LINHA • Preto</div>
+                                </div>
+                            </div>
+                        </div>
 
-      <div class="legenda">
-        <span class="legend-item"><span class="legend-icon status-ok">✓</span> Compareceu</span>
-        <span class="legend-item"><span class="legend-icon status-bad">✗</span> Faltou</span>
-        <span class="legend-item"><span class="legend-icon status-null">—</span> Sem jogo / não computado</span>
-      </div>
-    </section>
-  </main>
+
+                        <!-- Painel KPI (mobile only) -->
+                        <div class="kpi-panel mobile-only">
+                            <div class="kpi-item"><span class="kpi-label">Datas</span><span class="kpi">1</span></div>
+                            <div class="kpi-item"><span class="kpi-label">Gols</span><span class="kpi">5</span></div>
+                        </div>
+
+                        <!-- Colunas desktop -->
+                        <div class="col col-datas" data-label="Datas"><span class="kpi">1</span></div>
+                        <div class="col col-gols" data-label="Gols"><span class="kpi">5</span></div>
+                        <div class="col col-dia" data-label="Dia 1"><span class="status status-ok">✓</span></div>
+                        <div class="col col-dia" data-label="Dia 2"><span class="status status-null">—</span></div>
+                        <div class="col col-dia" data-label="Dia 3"><span class="status status-null">—</span></div>
+                        <div class="col col-dia" data-label="Dia 4"><span class="status status-null">—</span></div>
+                        <div class="col col-dia" data-label="Final"><span class="status status-null">—</span></div>
+                    </div>
+
+                    <!-- Medina -->
+                    <div class="tabela-row" data-nome="Medina" data-posicao="Goleiro" data-time="Preto" data-datas="0"
+                        data-gols="0">
+                        <div class="col col-jogador">
+                            <div class="jogador-cell">
+                                <div class="avatar"><img src="img/Placeholder.png" alt="Medina" /></div>
+                                <div class="jogador-info">
+                                    <div class="jogador-nome">Medina</div>
+                                    <div class="jogador-sub">GOLEIRO • Preto</div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Painel KPI (mobile only) -->
+                        <div class="kpi-panel mobile-only">
+                            <div class="kpi-item"><span class="kpi-label">Datas</span><span class="kpi">1</span></div>
+                            <div class="kpi-item"><span class="kpi-label">Gols</span><span class="kpi">0</span></div>
+                        </div>
+
+                        <!-- Colunas desktop -->
+                        <div class="col col-datas" data-label="Datas"><span class="kpi">0</span></div>
+                        <div class="col col-gols" data-label="Gols"><span class="kpi">0</span></div>
+                        <div class="col col-dia" data-label="Dia 1"><span class="status status-bad">✗</span></div>
+                        <div class="col col-dia" data-label="Dia 2"><span class="status status-null">—</span></div>
+                        <div class="col col-dia" data-label="Dia 3"><span class="status status-null">—</span></div>
+                        <div class="col col-dia" data-label="Dia 4"><span class="status status-null">—</span></div>
+                        <div class="col col-dia" data-label="Final"><span class="status status-null">—</span></div>
+                    </div>
+                </div>
+
+                <!-- Placeholders -->
+                <div class="tabela-row placeholder">
+                    <div class="col col-jogador"></div>
+                    <div class="col col-datas"></div>
+                    <div class="col col-gols"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                </div>
+                <div class="tabela-row placeholder">
+                    <div class="col col-jogador"></div>
+                    <div class="col col-datas"></div>
+                    <div class="col col-gols"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                </div>
+                <div class="tabela-row placeholder">
+                    <div class="col col-jogador"></div>
+                    <div class="col col-datas"></div>
+                    <div class="col col-gols"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                </div>
+                <div class="tabela-row placeholder">
+                    <div class="col col-jogador"></div>
+                    <div class="col col-datas"></div>
+                    <div class="col col-gols"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                </div>
+                <div class="tabela-row placeholder">
+                    <div class="col col-jogador"></div>
+                    <div class="col col-datas"></div>
+                    <div class="col col-gols"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                </div>
+                <div class="tabela-row placeholder">
+                    <div class="col col-jogador"></div>
+                    <div class="col col-datas"></div>
+                    <div class="col col-gols"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                </div>
+                <div class="tabela-row placeholder">
+                    <div class="col col-jogador"></div>
+                    <div class="col col-datas"></div>
+                    <div class="col col-gols"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                </div>
+                <div class="tabela-row placeholder">
+                    <div class="col col-jogador"></div>
+                    <div class="col col-datas"></div>
+                    <div class="col col-gols"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                </div>
+                <div class="tabela-row placeholder">
+                    <div class="col col-jogador"></div>
+                    <div class="col col-datas"></div>
+                    <div class="col col-gols"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                </div>
+                <div class="tabela-row placeholder">
+                    <div class="col col-jogador"></div>
+                    <div class="col col-datas"></div>
+                    <div class="col col-gols"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                    <div class="col col-dia"></div>
+                </div>
+            </div>
+
+            <div class="legenda">
+                <span class="legend-item"><span class="legend-icon status-ok">✓</span> Compareceu</span>
+                <span class="legend-item"><span class="legend-icon status-bad">✗</span> Faltou</span>
+                <span class="legend-item"><span class="legend-icon status-null">—</span> Sem jogo / não computado</span>
+            </div>
+        </section>
+    </main>
 
   <!-- Rodapé -->
   <footer>
@@ -272,4 +357,5 @@
     aplicaFiltrosOrdenacao();
   </script>
 </body>
+
 </html>
