@@ -1,4 +1,6 @@
+// layout.js
 document.addEventListener("DOMContentLoaded", async () => {
+    // ===== NAVBAR =====
     const navbar = document.getElementById("navbar");
     if (navbar) {
         const resp = await fetch("navbar.html");
@@ -21,5 +23,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 link.classList.add("ativo");
             }
         });
+    }
+
+    // ===== FOOTER =====
+    const footer = document.getElementById("footer");
+    if (footer) {
+        const resp = await fetch("footer.html");
+        footer.innerHTML = await resp.text();
     }
 });
