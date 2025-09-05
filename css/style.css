@@ -27,11 +27,6 @@ header .logo {
   margin-bottom: 15px;
 }
 
-h1 {
-  font-size: 2.5rem;
-  margin: 10px 0;
-}
-
 p {
   font-size: 1.1rem;
 }
@@ -107,25 +102,6 @@ footer {
 .nav-center li a:hover,
 .nav-center li a.ativo {
   opacity: 0.7;
-}
-
-/* Lado direito (botão login, etc) */
-.nav-right {
-  margin-left: auto; /* mantém botão login à direita */
-}
-
-.nav-right .btn-login {
-  background: #fff;
-  color: #00a2ff;
-  font-weight: bold;
-  padding: 6px 12px;
-  border-radius: 6px;
-  text-decoration: none;
-  transition: background 0.3s;
-}
-
-.nav-right .btn-login:hover {
-  background: #e0e0e0;
 }
 
 .hero-conteudo {
