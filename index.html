@@ -6,6 +6,7 @@
 	<title>SuperCopa B.C.F.C</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="stylesheet" href="css/style.css" />
+	<script src="js/index.js" defer></script>
 </head>
 <body>
 	<!-- Navbar -->
@@ -49,17 +50,5 @@
 	<footer>
 		<p>&copy; 2025 SuperCopa B.C.F.C - Todos os direitos reservados</p>
 	</footer>
-
-  <!-- JS: menu mobile -->
-  <script>
-    const nav = document.querySelector('.navbar');
-    const btn = document.querySelector('.nav-toggle');
-    if (nav && btn) {
-      btn.addEventListener('click', () => {
-        const open = nav.classList.toggle('open');
-        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-      });
-    }
-  </script>
 </body>
 </html>
