@@ -31,7 +31,7 @@ body {
   justify-content: flex-start;
   align-items: center;
   background: var(--roxo-escuro);
-  padding: 12px 30px;
+  padding: 18px 30px;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -120,8 +120,6 @@ footer {
   padding: 10px;
   font-size: 0.9rem;
   text-align: center;
-  /* position: fixed; REMOVIDO */
-  /* bottom: 0; left: 0; width: 100%; */
 }
 
 /* ===== Cartões de jogador (layout antigo ainda usado onde for preciso) ===== */
@@ -221,44 +219,80 @@ footer {
   main.conteudo { max-width: 95%; }
   .tabela-jogadores { padding: 18px; }
   .lista-titulo { font-size: 1.6rem; }
-  .avatar { width: 50px; height: 50px; }
-  .jogador-nome { font-size: 1rem; }
-  .jogador-sub  { font-size: 0.72rem; }
 }
 
-/* Jogadores: “card mode” no mobile */
+/* ===== Jogadores – layout mobile compacto e horizontal ===== */
+.mobile-only { display: none; }
+
 @media (max-width: 640px) {
+  /* Cabeçalho some no mobile */
   .tabela-head { display: none; }
 
+  /* Prepara o card para painel topo-direito e reduz a altura */
   .tabela-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    row-gap: 10px; column-gap: 12px;
-    padding: 12px; border-radius: 14px;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    padding: 10px 12px 12px;   /* topo menor para reduzir altura */
+    border-radius: 14px;
   }
-  .tabela-row .col-jogador { grid-column: 1 / -1; }
-  .tabela-row .col-datas,
-  .tabela-row .col-gols,
-  .tabela-row .col-dia { justify-content: flex-start; }
 
+  /* bloco do jogador: canto superior esquerdo */
+  .tabela-row .col-jogador {
+    flex: 0 0 100%;
+    display: flex;
+    align-items: center;
+    margin-right: 80px; /* evita que o texto colida com o painel */
+  }
+  .avatar { width: 48px; height: 48px; }
+  .jogador-nome { font-size: 1rem; margin-bottom: 2px; }
+  .jogador-sub  { font-size: 0.7rem; }
+
+  /* Painel KPI (Datas e Gols) no topo-direito */
+  .kpi-panel.mobile-only {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: absolute;
+    top: 8px;
+    right: 10px;
+  }
+  .kpi-item {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #fff; padding: 5px 8px; border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  }
+  .kpi-label { font-size: 0.74rem; color: #777; }
+  .kpi { font-size: 1.05rem; font-weight: 800; color: #222; }
+
+  /* Esconde as colunas Datas/Gols padrão no mobile */
+  .tabela-row .col-datas,
+  .tabela-row .col-gols { display: none; }
+
+  /* Dias: distribuição horizontal em linhas */
+  .tabela-row .col-dia {
+    flex: 0 0 22%;
+    display: flex; align-items: center; gap: 6px;
+    min-width: 120px; /* evita esmagar demais */
+  }
   .tabela-row .col[data-label]::before {
     content: attr(data-label);
-    display: block;
-    font-size: 0.72rem; color: #888; margin-bottom: 4px; line-height: 1;
+    display: inline-block;
+    font-size: 0.74rem; color: #888; margin-right: 6px;
+    min-width: 38px;
   }
 
-  .tabela-row .col-dia { display: flex; align-items: center; gap: 6px; }
   .status { width: 22px; height: 22px; font-size: 1rem; border-radius: 5px; }
 }
 
-/* Placeholders no mobile */
-@media (max-width: 640px) {
-  .tabela-row.placeholder { grid-template-columns: 1fr 1fr; min-height: 96px; }
-  .tabela-row.placeholder .col { height: 22px; }
-  .tabela-row.placeholder .col.col-jogador { height: 44px; grid-column: 1 / -1; }
+/* Telas bem pequenas: ajusta quebra */
+@media (max-width: 380px) {
+  .tabela-row .col-dia { flex: 0 0 48%; min-width: 0; }
 }
 
-/* Home mobile */
+/* Home e Navbar mobile */
 @media (max-width: 720px) {
   header.hero { padding: 28px 16px; }
   .hero-conteudo { gap: 8px; }
@@ -267,7 +301,6 @@ footer {
   main.conteudo h2 { font-size: 1.25rem; }
   main.conteudo p { font-size: 1rem; }
 
-  /* Navbar mobile */
   .navbar { justify-content: space-between; padding: 10px 16px; gap: 12px; }
   .nav-left .logo { max-height: 32px; }
   .titulo-site { font-size: 1rem; }
@@ -291,3 +324,6 @@ footer {
   .nome-jogador { font-size: 16px; }
   .cor-time { width: 20px; height: 20px; }
 }
+
+/* Some o hero nas páginas internas */
+body.interna .hero { display: none; }

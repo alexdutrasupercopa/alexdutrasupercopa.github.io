@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
+<body class="interna">
   <!-- Navbar -->
   <nav class="navbar">
     <div class="nav-left">
@@ -56,6 +56,20 @@
               </div>
             </div>
           </div>
+
+          <!-- Painel KPI (mobile only) -->
+          <div class="kpi-panel mobile-only" aria-label="Resumo do jogador">
+            <div class="kpi-item" title="Datas comparecidas">
+              <span class="kpi-label">Datas</span>
+              <span class="kpi">1</span>
+            </div>
+            <div class="kpi-item" title="Gols marcados">
+              <span class="kpi-label">Gols</span>
+              <span class="kpi">5</span>
+            </div>
+          </div>
+
+          <!-- Colunas (visíveis no desktop) -->
           <div class="col col-datas" data-label="Datas"><span class="kpi">1</span></div>
           <div class="col col-gols"  data-label="Gols"><span class="kpi">5</span></div>
           <div class="col col-dia"   data-label="Dia 1"><span class="status status-ok" aria-label="Compareceu">✓</span></div>
@@ -67,104 +81,54 @@
 
         <!-- Placeholders (10 linhas) -->
         <div class="tabela-row placeholder">
-          <div class="col col-jogador"></div>
-          <div class="col col-datas"></div>
-          <div class="col col-gols"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
+          <div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div>
         </div>
         <div class="tabela-row placeholder">
-          <div class="col col-jogador"></div>
-          <div class="col col-datas"></div>
-          <div class="col col-gols"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
+          <div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div>
         </div>
         <div class="tabela-row placeholder">
-          <div class="col col-jogador"></div>
-          <div class="col col-datas"></div>
-          <div class="col col-gols"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
+          <div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div>
         </div>
         <div class="tabela-row placeholder">
-          <div class="col col-jogador"></div>
-          <div class="col col-datas"></div>
-          <div class="col col-gols"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
+          <div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div>
         </div>
         <div class="tabela-row placeholder">
-          <div class="col col-jogador"></div>
-          <div class="col col-datas"></div>
-          <div class="col col-gols"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
+          <div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div>
         </div>
         <div class="tabela-row placeholder">
-          <div class="col col-jogador"></div>
-          <div class="col col-datas"></div>
-          <div class="col col-gols"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
+          <div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div>
         </div>
         <div class="tabela-row placeholder">
-          <div class="col col-jogador"></div>
-          <div class="col col-datas"></div>
-          <div class="col col-gols"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
+          <div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div>
         </div>
         <div class="tabela-row placeholder">
-          <div class="col col-jogador"></div>
-          <div class="col col-datas"></div>
-          <div class="col col-gols"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
+          <div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div>
         </div>
         <div class="tabela-row placeholder">
-          <div class="col col-jogador"></div>
-          <div class="col col-datas"></div>
-          <div class="col col-gols"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
+          <div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div>
         </div>
         <div class="tabela-row placeholder">
-          <div class="col col-jogador"></div>
-          <div class="col col-datas"></div>
-          <div class="col col-gols"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
-          <div class="col col-dia"></div>
+          <div class="col col-jogador"></div><div class="col col-datas"></div><div class="col col-gols"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div><div class="col col-dia"></div>
+          <div class="col col-dia"></div><div class="col col-dia"></div>
         </div>
       </div>
 
