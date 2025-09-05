@@ -104,7 +104,9 @@ footer {
   opacity: 0.7;
 }
 
-.hero-conteudo {
+.hero-conteudo {    
+  position: relative;
+  z-index: 1; /* garante que o conteúdo fique acima do fundo */
   display: flex;
   flex-direction: column; /* empilha em coluna */
   align-items: center;    /* centraliza horizontalmente */
@@ -130,5 +132,9 @@ footer {
   background-repeat: no-repeat;
   opacity: 0.3;
   z-index: 0;
+}
+
+.hero {
+  position: relative;
 }
 
