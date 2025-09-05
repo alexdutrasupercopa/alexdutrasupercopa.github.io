@@ -128,3 +128,16 @@ footer {
 .nav-right .btn-login:hover {
   background: #e0e0e0;
 }
+
+.hero-conteudo {
+  display: flex;
+  flex-direction: column; /* empilha em coluna */
+  align-items: center;    /* centraliza horizontalmente */
+  gap: 10px;              /* espaço entre as imagens */
+}
+
+.hero-img {
+  max-width: 300px; /* controla o tamanho */
+  height: auto;
+  display: block;   /* garante que cada imagem ocupe uma linha */
+}
