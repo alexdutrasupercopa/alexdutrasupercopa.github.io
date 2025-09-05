@@ -138,3 +138,10 @@ footer {
   position: relative;
 }
 
+.imagemResumo {
+  height: calc(100vh - 80px - 60px); /* altura total da tela menos header e footer */
+  background-image: url('img/resumo1.png'); /* caminho da sua imagem */
+  background-size: cover; /* cobre todo o espaço */
+  background-position: center;
+  background-repeat: no-repeat;
+}
