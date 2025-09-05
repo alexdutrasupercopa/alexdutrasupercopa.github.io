@@ -48,15 +48,15 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #001f54;
-  padding: 10px 20px;
-  color: white;
+  background: #00a2ff; /* azul estilo NFL Fantasy */
+  padding: 12px 30px;
   position: sticky;
   top: 0;
   z-index: 1000;
 }
 
-.navbar .logo-nome {
+/* Lado esquerdo (logo + nome) */
+.nav-left {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -66,27 +66,43 @@ footer {
   max-height: 40px;
 }
 
-.navbar .titulo-site {
+.titulo-site {
   font-size: 1.2rem;
   font-weight: bold;
+  color: white;
 }
 
-.navbar .menu {
+/* Links centrais */
+.nav-center {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: 25px;
 }
 
-.navbar .menu li a {
+.nav-center li a {
   color: white;
   text-decoration: none;
-  font-weight: 500;
-  padding: 6px 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: opacity 0.3s;
+}
+
+.nav-center li a:hover,
+.nav-center li a.ativo {
+  opacity: 0.7;
+}
+
+/* Lado direito (botão login, etc) */
+.nav-right .btn-login {
+  background: #fff;
+  color: #00a2ff;
+  font-weight: bold;
+  padding: 6px 12px;
   border-radius: 6px;
+  text-decoration: none;
   transition: background 0.3s;
 }
 
-.navbar .menu li a:hover,
-.navbar .menu li a.ativo {
-  background: #004aad;
+.nav-right .btn-login:hover {
+  background: #e0e0e0;
 }
