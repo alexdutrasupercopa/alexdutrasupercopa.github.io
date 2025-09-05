@@ -27,42 +27,141 @@
   <header class="hero"></header>
 
   <!-- Conteúdo principal com lista de jogadores -->
-  <main class="conteudo">
-    <h2>Jogadores</h2>
+<main class="conteudo">
+  <section class="lista-container">
+    <h2 class="lista-titulo">Lista de Jogadores</h2>
 
-    <div class="jogador">
-      <div class="foto-jogador">
-        <img src="img/Thiago.png" alt="Jogador 1">
+    <!-- Cabeçalho da “tabela” -->
+    <div class="tabela-jogadores">
+      <div class="tabela-head">
+        <div class="col col-jogador">Jogador</div>
+        <div class="col col-datas" title="Quantidade de datas que compareceu">Datas</div>
+        <div class="col col-gols">Gols</div>
+        <div class="col col-dia">Dia 1</div>
+        <div class="col col-dia">Dia 2</div>
+        <div class="col col-dia">Dia 3</div>
+        <div class="col col-dia">Dia 4</div>
+        <div class="col col-dia">Final</div>
       </div>
-      <div class="info-jogador">
-        <div class="nome-jogador">Thiago</div>
-        <div class="cor-time" style="background-color: rgb(35, 35, 35);"></div>
+
+      <!-- Linha 1 -->
+      <div class="tabela-row">
+        <div class="col col-jogador">
+          <div class="jogador-cell">
+            <div class="avatar"><img src="img/Thiago.png" alt="Thiago"></div>
+            <div class="jogador-info">
+              <div class="jogador-nome">Thiago</div>
+              <div class="jogador-sub">LINHA • Preto</div>
+            </div>
+          </div>
+        </div>
+        <div class="col col-datas"><span class="kpi">1</span></div>
+        <div class="col col-gols"><span class="kpi">5</span></div>
+        <div class="col col-dia"><span class="status status-ok" aria-label="Compareceu">✓</span></div>
+        <div class="col col-dia"><span class="status status-null" aria-label="—">—</span></div>
+        <div class="col col-dia"><span class="status status-null" aria-label="—">—</span></div>
+        <div class="col col-dia"><span class="status status-null" aria-label="—">—</span></div>
+        <div class="col col-dia"><span class="status status-null" aria-label="—">—</span></div>
       </div>
+
+          <!-- Placeholder rows -->
+      <div class="tabela-row placeholder">
+        <div class="col col-jogador"></div>
+        <div class="col col-datas"></div>
+        <div class="col col-gols"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+      </div>
+
+      <div class="tabela-row placeholder">
+        <div class="col col-jogador"></div>
+        <div class="col col-datas"></div>
+        <div class="col col-gols"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+      </div>
+
+      <div class="tabela-row placeholder">
+        <div class="col col-jogador"></div>
+        <div class="col col-datas"></div>
+        <div class="col col-gols"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+      </div>
+
+      <div class="tabela-row placeholder">
+        <div class="col col-jogador"></div>
+        <div class="col col-datas"></div>
+        <div class="col col-gols"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+      </div>
+
+      <div class="tabela-row placeholder">
+        <div class="col col-jogador"></div>
+        <div class="col col-datas"></div>
+        <div class="col col-gols"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+      </div>
+
+      <div class="tabela-row placeholder">
+        <div class="col col-jogador"></div>
+        <div class="col col-datas"></div>
+        <div class="col col-gols"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+      </div>
+
+      <div class="tabela-row placeholder">
+        <div class="col col-jogador"></div>
+        <div class="col col-datas"></div>
+        <div class="col col-gols"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+      </div>
+
+      <div class="tabela-row placeholder">
+        <div class="col col-jogador"></div>
+        <div class="col col-datas"></div>
+        <div class="col col-gols"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+        <div class="col col-dia"></div>
+      </div>
+
+
+    <!-- Legenda opcional -->
+    <div class="legenda">
+      <span class="legend-item"><span class="legend-icon status-ok">✓</span> Compareceu</span>
+      <span class="legend-item"><span class="legend-icon status-bad">✗</span> Faltou</span>
+      <span class="legend-item"><span class="legend-icon status-null">—</span> Sem jogo / não computado</span>
     </div>
-
-    <div class="jogador">
-      <div class="foto-jogador">
-        <img src="img/Penna.png" alt="Jogador 2">
-      </div>
-      <div class="info-jogador">
-        <div class="nome-jogador">Penna</div>
-        <div class="cor-time" style="background-color: blue;"></div>
-      </div>
-    </div>
-
-    <div class="jogador">
-      <div class="foto-jogador">
-        <img src="img/Parada.png" alt="Jogador 3">
-      </div>
-      <div class="info-jogador">
-        <div class="nome-jogador">Parada</div>
-        <div class="cor-time" style="background-color: rgb(221, 221, 221);"></div>
-      </div>
-    </div>
-
-    <!-- Você pode adicionar mais jogadores aqui seguindo o mesmo padrão -->
-
-  </main>
+  </section>
+</main>
 
   <!-- Rodapé -->
   <footer>
