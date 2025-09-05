@@ -20,6 +20,7 @@ header.hero {
   background: linear-gradient(to bottom, #60036e, #430244);
   color: white;
   padding: 40px 20px;
+  position: relative;
 }
 
 header .logo {
@@ -31,6 +32,36 @@ p {
   font-size: 1.1rem;
 }
 
+.hero-conteudo {    
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.hero-img {
+  max-width: 300px;
+  height: auto;
+  display: block;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../img/fundo.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  z-index: 0;
+}
+
 /* ===== Conteúdo principal ===== */
 main.conteudo {
   margin: 30px auto;
@@ -39,6 +70,64 @@ main.conteudo {
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* espaço entre jogadores */
+}
+
+/* ===== Jogadores ===== */
+.jogador {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.jogador:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+.foto-jogador {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #ccc;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.foto-jogador img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.info-jogador {
+  flex: 1;
+  margin-left: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nome-jogador {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.cor-time {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-color: red;
+  flex-shrink: 0;
 }
 
 /* ===== Rodapé ===== */
@@ -48,8 +137,8 @@ footer {
   padding: 10px;
   font-size: 0.9rem;
   text-align: center;
-  position: fixed;   /* sempre fixo */
-  bottom: 0;         /* gruda no fundo */
+  position: fixed;
+  bottom: 0;
   left: 0;
   width: 100%;
 }
@@ -57,14 +146,14 @@ footer {
 /* ===== Navbar ===== */
 .navbar {
   display: flex;
-  justify-content: flex-start; /* <<< AGORA ALINHA PRA ESQUERDA */
+  justify-content: flex-start;
   align-items: center;
   background: #200025;
   padding: 12px 30px;
   position: sticky;
   top: 0;
   z-index: 1000;
-  gap: 40px; /* espaço entre o logo/título e os links */
+  gap: 40px;
 }
 
 /* Lado esquerdo (logo + nome) */
@@ -104,36 +193,23 @@ footer {
   opacity: 0.7;
 }
 
-.hero-conteudo {    
-  position: relative;
-  z-index: 1; /* garante que o conteúdo fique acima do fundo */
-  display: flex;
-  flex-direction: column; /* empilha em coluna */
-  align-items: center;    /* centraliza horizontalmente */
-  gap: 10px;              /* espaço entre as imagens */
+/* ===== Responsividade ===== */
+@media (max-width: 500px) {
+  .jogador {
+    padding: 10px;
 }
 
-.hero-img {
-  max-width: 300px; /* controla o tamanho */
-  height: auto;
-  display: block;   /* garante que cada imagem ocupe uma linha */
+  .foto-jogador {
+    width: 50px;
+    height: 50px;
 }
 
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url('../img/fundo.png'); /* caminho relativo da pasta CSS para a imagem */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 0.3;
-  z-index: 0;
-}
+  .nome-jogador {
+    font-size: 16px;
+  }
 
-.hero {
-  position: relative;
+  .cor-time {
+    width: 20px;
+    height: 20px;
+}
 }
