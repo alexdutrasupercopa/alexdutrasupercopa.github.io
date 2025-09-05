@@ -327,3 +327,40 @@ footer {
 
 /* Some o hero nas páginas internas */
 body.interna .hero { display: none; }
+
+/* ===== Barra de filtros / ordenação ===== */
+.filtros{
+  display:flex; justify-content:space-between; align-items:center;
+  gap:12px; margin-bottom:10px; flex-wrap:wrap;
+}
+.filtro-esq, .filtro-dir{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.filtros input[type="search"], .filtros select{
+  background:#fff; border:1px solid #e7e7e7; border-radius:10px;
+  padding:8px 10px; font-size:0.95rem; outline:0;
+}
+.filtros input[type="search"]{ min-width:220px; }
+.filtros button#limpar{
+  padding:8px 12px; border:1px solid #e7e7e7; background:#fff; border-radius:10px;
+  cursor:pointer;
+}
+.lbl-ordenar{ color:#666; font-size:.9rem; }
+
+/* Cabeçalhos clicáveis (desktop) */
+.tabela-head .th{
+  background:transparent; border:0; text-align:left; font-weight:700; color:#555;
+  cursor:pointer; padding:0; display:flex; align-items:center; gap:6px;
+}
+.tabela-head .th.center{ justify-content:center; }
+.tabela-head .th::after{ content:""; border:5px solid transparent; margin-left:4px; opacity:.4; }
+.tabela-head .th.asc::after { border-bottom-color:#555; transform:translateY(-2px); }
+.tabela-head .th.desc::after{ border-top-color:#555; transform:translateY(2px); }
+
+/* Mobile: filtros empilham bonitos */
+@media (max-width: 720px){
+  .filtros{ gap:8px; }
+  .filtros input[type="search"]{ min-width:160px; }
+  .lbl-ordenar{ display:none; } /* economiza espaço */
+}
+
+.tabela-body { display: contents; } /* mantém o grid/flex das linhas */
+
