@@ -1381,3 +1381,76 @@ body.interna .hero {
   opacity: .7;
 }
 
+/* Destaques (Home) */
+#highlights{ 
+  padding: 18px 0; 
+  display:flex; 
+  justify-content:center;   /* centraliza o grid */
+}
+.highlight-cards{
+  width: 100%;
+  max-width: 1100px;        /* não ocupa a tela toda */
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* cards menores */
+  gap: 16px;
+  align-items: stretch;
+}
+.player-highlight{
+  position: relative;       /* para a badge */
+  background:#fff;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+  padding: 16px;            /* um pouco menor */
+}
+.player-highlight .top{
+  display:grid;
+  grid-template-columns: 72px 1fr;  /* avatar menor */
+  gap: 12px;
+  align-items:center;
+}
+.player-highlight .avatar{
+  width:72px; height:72px; border-radius:50%; object-fit:cover;
+  box-shadow:0 0 0 3px #f3f3f3;
+}
+.player-highlight .name{
+  font-size: clamp(18px, 2.2vw, 26px);
+  font-weight: 800; line-height:1.05;
+}
+.player-highlight .sub{ color:#6b7280; font-size:12px; margin-top:2px; }
+.player-highlight .stats{
+  display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;
+}
+.player-highlight .stat{
+  border:1px solid #eee; border-radius:12px; padding:10px; text-align:center;
+}
+.player-highlight .stat .label{ color:#6b7280; font-size:12px; }
+.player-highlight .stat .val{ font-size:18px; font-weight:800; margin-top:2px; }
+
+@media (max-width: 860px){
+  .highlight-cards { grid-template-columns: 1fr; }
+}
+
+/* badge do destaque */
+.hl-badge{
+  position:absolute; top:8px; right:8px;
+  display:inline-flex; align-items:center; gap:6px;
+  padding:6px 10px; border-radius:999px;
+  font-weight:800; font-size:12px; color:#222; background:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.08), inset 0 0 0 1px rgba(0,0,0,.06);
+}
+.hl-badge .ico{ font-size:14px; line-height:1; }
+
+/* cores específicas */
+.hl-badge.art{ background:#fff7e6; color:#7a4b00; border:1px solid #ffe2a8; }   /* Artilheiro */
+.hl-badge.gk { background:#e8fff7; color:#0a6b4f; border:1px solid #b8f0de; }   /* Luva de Ouro */
+
+
+/* efeito de carregamento simples */
+.skeleton{ position: relative; overflow: hidden; }
+.skeleton::after{
+  content:""; position:absolute; inset:0;
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,.04), transparent);
+  animation: shimmer 1.2s infinite;
+}
+@keyframes shimmer{ 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }

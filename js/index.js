@@ -1,9 +1,175 @@
-// JS: menu mobile
-const nav = document.querySelector('.navbar');
-const btn = document.querySelector('.nav-toggle');
+// =========================
+// Credenciais do Supabase
+// =========================
+const SUPABASE_URL = "https://gbgfndczbrqclmpzpvol.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdiZ2ZuZGN6YnJxY2xtcHpwdm9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxMTQxNzcsImV4cCI6MjA3MjY5MDE3N30.WXOGWuEiVesBV8Rm_zingellNhV0ClF9Nxkzp-ULs80";
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// =========================
+// Menu mobile
+// =========================
+const nav = document.querySelector('.navbar')
+const btn = document.querySelector('.nav-toggle')
 if (nav && btn) {
-    btn.addEventListener('click', () => {
-        const open = nav.classList.toggle('open');
-        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
+  btn.addEventListener('click', () => {
+    const open = nav.classList.toggle('open')
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false')
+  })
+}
+
+// =========================================================================
+// Destaques (Home) - Artilheiro e Melhor Goleiro
+// =========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+  montarDestaques()
+})
+
+async function montarDestaques() {
+  const elArtilheiro = document.getElementById('card-artilheiro')
+  const elGoleiro   = document.getElementById('card-goleiro')
+  if (!elArtilheiro && !elGoleiro) return
+  console.log('elArtilheiro, elGoleiro' +elArtilheiro + ' - ' + elGoleiro);  
+  try {
+    const listaBruta = await obterListaJogadores()
+    const lista = listaBruta.map(mapearJogadorSupabase)
+
+    const artilheiro   = obterArtilheiro(lista)
+    const melhorGol    = obterMelhorGoleiro(lista)
+
+    if (elArtilheiro && artilheiro) {
+    renderizarCard(elArtilheiro, artilheiro, {
+      tipo: 'art',                 // ⟵ novo
+      labelEsq: 'Gols',
+      valorEsq: artilheiro.gols,
+      labelDir: 'Jogos',
+      valorDir: artilheiro.jogos
+    })
+  }
+      if (elGoleiro && melhorGol) {
+    renderizarCard(elGoleiro, melhorGol, {
+      tipo: 'gk',                  // ⟵ novo
+      labelEsq: 'Gols Sofridos',
+      valorEsq: melhorGol.golsS,
+      labelDir: 'Jogos',
+      valorDir: melhorGol.jogos
+    })
+  }
+  } catch (e) {
+    console.error('Erro ao montar destaques:', e)
+  }
+}
+
+// =========================
+// Busca de dados
+// =========================
+async function obterListaJogadores() {
+  const { data, error } = await db
+    .from('Jogador')
+    .select('Nome,Time,Posicao,Gols,GolsSofridos,Jogos,Foto')
+
+  if (error) {
+    console.error('Erro Supabase:', error)
+    return []
+  }
+  return data || []
+}
+
+// =========================
+// Mapeamento (campos exatos)
+// =========================
+function mapearJogadorSupabase(raw) {
+  return {
+    id: raw.Nome,
+    nome: raw.Nome || '',
+    time: raw.Time || '',
+    posicao: raw.Posicao || '',
+    gols: Number(raw.Gols || 0),
+    golsS: Number(raw.GolsSofridos || 0),
+    jogos: Number(raw.Jogos || 0),
+    foto: raw.Foto || ''
+  }
+}
+
+// =========================
+// Lógicas de seleção
+// =========================
+function obterArtilheiro(lista) {
+  return [...lista].sort((a, b) => {
+    if (b.gols !== a.gols) return b.gols - a.gols
+    if (b.jogos !== a.jogos) return b.jogos - a.jogos
+    return normalizar(a.nome).localeCompare(normalizar(b.nome))
+  })[0]
+}
+
+function obterMelhorGoleiro(lista) {
+  const goleiros = lista.filter(j => /goleir/i.test(j.posicao || ''))
+  if (!goleiros.length) return null
+
+  return goleiros.sort((a, b) => {
+    if (a.golsS !== b.golsS) return a.golsS - b.golsS
+    const ma = a.jogos ? a.golsS / a.jogos : a.golsS
+    const mb = b.jogos ? b.golsS / b.jogos : b.golsS
+    if (ma !== mb) return ma - mb
+    return normalizar(a.nome).localeCompare(normalizar(b.nome))
+  })[0]
+}
+
+// =========================
+// Renderização dos cards
+// =========================
+function renderizarCard(el, jogador, info) {
+  if (!el || !jogador) return
+  const placeholder = 'assets/img/placeholder-user.png'
+  const foto = jogador.foto && jogador.foto.trim() ? jogador.foto : placeholder
+
+  const isArt = info?.tipo === 'art'
+  const badgeHtml = `
+    
+    <div class="hl-badge ${isArt ? 'art' : 'gk'}">
+      <span class="ico">${isArt ? '🥇' : '🧤'}</span>
+      <span>${isArt ? 'Artilheiro' : 'Luva de Ouro'}</span>
+    </div>`
+
+  el.classList.remove('skeleton')
+  el.innerHTML = `
+    ${badgeHtml}
+    <div class="top">
+      <img class="avatar"
+           src="${foto}"
+           alt="${jogador.nome}"
+           onerror="this.onerror=null;this.src='${placeholder}'">
+      <div>
+        <div class="name">${jogador.nome || '—'}</div>
+        <div class="sub">${(jogador.posicao || '').toUpperCase()} • ${jogador.time || ''}</div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <div class="label">${info.labelEsq}</div>
+        <div class="val">${info.valorEsq ?? 0}</div>
+      </div>
+      <div class="stat">
+        <div class="label">${info.labelDir}</div>
+        <div class="val">${info.valorDir ?? 0}</div>
+      </div>
+    </div>
+  `
+
+  el.style.cursor = 'pointer'
+  el.addEventListener('click', () => {
+    if (typeof window.abrirModalJogador === 'function') {
+      window.abrirModalJogador(jogador.id || jogador.nome)
+    }
+  })
+}
+
+
+// =========================
+// Helpers
+// =========================
+function normalizar(v) {
+  return String(v || '')
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
 }

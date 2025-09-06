@@ -6,6 +6,7 @@
 	<title>SuperCopa B.C.F.C</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="stylesheet" href="css/style.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 	<script src="js/index.js" defer></script>
     <script src="js/layout.js" defer></script>
 </head>
@@ -20,6 +21,14 @@
 			<img src="img/logoEscrito.png" alt="Super Copa" class="hero-img" />
 		</div>
 	</header>
+  
+  <section id="highlights" class="container">
+  <div class="highlight-cards">
+    <!-- preenchidos via JS -->
+    <article id="card-artilheiro" class="player-highlight skeleton"></article>
+    <article id="card-goleiro" class="player-highlight skeleton"></article>
+  </div>
+  </section>
 
 	<!-- Conteúdo -->
     <div class="page-wrapper">
