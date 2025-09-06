@@ -268,12 +268,14 @@ function renderModalJogador(j) {
   const time    = j.Time || '';
   const gols    = Number(j.Gols || 0);
   const golsSofridos = Number(j.GolsSofridos || 0); // coluna vinda do banco
-  const jogos   = Number(j.Jogos || 0);             // agora já vem do banco
   const foto    = j.Foto || 'img/Placeholder.png';
 
   // pinta a faixa do topo conforme o time
   const banner = overlay.querySelector('.modal-banner');
   if (banner) banner.style.background = TEAM_COLORS[time] || '#888';
+
+   // KPIs
+  const totalJogos = Number(j.Jogos ?? 0);
 
   titleEl.textContent = 'Detalhes do Jogador';
 
