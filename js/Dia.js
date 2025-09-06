@@ -351,7 +351,7 @@ function toastRowErr(row){
 
 // 6) Fluxo principal da Fase de Grupos (novo esquema com ARRAY de jogos)
 async function initFaseGrupos(n){
-  const setup = document.getElementById("grupos-setup");
+  const setup = document.getElementById("grupo-setup-wrap");
   const body  = document.getElementById("grupos-body");
   if (!setup || !body) return;
 
