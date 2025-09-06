@@ -107,19 +107,13 @@ const SUPABASE_URL = "https://gbgfndczbrqclmpzpvol.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdiZ2ZuZGN6YnJxY2xtcHpwdm9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxMTQxNzcsImV4cCI6MjA3MjY5MDE3N30.WXOGWuEiVesBV8Rm_zingellNhV0ClF9Nxkzp-ULs80";
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Conta presenças (true) para o KPI "Jogos"
-const presencasCount = (obj) => {
-  const vals = [obj.Dia1, obj.Dia2, obj.Dia3, obj.Dia4, obj.Final];
-  return vals.reduce((acc, v) => acc + (v === true ? 1 : 0), 0);
-};
-
 async function carregarJogadores() {
   if (!bodyEl) return;
   bodyEl.innerHTML = ''; // limpa
 
   const { data, error } = await db
     .from('Jogador')
-    .select('Nome, Posicao, Time, Gols, Foto, Dia1, Dia2, Dia3, Dia4, Final')
+    .select('Nome, Posicao, Time, Gols, Jogos, Foto, Dia1, Dia2, Dia3, Dia4, Final')
     .order('Nome', { ascending: true });
 
   if (error) {
@@ -135,9 +129,8 @@ async function carregarJogadores() {
     const posicao = String(j.Posicao || '').toUpperCase() || 'LINHA'; // LINHA | GOLEIRO
     const time    = j.Time || '';                                      // "Preto", "Branco", ...
     const gols    = Number(j.Gols || 0);
+    const datas   = Number(j.Jogos ?? 0); 
 
-    // KPI "Jogos" = presenças (true)
-    const datas   = presencasCount(j);
 
     const row = document.createElement('div');
     row.className = 'tabela-row';
@@ -282,7 +275,7 @@ function renderModalJogador(j) {
 
   // KPIs
   const dias = [j.Dia1, j.Dia2, j.Dia3, j.Dia4, j.Final];
-  const totalJogos = dias.reduce((acc, v) => acc + ((v === true || v === false) ? 1 : 0), 0);
+  const totalJogos = Number(j.Jogos ?? 0);
 
   titleEl.textContent = 'Detalhes do Jogador';
 
@@ -358,7 +351,7 @@ document.querySelector('.tabela-body')?.addEventListener('click', async (e) => {
 
   const nome = row.dataset.nomeKey || row.dataset.nome;
   if (!nome) return;
-  
+
   // 1º tenta do cache
   const cached = JOGADORES_BY_NOME.get(nome);
   if (cached) {
