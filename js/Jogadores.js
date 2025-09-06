@@ -358,10 +358,7 @@ document.querySelector('.tabela-body')?.addEventListener('click', async (e) => {
 
   const nome = row.dataset.nomeKey || row.dataset.nome;
   if (!nome) return;
-
-  console.log('[CLICK] Abrindo modal para:', nome);
-  console.log('[CACHE HAS]', JOGADORES_BY_NOME.has(nome));
-
+  
   // 1º tenta do cache
   const cached = JOGADORES_BY_NOME.get(nome);
   if (cached) {
