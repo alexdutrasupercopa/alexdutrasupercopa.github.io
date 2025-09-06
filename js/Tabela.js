@@ -227,7 +227,9 @@ async function load(){
     return;
   }
 
-  BASE_ROWS = (data||[]).map(normalizeRow);
+  BASE_ROWS = (data || [])
+  .map(normalizeRow)
+  .filter(r => (r.nome || "").toLowerCase() !== "fa"); // ignora o time FA
   applyUI();
 }
 
