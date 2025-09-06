@@ -953,3 +953,95 @@ body.interna .hero {
     display: block;            /* garante que as regras apliquem */
   }
 }
+
+/* ===== Tabela de jogadores: alinhamento & overflow ===== */
+
+/* Use o MESMO grid no cabeçalho e nas linhas */
+.tabela-head,
+.tabela-row {
+  display: grid;
+  /* Colunas: [Jogador | Jogos | Gols | Dia1..Dia4 | Final] */
+  grid-template-columns: minmax(0, 1fr) 72px 72px repeat(5, 54px);
+  align-items: center;
+  column-gap: 12px; /* altere aqui e no head para manter igual */
+  box-sizing: border-box;
+}
+
+/* Header: centralizar números/dias */
+.tabela-head > *:not(:first-child) {
+  text-align: center;
+}
+
+/* Célula do jogador: impedir que o nome empurre colunas */
+.col-jogador { min-width: 0; }
+.jogador-cell { display: flex; align-items: center; gap: 12px; }
+.jogador-info { min-width: 0; }
+.jogador-nome {
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* "..." em nomes longos */
+}
+
+/* Colunas numéricas/dia com largura fixa e centro */
+.col-datas, .col-gols, .col-dia { 
+  text-align: center;
+  overflow: hidden;       /* defesa extra contra estouro */
+}
+
+
+/* MOBILE: layout compacto que mantém alinhamento básico */
+@media (max-width: 640px) {
+  /* Mostre só Jogador, Jogos e Gols (os dias viram painel mobile) */
+  .tabela-row,
+  .tabela-head {
+    grid-template-columns: minmax(0, 1fr) 56px 56px;
+    column-gap: 10px;
+  }
+  .col-dia { display: none !important; }
+  .col-datas, .col-gols { text-align: center; }
+
+  /* Ellipsis garantido no nome */
+  .jogador-nome {
+    font-size: clamp(.9rem, 3.5vw, 1rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+/* Garantir que a coluna do jogador possa encolher */
+.tabela-row, .tabela-head {
+  /* já deve ter seu grid-template-columns; deixe como está */
+  column-gap: 12px;
+}
+
+.col-jogador { 
+  min-width: 0;                 /* crucial p/ grid/flex */
+}
+
+.jogador-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;                 /* libera o conteúdo interno para encolher */
+}
+
+.jogador-info {
+  min-width: 0;                 /* libera o nome */
+  flex: 1 1 auto;
+}
+
+/* Ellipsis em QUALQUER largura (inclusive telas “médias”) */
+.jogador-nome {
+  display: block;
+  min-width: 0;
+  max-width: 100%;              /* garante limite */
+  white-space: nowrap;          /* uma linha só */
+  overflow: hidden;             /* corta excedente */
+  text-overflow: ellipsis;      /* … */
+}
+
+/* Se ainda “brigar” perto do breakpoint, reduza levemente a fonte */
+@media (max-width: 1024px) {
+  .jogador-nome { font-size: clamp(.9rem, 2.2vw, 1rem); }
+}
