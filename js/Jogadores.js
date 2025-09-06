@@ -113,7 +113,7 @@ async function carregarJogadores() {
 
   const { data, error } = await db
     .from('Jogador')
-    .select('Nome, Posicao, Time, Gols, Jogos, Foto, Dia1, Dia2, Dia3, Dia4, Final')
+    .select('Nome, Posicao, Time, Gols, Jogos, Foto, Dia1, Dia2, Dia3, Dia4, Final,ObservacaoFA')
     .order('Nome', { ascending: true });
 
   if (error) {
@@ -325,7 +325,7 @@ function renderModalJogador(j) {
   // Render dinâmico dos extras
   const extras = overlay.querySelector('#extras');
   const ignorar = new Set([
-    'Nome','Posicao','Time','Gols','Foto',
+    'Nome','Posicao','Time','Gols','Foto', 'Jogos',
     'Dia1','Dia2','Dia3','Dia4','Final',
     'created_at','updated_at','id' // caso exista
   ]);

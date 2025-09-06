@@ -322,6 +322,10 @@ footer {
 .jogador-nome {
     font-weight: 800;
     font-size: 1.05rem;
+    line-height: 1.2;
+    display: -webkit-box;       /* layout flexível */
+    -webkit-line-clamp: 2;      /* no máximo 2 linhas */
+    -webkit-box-orient: vertical;
     color: #1a1a1a;
     margin-bottom: 4px;
 }
@@ -479,11 +483,6 @@ footer {
     .avatar {
         width: 48px;
         height: 48px;
-    }
-
-    .jogador-nome {
-        font-size: 1rem;
-        margin-bottom: 2px;
     }
 
     .jogador-sub {
@@ -888,4 +887,69 @@ body.interna .hero {
 @media (max-width: 640px){
   .player-top { grid-template-columns: 90px 1fr; gap: 12px; }
   .player-top .modal-nome { font-size: 1.1rem; }
+}
+
+/* --- NÃO deixar o nome empurrar as colunas --- */
+
+/* 1) A coluna do jogador pode encolher */
+.col-jogador { 
+  min-width: 0;           /* crucial */
+  flex: 1 1 auto;         /* se a linha for flex */
+}
+
+/* 2) Dentro do cartão do jogador, permita encolher */
+.jogador-cell { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px;
+}
+.jogador-info { 
+  min-width: 0;           /* libera o ellipsis */
+}
+
+/* 3) Nome com reticências */
+.jogador-nome{
+  font-weight: 800;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;     /* até 2 linhas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* 4) Fixar largura das outras colunas (datas/gols/dias) para não “dançarem” */
+.col-datas, .col-gols { 
+  width: 56px; 
+  flex: 0 0 56px;         /* se a linha for flex */
+  text-align: center;
+}
+.col-dia { 
+  width: 42px; 
+  flex: 0 0 42px;         /* se a linha for flex */
+  text-align: center;
+}
+
+/* 5) Se sua linha usa GRID (em vez de flex), esta grade resolve no desktop */
+@media (min-width: 800px){
+  .tabela-row{
+    display: grid;
+    grid-template-columns: minmax(0,1fr) 72px 72px repeat(5, 46px);
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+/* regra base — garante que o nome pode encolher */
+.jogador-info { min-width: 0; }
+
+/* MOBILE: corta nomes grandes com "..." */
+@media (max-width: 640px) {
+  .jogador-nome {
+    white-space: nowrap;       /* não quebra linha */
+    overflow: hidden;          /* corta o excesso */
+    text-overflow: ellipsis;   /* adiciona os "..." */
+    max-width: 100%;           /* respeita o espaço disponível */
+    display: block;            /* garante que as regras apliquem */
+  }
 }
