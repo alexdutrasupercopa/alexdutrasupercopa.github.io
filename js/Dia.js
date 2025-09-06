@@ -248,6 +248,31 @@ async function getFGMatchesForDay(n){
   return { ids, matches: ordered };
 }
 
+// ---- Cores dos times (ajuste se trocar nomes/cores) ----
+const TEAM_COLORS = {
+  amarelo: "#f3c614",
+  azul:    "#2563eb",
+  branco:  "#ffffff",
+  preto:   "#0f172a",
+};
+function teamColor(name){
+  const k = String(name||"").trim().toLowerCase();
+  return TEAM_COLORS[k] || "#9ca3af";
+}
+function esc(s){return String(s).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));}
+function teamDotHTML(name, side){
+  const safe = esc(name || "");
+  const color = teamColor(name);
+  // mantém um input hidden .in-a / .in-b para o salvamento
+  return `
+    <div class="team-dot-wrap" title="${safe}" aria-label="${safe}">
+      <span class="team-dot" style="background:${color}"></span>
+      <input type="hidden" class="in-team in-${side}" value="${safe}">
+    </div>
+  `;
+}
+
+
 // 5) Renderizar edição (Partida)
 function renderGroupsEditableFG(matches, n){
   const body = document.getElementById("grupos-body");
@@ -266,13 +291,12 @@ function renderGroupsEditableFG(matches, n){
     row.dataset.id = id;
 
     row.innerHTML = `
-      <div class="col">
         <div class="match-teams">
-          <input class="in-team in-a" value="${t1}" placeholder="Time 1" />
-          <span class="vs">vs</span>
-          <input class="in-team in-b" value="${t2}" placeholder="Time 2" />
+        ${teamDotHTML(t1, "a")}
+        <span class="vs">vs</span>
+        ${teamDotHTML(t2, "b")}
         </div>
-      </div>
+
 
       <div class="col center">
         <div class="match-score">

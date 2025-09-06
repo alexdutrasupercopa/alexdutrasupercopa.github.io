@@ -100,7 +100,6 @@ function teamCell(nome){
            border:2px solid rgba(0,0,0,.08);box-shadow:inset 0 0 0 2px rgba(0,0,0,.06)"></div>
       <div class="jogador-info">
         <div class="jogador-nome" title="${nome||""}">${nome||"-"}</div>
-        <div class="jogador-sub">Time</div>
       </div>
     </div>`;
 }
