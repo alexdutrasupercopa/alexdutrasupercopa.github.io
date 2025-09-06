@@ -113,7 +113,7 @@ async function carregarJogadores() {
 
   const { data, error } = await db
     .from('Jogador')
-    .select('Nome, Posicao, Time, Gols, Jogos, Foto, Dia1, Dia2, Dia3, Dia4, Final,ObservacaoFA')
+    .select('Nome, Posicao, Time, Gols, Jogos, Foto, Dia1, Dia2, Dia3, Dia4, Final,ObservacaoFA, GolsSofridos')
     .order('Nome', { ascending: true });
 
   if (error) {
@@ -267,17 +267,31 @@ function renderModalJogador(j) {
   const posicao = String(j.Posicao || '').toUpperCase();
   const time    = j.Time || '';
   const gols    = Number(j.Gols || 0);
+  const golsSofridos = Number(j.GolsSofridos || 0); // coluna vinda do banco
+  const jogos   = Number(j.Jogos || 0);             // agora já vem do banco
   const foto    = j.Foto || 'img/Placeholder.png';
 
   // pinta a faixa do topo conforme o time
   const banner = overlay.querySelector('.modal-banner');
   if (banner) banner.style.background = TEAM_COLORS[time] || '#888';
 
-  // KPIs
-  const dias = [j.Dia1, j.Dia2, j.Dia3, j.Dia4, j.Final];
-  const totalJogos = Number(j.Jogos ?? 0);
-
   titleEl.textContent = 'Detalhes do Jogador';
+
+  // escolhe KPI principal
+  let kpiExtraHtml = '';
+  if (posicao === 'GOLEIRO') {
+    kpiExtraHtml = `
+      <div class="kpi-card">
+        <div class="kpi-label">Gols Sofridos</div>
+        <div class="kpi-value">${golsSofridos}</div>
+      </div>`;
+  } else {
+    kpiExtraHtml = `
+      <div class="kpi-card">
+        <div class="kpi-label">Gols</div>
+        <div class="kpi-value">${gols}</div>
+      </div>`;
+  }
 
   bodyEl.innerHTML = `
     <!-- Topo: foto à esquerda, infos à direita -->
@@ -293,10 +307,7 @@ function renderModalJogador(j) {
 
     <!-- KPIs abaixo do topo -->
     <div class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-label">Gols</div>
-        <div class="kpi-value">${gols}</div>
-      </div>
+      ${kpiExtraHtml}
       <div class="kpi-card">
         <div class="kpi-label">Jogos</div>
         <div class="kpi-value">${totalJogos}</div>
@@ -325,7 +336,7 @@ function renderModalJogador(j) {
   // Render dinâmico dos extras
   const extras = overlay.querySelector('#extras');
   const ignorar = new Set([
-    'Nome','Posicao','Time','Gols','Foto', 'Jogos',
+    'Nome','Posicao','Time','Gols','Foto', 'Jogos','GolsSofridos',
     'Dia1','Dia2','Dia3','Dia4','Final',
     'created_at','updated_at','id' // caso exista
   ]);
