@@ -490,7 +490,7 @@ footer {
         font-size: 0.7rem;
     }
 
-    /* Painel KPI (Datas e Gols) no topo-direito */
+    /* Painel KPI (Jogos e Gols) no topo-direito */
     .kpi-panel.mobile-only {
         display: flex;
         align-items: center;
@@ -521,7 +521,7 @@ footer {
         color: #222;
     }
 
-    /* Esconde as colunas Datas/Gols padrão no mobile */
+    /* Esconde as colunas Jogos/Gols padrão no mobile */
     .tabela-row .col-datas,
     .tabela-row .col-gols {
         display: none;

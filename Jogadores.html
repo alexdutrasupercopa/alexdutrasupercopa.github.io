@@ -6,7 +6,8 @@
     <title>SuperCopa B.C.F.C</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="css/style.css" />
-    <script src="js/Jogadores.js" defer></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script defer src="js/Jogadores.js"></script>
     <script src="js/layout.js" defer></script>
 </head>
 
@@ -46,8 +47,8 @@
                     <select id="ordenar" aria-label="Ordenar por">
                         <option value="nome-asc">Nome (A–Z)</option>
                         <option value="nome-desc">Nome (Z–A)</option>
-                        <option value="datas-desc">Datas (↓)</option>
-                        <option value="datas-asc">Datas (↑)</option>
+                        <option value="datas-desc">Jogos (↓)</option>
+                        <option value="datas-asc">Jogos (↑)</option>
                         <option value="gols-desc">Gols (↓)</option>
                         <option value="gols-asc">Gols (↑)</option>
                     </select>
@@ -59,7 +60,7 @@
                 <!-- Cabeçalho -->
                 <div class="tabela-head">
                     <button class="th sort" data-sort="nome">Jogador</button>
-                    <button class="th sort center" data-sort="datas">Datas</button>
+                    <button class="th sort center" data-sort="datas">Jogos</button>
                     <button class="th sort center" data-sort="gols">Gols</button>
                     <div class="col col-dia">Dia 1</div>
                     <div class="col col-dia">Dia 2</div>
@@ -86,12 +87,12 @@
 
                         <!-- Painel KPI (mobile only) -->
                         <div class="kpi-panel mobile-only">
-                            <div class="kpi-item"><span class="kpi-label">Datas</span><span class="kpi">1</span></div>
+                            <div class="kpi-item"><span class="kpi-label">Jogos</span><span class="kpi">1</span></div>
                             <div class="kpi-item"><span class="kpi-label">Gols</span><span class="kpi">5</span></div>
                         </div>
 
                         <!-- Colunas desktop -->
-                        <div class="col col-datas" data-label="Datas"><span class="kpi">1</span></div>
+                        <div class="col col-datas" data-label="Jogos"><span class="kpi">1</span></div>
                         <div class="col col-gols" data-label="Gols"><span class="kpi">5</span></div>
                         <div class="col col-dia" data-label="Dia 1"><span class="status status-ok">✓</span></div>
                         <div class="col col-dia" data-label="Dia 2"><span class="status status-null">—</span></div>
@@ -116,12 +117,12 @@
 
                         <!-- Painel KPI (mobile only) -->
                         <div class="kpi-panel mobile-only">
-                            <div class="kpi-item"><span class="kpi-label">Datas</span><span class="kpi">1</span></div>
+                            <div class="kpi-item"><span class="kpi-label">Jogos</span><span class="kpi">1</span></div>
                             <div class="kpi-item"><span class="kpi-label">Gols</span><span class="kpi">0</span></div>
                         </div>
 
                         <!-- Colunas desktop -->
-                        <div class="col col-datas" data-label="Datas"><span class="kpi">0</span></div>
+                        <div class="col col-datas" data-label="Jogos"><span class="kpi">0</span></div>
                         <div class="col col-gols" data-label="Gols"><span class="kpi">0</span></div>
                         <div class="col col-dia" data-label="Dia 1"><span class="status status-bad">✗</span></div>
                         <div class="col col-dia" data-label="Dia 2"><span class="status status-null">—</span></div>
