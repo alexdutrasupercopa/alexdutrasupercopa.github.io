@@ -867,17 +867,6 @@ body.interna .hero {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-/* Opção B (alternativa): até 2 linhas com reticências
-.player-top .modal-title {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  white-space: normal;
-}
-*/
-
 /* Lista (cards/linhas) – evita quebrar layout no mobile */
 .jogador-info { min-width: 0; }                       /* permite encolher */
 .jogador-nome {
