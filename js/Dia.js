@@ -88,7 +88,7 @@ async function loadData({ n, final }) {
 }
 
 // ---------- MATA-MATA (listagem simples, igual antes) ----------
-const FK_TO_DATA = ["DataNumero","DiaNumero","dataNumero","diaNumero","Data","Dia"];
+const FK_TO_DATA = ["Data"];
 
 async function loadMatches(table, dataNumero){
   for(const fk of FK_TO_DATA){
