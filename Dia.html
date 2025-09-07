@@ -1,73 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Dia • SuperCopa B.C.F.C</title>
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SuperCopa B.C.F.C — Dia</title>
+
   <link rel="stylesheet" href="css/style.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script defer src="js/layout.js"></script>
-  <script defer src="js/ligaNavBar.js"></script>
   <script defer src="js/Dia.js"></script>
 </head>
 <body class="interna">
   <div id="navbar"></div>
+  <header class="hero"></header>
 
-  <!-- Navbar interna da Liga (injetada) -->
-  <div id="ligaNavBar"></div>
-
-  <main class="conteudo">
-    <section class="lista-container">
-      <h2 class="lista-titulo" id="dia-titulo">Dia</h2>
-
-      <!-- Card com informações gerais da Data -->
-      <div class="tabela-jogadores" id="data-card">
-        <div class="tabela-head" id="data-head">
-          <div class="th">Informações do Dia</div>
-        </div>
-        <div class="tabela-body" id="data-body">
-          <div class="tabela-row tabela-row-ghost"></div>
+  <main class="conteudo page-dia">
+    <!-- Topo minimalista: texto-resumo + seletor de dia -->
+    <section class="toolbar-dia">
+      <div class="toolbar-inner">
+       
+        <div class="dia-picker">
+          <label for="dia-select">DATA</label>
+          <select id="dia-select" aria-label="Selecionar dia"></select>
         </div>
       </div>
+    </section>
 
-      <h3 class="sec-title">Fase de grupos</h3>
+    <!-- Resumo visual -->
+    <section class="lista-container" id="resumo-dia">
+      <h2 class="lista-titulo" style = "padding-bottom: 10px">Resumo da Data</h2>
 
-        <!-- Card das partidas (editável) — mantém o que você já tem -->
-        <div class="tabela-jogadores" id="grupos-card">
-        <div id="grupo-setup-wrap" class="grupo-setup-wrap">
-            <button id="grp-gerar" class="btn-primary">Gerar partidas</button>
-        </div>
-
-        <div class="tabela-head">
-            <div class="th">Partidas</div>
-            <div class="th center">Placar</div>
-            <div class="th center">Status</div>
-            <div class="th center">Ações</div>
-        </div>
-        <div class="tabela-body" id="grupos-body">
-            <div class="tabela-row tabela-row-ghost"></div>
-        </div>
-        <div class="card-actions">
-            <button id="grp-salvar-tudo" class="btn-primary">Salvar tudo</button>
-        </div>
+      <div class="resumo-grid">
+        <div class="col-esq">
+          <div class="card-resumo">
+            <div class="card-head">Fase de Grupos</div>
+            <div class="fg-matches" id="fg-matches"></div>
+            <div class="fg-table" id="fg-table"></div>
+          </div>
         </div>
 
-
-      <!-- Mata-mata -->
-      <h3 class="sec-title">Mata-mata</h3>
-      <div class="tabela-jogadores" id="mata-card">
-        <div class="tabela-head">
-          <div class="th">Partidas</div>
-          <div class="th center">Placar</div>
-          <div class="th center">Status</div>
-        </div>
-        <div class="tabela-body" id="mata-body">
-          <div class="tabela-row tabela-row-ghost"></div>
+        <div class="col-dir">
+          <div class="card-resumo">
+            <div class="mm-matches" id="mm-matches"></div>
+            <div class="day-podium" id="day-podium"></div>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
   <div id="footer"></div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => { if (typeof init === "function") init(); });
+  </script>
+  
 </body>
 </html>

@@ -452,7 +452,7 @@ footer {
     display: none;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 830px) {
 
     /* Cabeçalho some no mobile */
     .tabela-head {
@@ -991,7 +991,7 @@ body.interna .hero {
 
 
 /* MOBILE: layout compacto que mantém alinhamento básico */
-@media (max-width: 640px) {
+@media (max-width: 830px) {
   /* Mostre só Jogador, Jogos e Gols (os dias viram painel mobile) */
   .tabela-row,
   .tabela-head {
@@ -1454,3 +1454,1319 @@ body.interna .hero {
   animation: shimmer 1.2s infinite;
 }
 @keyframes shimmer{ 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+
+/* ===== Liga › Resumo da Data (escopado) ===== */
+.dia-grid{
+	display:grid;
+	grid-template-columns: 1fr 320px; /* coluna principal | lateral direita */
+	gap:20px;
+}
+@media (max-width: 900px){
+	.dia-grid{ grid-template-columns: 1fr; }
+}
+
+/* painéis (mantém look branco + sombra do projeto) */
+.painel-dia{
+	background:#fff;
+	border-radius:12px;
+	box-shadow:0 4px 8px rgba(0,0,0,.1);
+	padding:16px;
+}
+.painel-dia .topo{
+	display:flex; align-items:center; justify-content:space-between; gap:10px;
+	margin-bottom:8px;
+}
+.painel-dia .badge{
+	color:#000;
+	background: var(--grad-top);
+	background: linear-gradient(to right, var(--grad-top), var(--grad-bot));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	font-weight:800;
+	font-size:12px;
+	white-space:nowrap;
+}
+
+/* ===== Lista de jogos ===== */
+.lista-jogos{ display:grid; gap:12px; }
+
+.jogo{
+	display:grid;
+	grid-template-columns: auto 1fr auto 1fr auto; /* timeA | … | placar | … | timeB | id */
+	align-items:center;
+	gap:8px;
+	padding:10px;
+	background:#f7f7f7;
+	border-radius:12px;
+}
+
+.jogo .time{ display:flex; align-items:center; gap:8px; min-width:0; }
+.jogo .bolinha{
+	width:14px; height:14px; border-radius:50%;
+	border:2px solid rgba(0,0,0,.08); /* contorno p/ time branco aparecer */
+	box-shadow: inset 0 1px 2px rgba(0,0,0,.04);
+}
+.jogo .nome-time{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+.jogo .placar{ font-weight:800; font-variant-numeric: tabular-nums; }
+.jogo .identificador{ font-size:12px; color:#666; }
+
+.jogo .artilheiros{
+	grid-column:1 / -1;
+	display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;
+}
+.jogo .chip{
+	display:flex; align-items:center; gap:6px;
+	background:#f5f5f5; padding:4px 8px; border-radius:999px;
+}
+.jogo .chip img{ width:18px; height:18px; border-radius:50%; object-fit:cover; }
+
+/* ===== Tabela do dia (fase de grupos) ===== */
+.tabela-dia{ width:100%; border-collapse:collapse; }
+.tabela-dia th, .tabela-dia td{ padding:8px 10px; text-align:center; }
+.tabela-dia th{ color:#666; font-weight:700; }
+.tabela-dia tbody tr{ background:#fff; }
+.tabela-dia tbody tr + tr{ border-top:1px solid #eee; }
+.tabela-dia .td-time{
+	text-align:left;
+	display:flex; align-items:center; gap:8px;
+}
+.tabela-dia .pos{ font-weight:800; }
+.tabela-dia .bonus{ color:#208a3c; font-weight:800; }
+
+/* ===== Colocações finais (lateral) ===== */
+.colocacoes-dia{
+	list-style: decimal;
+	margin:0; padding-left:18px;
+	display:grid; gap:8px;
+}
+.colocacoes-dia li{
+	display:flex; justify-content:space-between; align-items:center; gap:12px;
+	padding:8px; border-radius:10px; background:#f7f7f7;
+}
+.colocacoes-dia .quem{ display:flex; align-items:center; gap:8px; }
+.colocacoes-dia .bolinha{
+	width:18px; height:18px; border-radius:50%;
+	border:2px solid rgba(0,0,0,.08);
+}
+.colocacoes-dia .bonus{ color:#208a3c; font-weight:800; }
+.colocacoes-dia .nm{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+/* ===== Responsivo leve ===== */
+@media (max-width: 720px){
+	.jogo{ grid-template-columns: 1fr auto 1fr; }
+	.jogo .identificador{ grid-column: 1 / -1; }
+}
+
+.resumo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card-resumo{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+.card-head{font-weight:700;margin-bottom:10px}
+.match-line{display:grid;grid-template-columns:auto 60px auto;align-items:center;gap:8px;padding:6px 8px;border-radius:10px;background:#f9fafb;border:1px solid #eef0f4;margin-bottom:6px}
+.match-line .score{text-align:center;font-weight:600;opacity:.9}
+.scorers{font-size:.9rem;opacity:.85}
+.scorers.right{text-align:right}
+.team-dot{width:14px;height:14px;border-radius:50%;border:2px solid rgba(0,0,0,.08);display:inline-block;margin:0 6px}
+.fg-table{margin-top:10px}
+.fg-table .row{display:grid;grid-template-columns:auto 40px 40px 40px;gap:10px;padding:6px 8px;border-radius:10px}
+.fg-table .row.header{font-weight:700;opacity:.75;background:transparent;border:none}
+.fg-table .row.item{background:#f9fafb;border:1px solid #eef0f4;margin-top:6px}
+.day-podium .row{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:6px 8px;border-radius:10px;background:#f9fafb;border:1px solid #eef0f4;margin-top:6px}
+@media (max-width: 900px){ .resumo-grid{grid-template-columns:1fr} }
+
+    #grupos-card .tabela-head,
+    #grupos-card .tabela-body .tabela-row{
+      display:grid!important;
+      grid-template-columns:max-content 200px 130px 100px;
+      column-gap:12px; align-items:center; justify-content:start;
+    }
+    #grupos-card .tabela-body .tabela-row .col.center{display:flex;align-items:center;justify-content:center}
+    #grupos-card .match-score{display:grid;grid-template-columns:72px 24px 72px;gap:8px;align-items:center}
+    #grupos-card .in-score{width:72px;height:36px;text-align:center;box-sizing:border-box}
+    #grupos-card .match-score .x{display:inline-block;width:24px;text-align:center;opacity:.7}
+    .team-dot{width:18px;height:18px;border-radius:50%;border:2px solid rgba(0,0,0,.08);display:inline-block;box-shadow:0 1px 2px rgba(0,0,0,.05) inset}
+    #grupos-card .match-teams{display:inline-flex!important;align-items:center;gap:6px;width:max-content}
+    #grupos-card .match-teams .vs{display:inline-block;min-width:12px;text-align:center;opacity:.7}
+
+    /* painel de gols/chips */
+    .goals-wrap{margin-top:10px;background:rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.06);border-radius:10px;padding:10px}
+    .goals-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .goals-actions button{padding:6px 10px;border-radius:8px;border:1px solid rgba(0,0,0,.15);background:#fff}
+    .goals-list{display:flex;flex-wrap:wrap;gap:6px}
+    .goal-chip{background:#f3f4f6;border:1px solid #e5e7eb;border-radius:999px;padding:4px 10px;font-size:.9rem}
+    .goal-chip em{font-style:normal;opacity:.6;padding:0 4px}
+
+    .goals-form{margin-top:10px;border-top:1px dashed rgba(0,0,0,.08);padding-top:10px}
+    .gf-row{display:grid;grid-template-columns:140px 1fr;gap:8px;align-items:start;margin-bottom:8px}
+    .gf-row input{width:100%;padding:8px 10px;border:1px solid #d1d5db;border-radius:8px}
+    .gf-results{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;grid-column:2 / -1}
+    .gf-item{padding:4px 8px;border:1px solid #d1d5db;border-radius:8px;background:#fff;cursor:pointer}
+    .gf-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
+    .gf-actions button{padding:6px 12px;border-radius:8px;border:1px solid rgba(0,0,0,.15);background:#fff}
+
+    /* resumo visual */
+    .resumo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .card-resumo{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+    .card-head{font-weight:700;margin-bottom:10px}
+    .match-line{display:grid;grid-template-columns:auto 60px auto;align-items:center;gap:8px;padding:6px 8px;border-radius:10px;background:#f9fafb;border:1px solid #eef0f4;margin-bottom:6px}
+    .match-line .score{text-align:center;font-weight:600;opacity:.9}
+    .scorers{font-size:.9rem;opacity:.85}
+    .scorers.right{text-align:right}
+    .fg-table{margin-top:10px}
+    .fg-table .row{display:grid;grid-template-columns:auto 40px 40px 40px;gap:10px;padding:6px 8px;border-radius:10px}
+    .fg-table .row.header{font-weight:700;opacity:.75}
+    .fg-table .row.item{background:#f9fafb;border:1px solid #eef0f4;margin-top:6px}
+    .day-podium .row{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:6px 8px;border-radius:10px;background:#f9fafb;border:1px solid #eef0f4;margin-top:6px}
+    @media (max-width:900px){.resumo-grid{grid-template-columns:1fr}#grupos-card .tabela-head{display:none}#grupos-card .tabela-body .tabela-row{grid-template-columns:1fr;row-gap:12px}}
+
+    /* ======== DIA — tabela de jogos (4 colunas) ======== */
+#grupos-card .tabela-head,
+#grupos-card .tabela-body .tabela-row{
+  display:grid;
+  grid-template-columns: 1fr 200px 130px 110px; /* Partidas | Placar | Status | Ações */
+  gap:12px;
+  align-items:center;
+}
+#grupos-card .tabela-body .tabela-row .center{
+  display:flex; justify-content:center; align-items:center;
+}
+#grupos-card .match-score{
+  display:grid; grid-template-columns:72px 24px 72px; gap:8px; align-items:center;
+}
+#grupos-card .in-score{ width:72px; height:36px; text-align:center; box-sizing:border-box; }
+#grupos-card .match-score .x{ width:24px; text-align:center; opacity:.7; }
+
+/* times como bolinhas */
+.team-dot{ width:18px; height:18px; border-radius:50%; border:2px solid rgba(0,0,0,.08); display:inline-block; box-shadow:0 1px 2px rgba(0,0,0,.05) inset; }
+#grupos-card .match-teams{ display:inline-flex; align-items:center; gap:8px; }
+#grupos-card .match-teams .vs{ display:inline-block; min-width:12px; text-align:center; opacity:.7; }
+
+/* painel de gols */
+.goals-wrap{ margin-top:10px; background:var(--card-bg, #f7f7f8); border:1px solid #ececec; border-radius:10px; padding:10px; }
+.goals-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.goals-list{ display:flex; flex-wrap:wrap; gap:6px; }
+.goal-chip{ background:#f3f4f6; border:1px solid #e5e7eb; border-radius:999px; padding:4px 10px; font-size:.9rem; }
+.goal-chip em{ font-style:normal; opacity:.6; padding:0 4px; }
+.goals-form{ margin-top:10px; border-top:1px dashed rgba(0,0,0,.08); padding-top:10px; }
+.gf-row{ display:grid; grid-template-columns:140px 1fr; gap:8px; align-items:start; margin-bottom:8px; }
+.gf-row input{ width:100%; padding:8px 10px; border:1px solid #d1d5db; border-radius:8px; }
+.gf-results{ display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; grid-column:2 / -1; }
+.gf-item{ padding:4px 8px; border:1px solid #d1d5db; border-radius:8px; background:#fff; cursor:pointer; }
+.gf-actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:6px; }
+
+/* ======== DIA — resumo (cards) ======== */
+.resumo-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.card-resumo{ background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:14px; }
+.card-head{ font-weight:700; margin-bottom:10px; }
+.match-line{ display:grid; grid-template-columns:auto 60px auto; align-items:center; gap:8px; padding:6px 8px; border-radius:10px; background:#f9fafb; border:1px solid #eef0f4; margin-bottom:6px; }
+.match-line .score{ text-align:center; font-weight:600; opacity:.9; }
+.scorers{ font-size:.9rem; opacity:.85; }
+.scorers.right{ text-align:right; }
+.fg-table{ margin-top:10px; }
+.fg-table .row{ display:grid; grid-template-columns:auto 40px 40px 40px; gap:10px; padding:6px 8px; border-radius:10px; }
+.fg-table .row.header{ font-weight:700; opacity:.75; }
+.fg-table .row.item{ background:#f9fafb; border:1px solid #eef0f4; margin-top:6px; }
+.green{ color:#059669; }
+.day-podium .row{ display:grid; grid-template-columns:auto 1fr auto; gap:8px; align-items:center; padding:6px 8px; border-radius:10px; background:#f9fafb; border:1px solid #eef0f4; margin-top:6px; }
+
+@media (max-width: 980px){
+  .resumo-grid{ grid-template-columns:1fr; }
+  #grupos-card .tabela-head{ display:none; }
+  #grupos-card .tabela-body .tabela-row{ grid-template-columns:1fr; row-gap:10px; }
+}
+
+/* ===== DIA (somente exibição) — overrides específicos desta página ===== */
+
+/* 3 colunas: Partidas | Placar | Status (remove a coluna Ações) */
+#grupos-card .tabela-head,
+#grupos-card .tabela-body .tabela-row{
+  display: grid !important;
+  grid-template-columns: 1fr 200px 130px !important;
+  column-gap: 12px;
+  align-items: center;
+}
+
+/* Times (bolinhas) e “vs” em linha, alinhado à esquerda */
+#grupos-card .match-teams{
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-start;
+  width: max-content;
+}
+#grupos-card .match-teams .vs{
+  display: inline-block;
+  min-width: 12px;
+  text-align: center;
+  opacity: .7;
+}
+
+/* Bolinhas dos times (mantém contorno pro branco aparecer) */
+#grupos-card .team-dot{
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,0,0,.08);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.05);
+  display: inline-block;
+}
+
+/* Placar SOMENTE LEITURA (valores em <div>, sem inputs) */
+#grupos-card .match-score{
+  display: grid;
+  grid-template-columns: 56px 18px 56px; /* A | × | B */
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+#grupos-card .in-score{
+  width: 56px;
+  text-align: center;
+  font-weight: 800;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  height: auto !important;
+  box-sizing: border-box;
+}
+#grupos-card .match-score .x{
+  width: 18px;
+  text-align: center;
+  opacity: .7;
+}
+
+/* Status centralizado, sem sobrepor o placar */
+#grupos-card .tabela-body .tabela-row .col.center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#grupos-card .badge{ white-space: nowrap; }
+
+/* Esconde qualquer coisa de edição que possa ter ficado */
+#grp-salvar-tudo,
+#grupo-setup-wrap,
+#grupos-card .btn-save-linha,
+#grupos-card .goals-wrap,
+#grupos-card .goals-head,
+#grupos-card .goals-actions,
+#grupos-card .goals-form{ display: none !important; }
+
+/* Espaçamento das linhas enxuto (evita “buraco” entre partidas e placar) */
+#grupos-card .tabela-body .tabela-row{
+  margin: 8px 0;
+}
+
+/* Mobile: empilha e mantém placar legível */
+@media (max-width: 720px){
+  #grupos-card .tabela-head{ display: none !important; }
+  #grupos-card .tabela-body .tabela-row{
+    grid-template-columns: 1fr !important;
+    row-gap: 10px;
+  }
+  #grupos-card .match-score{
+    grid-template-columns: 48px 16px 48px;
+    justify-content: flex-start;
+  }
+}
+/* ===== DIA — largura e toolbar ===== */
+.page-dia .lista-container { max-width: 1160px; margin: 0 auto 24px; }
+.toolbar-dia { margin: 8px 0 12px; }
+.toolbar-dia .toolbar-inner { max-width: 1160px; margin: 0 auto; padding: 0 6px; display:flex; align-items:center; justify-content:space-between; }
+.page-title { font-size: 28px; line-height: 1.1; margin: 0; }
+.dia-picker { display:flex; align-items:center; gap:10px; }
+.dia-picker select { appearance:none; background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:8px 12px; font-weight:600; }
+
+/* ===== Tabela de jogos (3 colunas) ===== */
+#grupos-card .tabela-head,
+#grupos-card .tabela-body .tabela-row{
+  display:grid;
+  grid-template-columns: 1fr 240px 140px; /* Partidas | Placar | Status */
+  gap:14px;
+  align-items:center;
+}
+#grupos-card .match-teams{ display:inline-flex; align-items:center; gap:10px; }
+#grupos-card .team-dot{ width:18px; height:18px; border-radius:50%; border:2px solid rgba(0,0,0,.08); box-shadow: inset 0 1px 2px rgba(0,0,0,.05); display:inline-block; }
+#grupos-card .match-score{ display:grid; grid-template-columns:70px 20px 70px; gap:10px; align-items:center; justify-content:center; }
+#grupos-card .in-score{ width:70px; text-align:center; font-weight:800; font-size:18px; }
+#grupos-card .match-score .x{ width:20px; text-align:center; opacity:.6; }
+#grupos-card .tabela-body .tabela-row .col.center{ display:flex; justify-content:center; align-items:center; }
+#grupos-card .badge{ white-space:nowrap; }
+
+/* ===== Resumo — layout amplo e tipografia ===== */
+.resumo-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:22px; }
+.card-resumo{ background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:14px; }
+.card-head{ font-weight:800; margin-bottom:12px; font-size:16px; }
+
+/* Linhas de partidas do resumo (FG e MM) */
+.match-line{
+  display:grid;
+  grid-template-columns: 1fr 90px 1fr; /* artilheiros A | placar | artilheiros B */
+  align-items:center;
+  gap:10px;
+  padding:8px 10px;
+  margin-bottom:8px;
+  border-radius:12px;
+  background:#f9fafb;
+  border:1px solid #eef0f4;
+}
+.match-line .score{ text-align:center; font-weight:800; font-size:18px; line-height:1; }
+.match-line .score .score-x{ opacity:.6; }
+.scorers{ font-size:.95rem; opacity:.86; }
+.scorers.right{ text-align:right; }
+
+/* Tabela FG no resumo */
+.fg-table{ margin-top:12px; }
+.fg-table .row{ display:grid; grid-template-columns: 1fr 60px 60px 60px; gap:10px; padding:8px 10px; border-radius:12px; }
+.fg-table .row.header{ font-weight:800; opacity:.75; }
+.fg-table .row.item{ background:#f9fafb; border:1px solid #eef0f4; margin-top:8px; }
+.green{ color:#059669; }
+
+/* Pódio do dia */
+.day-podium .row{ display:grid; grid-template-columns: 40px 1fr auto; gap:10px; align-items:center; padding:8px 10px; border-radius:12px; background:#f9fafb; border:1px solid #eef0f4; margin-top:8px; }
+
+/* Melhor uso no mobile */
+@media (max-width: 980px){
+  .page-dia .lista-container, .toolbar-dia .toolbar-inner { max-width: 100%; padding: 0 12px; }
+  #grupos-card .tabela-head{ display:none; }
+  #grupos-card .tabela-body .tabela-row{ grid-template-columns: 1fr; row-gap:8px; }
+  #grupos-card .match-score{ justify-content:flex-start; }
+  .resumo-grid{ grid-template-columns: 1fr; }
+  .match-line{ grid-template-columns: 1fr 72px 1fr; }
+  .match-line .score{ font-size:16px; }
+}
+/* ===== Resumo: Fase de Grupos no estilo do cartaz ===== */
+#resumo-dia .fg-matches .match-line-fancy{
+  display: grid;
+  grid-template-columns: 1fr 28px auto 28px 1fr; /* artilheiros A | dot A | placar | dot B | artilheiros B */
+  align-items: center;
+  gap: 14px;
+  padding: 8px 0;
+}
+
+#resumo-dia .fg-matches .dot .team-dot{
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,.25);
+}
+
+#resumo-dia .fg-matches .score-fancy{
+  text-align: center;
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif; /* cai para serif se não tiver a fonte */
+  font-style: italic;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: .5px;
+  line-height: 1;
+  color: #0f172a;
+}
+
+#resumo-dia .fg-matches .score-fancy .sep{
+  margin: 0 10px;
+  opacity: .85;
+}
+
+#resumo-dia .fg-matches .scorers-left,
+#resumo-dia .fg-matches .scorers-right{
+  font-size: 14px;
+  color: #262626;
+  opacity: .92;
+}
+#resumo-dia .fg-matches .scorers-right{ text-align: right; }
+
+/* tira molduras antigas desta lista específica */
+#resumo-dia .fg-matches .match-line{
+  display: none; /* caso haja algum legado, esconda */
+}
+
+@media (max-width: 980px){
+  #resumo-dia .fg-matches .match-line-fancy{
+    grid-template-columns: 1fr 24px auto 24px 1fr;
+    gap: 10px;
+  }
+  #resumo-dia .fg-matches .score-fancy{ font-size: 22px; }
+  #resumo-dia .fg-matches .dot .team-dot{ width: 20px; height: 20px; }
+  #resumo-dia .fg-matches .scorers-left,
+  #resumo-dia .fg-matches .scorers-right{ font-size: 13px; }
+}
+/* ===== Resumo (FG + MM) no estilo do cartaz ===== */
+#resumo-dia .fg-matches .match-line-fancy,
+#resumo-dia .mm-matches .match-line-fancy{
+  display: grid;
+  grid-template-columns: 1fr 28px auto 28px 1fr; /* artilheiros A | dot A | placar | dot B | artilheiros B */
+  align-items: center;
+  gap: 14px;
+  padding: 8px 0;
+}
+
+#resumo-dia .fg-matches .dot .team-dot,
+#resumo-dia .mm-matches .dot .team-dot{
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,.25);
+}
+
+#resumo-dia .fg-matches .score-fancy,
+#resumo-dia .mm-matches .score-fancy{
+  text-align: center;
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: .5px;
+  line-height: 1;
+  color: #0f172a;
+}
+#resumo-dia .fg-matches .score-fancy .sep,
+#resumo-dia .mm-matches .score-fancy .sep{ margin: 0 10px; opacity: .85; }
+
+#resumo-dia .fg-matches .scorers-left,
+#resumo-dia .fg-matches .scorers-right,
+#resumo-dia .mm-matches .scorers-left,
+#resumo-dia .mm-matches .scorers-right{
+  font-size: 14px;
+  color: #262626;
+  opacity: .92;
+}
+#resumo-dia .fg-matches .scorers-right,
+#resumo-dia .mm-matches .scorers-right{ text-align: right; }
+
+/* Título de cada seção do mata-mata */
+#resumo-dia .mm-matches .section{ margin-bottom: 12px; }
+#resumo-dia .mm-matches .section-title{
+  font-weight: 800;
+  font-size: 14px;
+  opacity: .75;
+  margin: 4px 0 8px;
+}
+
+/* esconda qualquer layout antigo nessa área */
+#resumo-dia .mm-matches .match-line{ display: none; }
+
+@media (max-width: 980px){
+  #resumo-dia .fg-matches .match-line-fancy,
+  #resumo-dia .mm-matches .match-line-fancy{
+    grid-template-columns: 1fr 24px auto 24px 1fr;
+    gap: 10px;
+  }
+  #resumo-dia .fg-matches .score-fancy,
+  #resumo-dia .mm-matches .score-fancy{ font-size: 22px; }
+  #resumo-dia .fg-matches .dot .team-dot,
+  #resumo-dia .mm-matches .dot .team-dot{ width: 20px; height: 20px; }
+  #resumo-dia .fg-matches .scorers-left,
+  #resumo-dia .fg-matches .scorers-right,
+  #resumo-dia .mm-matches .scorers-left,
+  #resumo-dia .mm-matches .scorers-right{ font-size: 13px; }
+}
+/* ===== DIA — polimento visual geral ===== */
+.page-dia .lista-container { max-width: 1180px; margin: 0 auto 24px; }
+.toolbar-dia .toolbar-inner { max-width: 1180px; }
+.card-resumo{ background:#fff; border:1px solid #e6e8ec; border-radius:16px; padding:16px; box-shadow:0 6px 18px rgba(16,24,40,.06); }
+.card-head{ font-weight:800; margin-bottom:12px; font-size:16px; }
+
+/* Grid das duas colunas do resumo */
+.resumo-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:24px; }
+
+/* ==== Cards dos jogos (FG + MM) ==== */
+#resumo-dia .fg-matches .match-line-fancy,
+#resumo-dia .mm-matches .match-line-fancy{
+  display: grid;
+  grid-template-columns: 1fr 30px auto 30px 1fr; /* artilheiros A | dot A | placar | dot B | artilheiros B */
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #eef0f4;
+  background: #fafbfc;
+  margin-bottom: 10px;
+}
+
+/* micro-elevacao */
+#resumo-dia .cardish{ box-shadow: 0 1px 0 rgba(0,0,0,.02); }
+#resumo-dia .cardish:hover{ background:#fff; box-shadow:0 3px 10px rgba(16,24,40,.06); transition: .15s; }
+
+#resumo-dia .fg-matches .dot .team-dot,
+#resumo-dia .mm-matches .dot .team-dot{
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,.25);
+}
+
+#resumo-dia .fg-matches .score-fancy,
+#resumo-dia .mm-matches .score-fancy{
+  text-align: center;
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 28px;
+  letter-spacing: .5px;
+  line-height: 1;
+  color: #0f172a;
+}
+#resumo-dia .fg-matches .score-fancy .sep,
+#resumo-dia .mm-matches .score-fancy .sep{ margin: 0 10px; opacity: .85; }
+
+#resumo-dia .fg-matches .scorers-left,
+#resumo-dia .fg-matches .scorers-right,
+#resumo-dia .mm-matches .scorers-left,
+#resumo-dia .mm-matches .scorers-right{
+  font-size: 14px;
+  color: #262626;
+  opacity: .92;
+}
+#resumo-dia .fg-matches .scorers-right,
+#resumo-dia .mm-matches .scorers-right{ text-align: right; }
+
+/* Seções do mata-mata */
+#resumo-dia .mm-matches .section{ margin-bottom: 14px; }
+#resumo-dia .mm-matches .section-title{
+  font-weight: 800; font-size: 14px; opacity: .72; margin: 6px 2px 10px;
+}
+
+/* ==== Tabela FG com PTS ==== */
+.fg-table{ margin-top: 14px; }
+.fg-table .row{
+  display:grid;
+  grid-template-columns: 1fr 68px 60px 60px 60px; /* Time | PTS | SG | Gols | +FG */
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+.fg-table .row.header{
+  font-weight:800; opacity:.75;
+  padding-top:0; padding-bottom:6px;
+}
+.fg-table .row.item{
+  background:#fafbfc; border:1px solid #eef0f4; margin-top:8px;
+}
+.fg-table .row.item:hover{ background:#fff; box-shadow:0 2px 8px rgba(16,24,40,.06); }
+.fg-table .teamcell{ display:flex; align-items:center; gap:8px; }
+
+/* Pódio mini-cards */
+.day-podium .row{
+  display:grid; grid-template-columns: 40px 1fr auto; gap:10px; align-items:center;
+  padding: 10px 12px; border-radius: 12px; background:#fafbfc; border:1px solid #eef0f4; margin-top:8px;
+}
+
+/* Responsivo */
+@media (max-width: 980px){
+  .resumo-grid{ grid-template-columns: 1fr; }
+  #resumo-dia .fg-matches .match-line-fancy,
+  #resumo-dia .mm-matches .match-line-fancy{ grid-template-columns: 1fr 26px auto 26px 1fr; }
+  #resumo-dia .fg-matches .score-fancy,
+  #resumo-dia .mm-matches .score-fancy{ font-size: 22px; }
+  .fg-table .row{ grid-template-columns: 1fr 60px 54px 54px 54px; }
+}
+/* ======= TOP: texto de resumo + seletor ======= */
+.page-dia .lista-container { max-width: 1180px; margin: 0 auto 28px; }
+.toolbar-dia { margin: 10px 0 6px; }
+.toolbar-dia .toolbar-inner{
+  max-width: 1180px; margin: 0 auto; padding: 0 6px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.day-summary{ font-size: 16px; font-weight: 600; color:#0f172a; }
+.dia-picker{ display:flex; align-items:center; gap:10px; }
+.dia-picker label{ font-size: 13px; opacity:.8; }
+.dia-picker select{ appearance:none; background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:8px 12px; font-weight:600; }
+
+/* ======= Resumo — cards mais soltos ======= */
+.resumo-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:30px; }
+.card-resumo{ background:#fff; border:1px solid #e6e8ec; border-radius:16px; padding:16px; box-shadow:0 6px 18px rgba(16,24,40,.06); }
+.card-head{ font-weight:800; margin-bottom:14px; font-size:16px; }
+
+/* Jogos em cards com mais respiro */
+#resumo-dia .fg-matches .match-line-fancy,
+#resumo-dia .mm-matches .match-line-fancy{
+  display:grid; grid-template-columns: 1fr 30px auto 30px 1fr;
+  align-items:center; gap:16px;
+  padding: 12px 14px; margin-bottom:16px;
+  border-radius: 14px; border:1px solid #eef0f4; background:#fafbfc;
+}
+#resumo-dia .cardish{ box-shadow:0 1px 0 rgba(0,0,0,.02); }
+#resumo-dia .cardish:hover{ background:#fff; box-shadow:0 3px 10px rgba(16,24,40,.06); }
+
+/* Placar grande */
+#resumo-dia .fg-matches .score-fancy,
+#resumo-dia .mm-matches .score-fancy{
+  text-align:center; font-family:"Playfair Display", Georgia, "Times New Roman", serif;
+  font-style:italic; font-weight:800; font-size:28px; letter-spacing:.5px; line-height:1; color:#0f172a;
+}
+#resumo-dia .fg-matches .score-fancy .sep,
+#resumo-dia .mm-matches .score-fancy .sep{ margin:0 10px; opacity:.85; }
+
+/* Artilheiros */
+#resumo-dia .fg-matches .scorers-left,
+#resumo-dia .fg-matches .scorers-right,
+#resumo-dia .mm-matches .scorers-left,
+#resumo-dia .mm-matches .scorers-right{ font-size:14px; color:#262626; opacity:.92; }
+#resumo-dia .fg-matches .scorers-right,
+#resumo-dia .mm-matches .scorers-right{ text-align:right; }
+
+/* Mata-mata: títulos maiores */
+#resumo-dia .mm-matches .section{ margin-bottom: 18px; }
+#resumo-dia .mm-matches .section-title.big{
+  font-weight:900; font-size:18px; letter-spacing:.2px;
+  margin: 2px 2px 12px; color:#0f172a;
+}
+
+/* Tabela FG (já com PTS) */
+.fg-table{ margin-top: 16px; }
+.fg-table .row{ display:grid; grid-template-columns: 1fr 68px 60px 60px 60px; gap:10px; padding:10px 12px; border-radius:10px; }
+.fg-table .row.header{ font-weight:800; opacity:.75; padding-top:0; padding-bottom:6px; }
+.fg-table .row.item{ background:#fafbfc; border:1px solid #eef0f4; margin-top:10px; }
+.fg-table .row.item:hover{ background:#fff; box-shadow:0 2px 8px rgba(16,24,40,.06); }
+.fg-table .teamcell{ display:flex; align-items:center; gap:8px; }
+.green{ color:#059669; }
+
+/* Bolinhas */
+#resumo-dia .fg-matches .dot .team-dot,
+#resumo-dia .mm-matches .dot .team-dot{ width:22px; height:22px; border-radius:50%; border:0; box-shadow:0 2px 6px rgba(0,0,0,.25); }
+
+/* Responsivo */
+@media (max-width: 980px){
+  .page-dia .lista-container, .toolbar-dia .toolbar-inner { max-width: 100%; padding: 0 12px; }
+  .resumo-grid{ grid-template-columns: 1fr; gap:22px; }
+  #resumo-dia .fg-matches .match-line-fancy,
+  #resumo-dia .mm-matches .match-line-fancy{ grid-template-columns: 1fr 26px auto 26px 1fr; gap:12px; }
+  #resumo-dia .fg-matches .score-fancy,
+  #resumo-dia .mm-matches .score-fancy{ font-size:22px; }
+  .fg-table .row{ grid-template-columns: 1fr 60px 54px 54px 54px; }
+}
+
+.fg-table {padding-top: 30px}
+.day-podium{padding-top: 30px}
+
+/* ===================== MOBILE TUNING (<= 600px) ===================== */
+@media (max-width: 600px){
+
+  /* Topo: mostrar só o seletor; resumo some para não quebrar */
+  .day-summary{ display:none; }
+  .dia-picker label{
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    font-weight: 700;
+  }
+  .dia-picker select{
+    padding: 10px 12px;
+    border-radius: 12px;
+  }
+
+  /* Grid vira 1 coluna e cards com mais respiro */
+  .resumo-grid{ grid-template-columns: 1fr; gap: 20px; }
+  #resumo-dia .card-resumo{ padding: 14px; }
+  #resumo-dia .card-head{ font-size: 15px; margin-bottom: 12px; }
+
+  /* ==== Ajuste dos cards de jogos (FG + MM) ==== 
+     Reorganiza em 3 linhas:
+       Linha 1: DOT A  |  PLACAR  | DOT B
+       Linha 2: Artilheiros A (esquerda)
+       Linha 3: Artilheiros B (direita) */
+  #resumo-dia .fg-matches .match-line-fancy,
+  #resumo-dia .mm-matches .match-line-fancy{
+    grid-template-columns: 28px auto 28px;
+    grid-template-rows: auto auto auto;
+    gap: 10px;
+    margin-bottom: 14px;
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  /* posicionamento explícito dos elementos */
+  #resumo-dia .match-line-fancy .dot:nth-of-type(1){ grid-column: 1; grid-row: 1; }
+  #resumo-dia .match-line-fancy .score-fancy{ grid-column: 2; grid-row: 1; }
+  #resumo-dia .match-line-fancy .dot:nth-of-type(2){ grid-column: 3; grid-row: 1; }
+
+  #resumo-dia .match-line-fancy .scorers-left{
+    grid-column: 1 / -1; grid-row: 2; text-align: left;
+    font-size: 13px;
+  }
+  #resumo-dia .match-line-fancy .scorers-right{
+    grid-column: 1 / -1; grid-row: 3; text-align: right;
+    font-size: 13px;
+  }
+
+  /* Placar um pouco menor para caber bem */
+  #resumo-dia .fg-matches .score-fancy,
+  #resumo-dia .mm-matches .score-fancy{ font-size: 24px; }
+
+  /* Bolinhas um tiquinho menores */
+  #resumo-dia .fg-matches .dot .team-dot,
+  #resumo-dia .mm-matches .dot .team-dot{
+    width: 20px; height: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,.22);
+  }
+
+  /* Seções do mata-mata mais destacadas */
+  #resumo-dia .mm-matches .section{ margin-bottom: 16px; }
+  #resumo-dia .mm-matches .section-title.big{
+    font-size: 17px;
+    margin: 0 2px 10px;
+  }
+
+  /* ==== Tabela da Fase de Grupos ==== */
+  .fg-table{ margin-top: 12px; }
+  .fg-table .row{
+    grid-template-columns: 1fr 58px 54px 54px 54px;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+  .fg-table .teamcell{ gap: 6px; }
+  .fg-table .row.item{ margin-top: 8px; }
+
+  /* Muito estreito? esconder +FG para não quebrar */
+  @media (max-width: 420px){
+    .fg-table .row{ grid-template-columns: 1fr 58px 54px 54px; }
+    .fg-table .row.header > :last-child,
+    .fg-table .row.item   > :last-child{ display:none; }
+  }
+}
+/* ================= MOBILE FIXES & POLISH ================= */
+
+/* --- Cards dos jogos (FG + MM) no MOBILE: 
+   DOT A + PLACAR + DOT B (linha 1) 
+   Artilheiros do Time1 (linha 2, esquerda)
+   Artilheiros do Time2 (linha 3, direita) --- */
+  /* ================= MOBILE FIXES & POLISH ================= */
+
+/* --- Cards dos jogos (FG + MM) no MOBILE: 
+   DOT A + PLACAR + DOT B (linha 1) 
+   Artilheiros do Time1 (linha 2, esquerda)
+   Artilheiros do Time2 (linha 3, direita) --- */
+@media (max-width: 600px){
+
+  /* Mais respiro e tipografia nos cards */
+  #resumo-dia .fg-matches .match-line-fancy,
+  #resumo-dia .mm-matches .match-line-fancy{
+    grid-template-columns: 36px 1fr 36px !important;
+    grid-template-rows: auto auto auto !important;
+    grid-template-areas:
+      "dotA score dotB"
+      "scA  score scB"
+      "scA  score scB" !important;  /* mantém o centro “alto” e os textos nas laterais */
+    gap: 8px !important;
+    padding: 12px !important;
+    margin-bottom: 14px !important;
+    border-radius: 14px !important;
+  }
+
+  /* Mapeia elementos para as áreas do grid */
+  #resumo-dia .match-line-fancy .dot:first-of-type{ grid-area: dotA; justify-self:center; align-self:center; }
+  #resumo-dia .match-line-fancy .dot:last-of-type{  grid-area: dotB; justify-self:center; align-self:center; }
+  #resumo-dia .match-line-fancy .score-fancy{       grid-area: score; justify-self:center; align-self:center; }
+  #resumo-dia .match-line-fancy .scorers-left{      grid-area: scA; text-align:left;  font-size:13px; }
+  #resumo-dia .match-line-fancy .scorers-right{     grid-area: scB; text-align:right; font-size:13px; }
+
+  /* Bolinhas menores e mais próximas */
+  #resumo-dia .fg-matches .dot .team-dot,
+  #resumo-dia .mm-matches .dot .team-dot{
+    width: 18px; height: 18px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.18);
+  }
+
+  /* Placar um pouco menor para caber bem */
+  #resumo-dia .fg-matches .score-fancy,
+  #resumo-dia .mm-matches .score-fancy{ font-size: 22px; }
+
+  /* Títulos das seções do mata-mata maiores no mobile */
+  #resumo-dia .mm-matches .section-title.big{
+    font-size: 18px; margin: 0 2px 10px;
+  }
+
+  /* Toolbar: mostra só “DATA” + seletor; esconde o texto-resumo */
+  .day-summary{ display:none; }
+  .dia-picker label{
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    font-weight: 700;
+  }
+  .dia-picker select{ padding: 10px 12px; border-radius: 12px; }
+
+  /* Grid principal em 1 coluna com bom espaçamento */
+  .resumo-grid{ grid-template-columns: 1fr; gap: 22px; }
+  .card-resumo{ padding: 14px; }
+  .card-head{ font-size: 15px; margin-bottom: 12px; }
+
+  /* ===== Tabela da Fase de Grupos – mobile ===== */
+  .fg-table{ margin-top: 12px; }
+  .fg-table .row{
+    grid-template-columns: 1fr 56px 54px 54px 54px; /* Time | PTS | SG | Gols | +FG */
+    gap: 8px;
+    padding: 10px 12px;
+  }
+  .fg-table .row.header{
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  .fg-table .teamcell{ min-width:0; display:flex; align-items:center; gap:6px; }
+  .fg-table .teamcell > *{ min-width:0; }
+  .fg-table .teamcell{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  /* Muito estreito? esconde +FG para não quebrar as colunas */
+  @media (max-width: 420px){
+    .fg-table .row{ grid-template-columns: 1fr 56px 54px 54px; }
+    .fg-table .row.header > :last-child,
+    .fg-table .row.item   > :last-child{ display:none; }
+  }
+}
+
+/* ====== Ajustes gerais (todas as larguras) ====== */
+/* Aproxima um pouco os elementos também no desktop/tablet */
+#resumo-dia .fg-matches .match-line-fancy,
+#resumo-dia .mm-matches .match-line-fancy{
+  gap: 12px;
+}
+#resumo-dia .fg-matches .dot .team-dot,
+#resumo-dia .mm-matches .dot .team-dot{
+  margin: 0; /* sem afastamento extra das bolinhas */
+}
+
+  /* =============================================================================
+   TABELA DA LIGA — TODAS AS COLUNAS + SCROLL HORIZONTAL + COLUNAS STICKY
+   (funciona em telas pequenas sem esconder nada)
+   ========================================================================== */
+
+/* A bolinha do time não encolhe */
+.tabela-times .time-dot{
+  width: 28px; height: 28px; border-radius: 50%;
+  flex: 0 0 28px;
+  border: 2px solid rgba(0,0,0,.08);
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.06);
+}
+
+/* Valores padrão das larguras das colunas (usados no grid e no sticky) */
+.tabela-times{
+  --col-pos:   52px;   /* #        */
+  --col-time:  220px;  /* Time     */
+  --col-pts:    68px;  /* Pts      */
+  --col-1o:     68px;  /* 1º       */
+  --col-2o:     68px;  /* 2º       */
+  --col-vit:    68px;  /* Vit      */
+  --col-saldo:  80px;  /* Saldo    */
+  --col-gpro:   80px;  /* Gols Pró */
+  --col-gcon:   80px;  /* Gols Sof.*/
+}
+
+/* --- Quando a tela é menor que a largura “ideal”, ativa rolagem horizontal
+   e define explicitamente a largura mínima do grid. Também deixa # e Time sticky. */
+@media (max-width: 1024px){
+  .tabela-times{
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    background: transparent; /* mantém sombra bonita no conteúdo */
+  }
+
+  .tabela-times .tabela-head,
+  .tabela-times .tabela-row{
+    min-width: calc(
+      var(--col-pos) + var(--col-time) + var(--col-pts) +
+      var(--col-1o) + var(--col-2o) + var(--col-vit) +
+      var(--col-saldo) + var(--col-gpro) + var(--col-gcon)
+    );
+    grid-template-columns:
+      var(--col-pos) var(--col-time) var(--col-pts)
+      var(--col-1o)  var(--col-2o)   var(--col-vit)
+      var(--col-saldo) var(--col-gpro) var(--col-gcon);
+  }
+
+  /* Garante que nada ficou oculto por patches antigos */
+  .tabela-times .tabela-head .th,
+  .tabela-times .tabela-row > .col{ display: block !important; }
+
+  /* Cabeçalho fica sticky no topo quando houver rolagem vertical */
+  .tabela-times .tabela-head{
+    position: sticky; top: 0; z-index: 7;
+    background: #fff; /* precisa de fundo para cobrir o que passa por baixo */
+  }
+
+  /* Centraliza números das colunas numéricas e preserva nome do time */
+  .tabela-times .tabela-head .th{ white-space: nowrap; }
+  .tabela-times .tabela-row  > .col:nth-child(n+3){ text-align: center; }
+  .tabela-times .jogador-nome{
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+}
+
+/* Muito estreitas (<480px): pode reduzir um pouco as larguras para rolar menos */
+@media (max-width: 480px){
+  .tabela-times{
+    --col-time: 200px;
+    --col-pts:   64px;
+    --col-1o:    64px;
+    --col-2o:    64px;
+    --col-vit:   64px;
+    --col-saldo: 74px;
+    --col-gpro:  74px;
+    --col-gcon:  74px;
+  }
+}
+/* ================== TABELA – compacta coluna Time e remove sticky ================== */
+
+/* linhas um pouco mais “justas” */
+.tabela-times .tabela-row{
+  padding: 10px 12px;   /* era maior */
+  row-gap: 6px;
+}
+.tabela-times .time-cell{ gap: 8px; } /* dot + nome mais próximos */
+
+/* a bolinha continua 100% circular */
+.tabela-times .time-dot{
+  width: 28px; height: 28px; border-radius: 50%;
+  flex: 0 0 28px;
+}
+
+/* --------- Até 1024px: reduz largura da coluna Time e DAS numéricas --------- */
+@media (max-width: 1024px){
+  /* valores mais enxutos para o grid (aqui você regula o “vazio”) */
+  .tabela-times{
+    --col-pos:   48px;  /* #        */
+    --col-time:  160px; /* Time (reduzido) */
+    --col-pts:    60px; /* Pts      */
+    --col-1o:     56px; /* 1º       */
+    --col-2o:     56px; /* 2º       */
+    --col-vit:    56px; /* Vit      */
+    --col-saldo:  68px; /* Saldo    */
+    --col-gpro:   68px; /* Gols Pró */
+    --col-gcon:   68px; /* Gols Sof */
+  }
+
+  /* aplica as larguras e mantém scroll horizontal se precisar */
+  .tabela-times{ overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .tabela-times .tabela-head,
+  .tabela-times .tabela-row{
+    min-width: calc(
+      var(--col-pos) + var(--col-time) + var(--col-pts) +
+      var(--col-1o)  + var(--col-2o)   + var(--col-vit) +
+      var(--col-saldo) + var(--col-gpro) + var(--col-gcon)
+    );
+    grid-template-columns:
+      var(--col-pos) var(--col-time) var(--col-pts)
+      var(--col-1o)  var(--col-2o)   var(--col-vit)
+      var(--col-saldo) var(--col-gpro) var(--col-gcon);
+  }
+
+  /* números centralizados nas colunas numéricas */
+  .tabela-times .tabela-head .th{ white-space: nowrap; }
+  .tabela-times .tabela-row  > .col:nth-child(n+3){ text-align: center; }
+  .tabela-times .jogador-nome{
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  /* -------- remover sticky completamente -------- */
+  .tabela-times .tabela-head,
+  .tabela-times .tabela-head .th:nth-child(1),
+  .tabela-times .tabela-head .th:nth-child(2),
+  .tabela-times .tabela-row  > .col:nth-child(1),
+  .tabela-times .tabela-row  > .col:nth-child(2){
+    position: static !important;
+    left: auto !important;
+    z-index: 1 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+}
+
+/* Muito estreito – pode reduzir ainda mais o “Time” (opcional) */
+@media (max-width: 480px){
+  .tabela-times{ --col-time: 140px; }
+}
+/* ======================= TABELA DA LIGA – FIX DESKTOP ESTREITO + MOBILE ======================= */
+
+/* Bolinha sempre circular */
+.tabela-times .time-dot{
+  width: 28px; height: 28px; border-radius: 50%;
+  flex: 0 0 28px;
+  border: 2px solid rgba(0,0,0,.08);
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.06);
+}
+
+/* Valores “padrão” (podem ser ajustados) */
+.tabela-times{
+  --col-pos:   54px;   /* #        */
+  --col-time:  190px;  /* Time     */
+  --col-pts:    68px;  /* Pts      */
+  --col-1o:     64px;  /* 1º       */
+  --col-2o:     64px;  /* 2º       */
+  --col-vit:    64px;  /* Vit      */
+  --col-saldo:  76px;  /* Saldo    */
+  --col-gpro:   76px;  /* Gols Pró */
+  --col-gcon:   76px;  /* Gols Sof.*/
+}
+
+/* Tabela base: garante box-sizing e centraliza numéricos */
+.tabela-times .tabela-head,
+.tabela-times .tabela-row{
+  box-sizing: border-box;
+}
+.tabela-times .tabela-row > .col:nth-child(n+3),
+.tabela-times .tabela-head .th:nth-child(n+3){ text-align: center; }
+
+/* ====== SCROLL + GRID FIX a partir de desktops menores e mobile ====== */
+@media (max-width: 1280px){
+  /* ativa scroll horizontal no contêiner */
+  .tabela-times{
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* todas as colunas sempre visíveis, com largura mínima explícita */
+  .tabela-times .tabela-head,
+  .tabela-times .tabela-row{
+    min-width: calc(
+      var(--col-pos) + var(--col-time) + var(--col-pts) +
+      var(--col-1o)  + var(--col-2o)   + var(--col-vit) +
+      var(--col-saldo) + var(--col-gpro) + var(--col-gcon)
+    );
+    grid-template-columns:
+      var(--col-pos) var(--col-time) var(--col-pts)
+      var(--col-1o)  var(--col-2o)   var(--col-vit)
+      var(--col-saldo) var(--col-gpro) var(--col-gcon);
+    column-gap: 12px;   /* mais compacto */
+  }
+
+  /* remove qualquer ocultação/sticky/antes que tenha sobrado de patches antigos */
+  .tabela-times .tabela-head .th,
+  .tabela-times .tabela-row > .col{ display:block !important; }
+  .tabela-times .tabela-head,
+  .tabela-times .tabela-head .th,
+  .tabela-times .tabela-row  > .col{
+    position: static !important; left:auto !important; z-index:1 !important; box-shadow:none !important;
+  }
+  .tabela-times .tabela-row::before{ content:none !important; } /* remove o fundo via ::before */
+}
+
+/* ====== LINHA COMO “CARD” QUE VAI ATÉ A ÚLTIMA COLUNA ====== */
+@media (max-width: 1280px){
+  .tabela-times .tabela-row{
+    background: #fff !important;                   /* o próprio fundo da linha */
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(16,24,40,.06);
+    padding: 10px 12px;                            /* um pouco mais enxuto */
+    row-gap: 6px;
+    width: fit-content;
+  }
+  .tabela-times .tabela-head{
+    background: transparent;                       /* cabeçalho “limpo” */
+  }
+  /* Nome do time com reticências quando estreita */
+  .tabela-times .jogador-nome{
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+  }
+}
+
+/* ====== MOBILE MUITO ESTREITO – encolhe um pouco mais sem quebrar ====== */
+@media (max-width: 480px){
+  .tabela-times{
+    --col-time: 120px;   /* reduz o “vazio” entre time e próximas colunas */
+    --col-pts:   62px;
+    --col-1o:    60px;
+    --col-2o:    60px;
+    --col-vit:   60px;
+    --col-saldo: 68px;
+    --col-gpro:  68px;
+    --col-gcon:  68px;
+  }
+}
+/* ===== Sticky footer universal (funciona em todas as páginas) ===== */
+html, body{
+  height: 100%;
+}
+
+body{
+  min-height: 100svh;          /* garante altura mínima = viewport (iOS safe) */
+  display: flex;
+  flex-direction: column;       /* empilha: header, conteúdo, footer */
+}
+
+/* Espaçador flexível: empurra o footer para baixo só quando faltar conteúdo */
+body::after{
+  content: "";
+  flex: 1 0 auto;
+}
+
+/* Footer nunca encolhe e ocupa a largura toda */
+footer, .footer, .site-footer, #footer{
+  flex-shrink: 0;
+  width: 100%;
+  margin-top: 0;                /* evita “degrau” se havia margin-top */
+}
+
+/* (Opcional) caso seu wrapper principal use overflow, evite cortar o footer */
+main, .main, .page, .content, .container-page{
+  /* se algum desses existir no seu layout, eles continuam naturais;
+     não é obrigatório, só um reforço para layouts variados */
+  overflow: visible;
+}
+
+/* ===================== Footer sempre colado no fundo (modo fixo) ===================== */
+/* Altura do rodapé (ajuste se o seu for maior/menor) */
+:root{
+  --footer-h: 48px; /* ex.: 48, 56, 64px */
+}
+
+/* Remove qualquer tentativa anterior de sticky via flex */
+body{ display:block !important; min-height:100svh; }
+body::after{ content:none !important; }
+
+/* Reserva espaço no fim da página para o rodapé fixo (não cobre conteúdo) */
+html, body{ height:auto; }
+body{
+  padding-bottom: calc(var(--footer-h) + env(safe-area-inset-bottom, 0px));
+}
+
+/* Footer fixo no canto inferior da janela, ocupando toda a largura */
+footer, .footer, .site-footer, #footer{
+  position: fixed !important;
+  left: 0; right: 0; bottom: 0;
+  height: var(--footer-h);
+  z-index: 50;
+  /* aparência (ajuste ao seu tema) */
+  background: #1f1f1f;       /* cor do seu footer */
+  color: #eaeaea;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 -4px 14px rgba(0,0,0,.12);
+  /* para iOS com notch */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Se algum wrapper estiver cortando o footer, previna overflow */
+main, .main, .page, .content, .container, .container-page, .wrapper, .wrap{
+  overflow: visible !important;
+}
+/* ===================== RESUMO DO DIA – RESET + LAYOUT ESTÁVEL ===================== */
+/* Escopo exclusivo para não interferir no resto do site */
+#resumo-dia{
+  --card-pad: 14px;
+  --dot: 18px;
+  --gap: 12px;
+}
+
+/* Grid principal: 2 colunas no desktop, 1 no mobile */
+#resumo-dia .resumo-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 1100px){
+  #resumo-dia .resumo-grid{ grid-template-columns: 1fr; }
+}
+
+/* Cards da coluna esquerda/direita */
+#resumo-dia .card-resumo{
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(16,24,40,.06);
+  padding: var(--card-pad);
+}
+
+/* ===== Linha de jogo (FG e Mata-mata) - layout determinístico ===== */
+#resumo-dia .fg-matches .match-line-fancy,
+#resumo-dia .mm-matches .match-line-fancy{
+  /* RESET: evita heranças de display/flex/position de outros patches */
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 26px auto 26px minmax(0,1fr);
+  grid-template-areas: "scA dotA score dotB scB";
+  align-items: center;
+  gap: var(--gap);
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(16,24,40,.05);
+}
+
+/* Bolinhas – não podem ficar absolutas nem “amassar” */
+#resumo-dia .match-line-fancy .dot{ margin: 0; position: static; }
+#resumo-dia .match-line-fancy .dot-a{ grid-area: dotA; justify-self: center; }
+#resumo-dia .match-line-fancy .dot-b{ grid-area: dotB; justify-self: center; }
+#resumo-dia .match-line-fancy .dot .team-dot{
+  width: var(--dot); height: var(--dot);
+  min-width: var(--dot); min-height: var(--dot);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,.15);
+}
+
+/* Placar central – sem sobreposição com as bolinhas */
+#resumo-dia .match-line-fancy .score-fancy{
+  grid-area: score;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;                 /* separa números do “×” */
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1;
+  white-space: nowrap;
+}
+#resumo-dia .match-line-fancy .score-fancy .sep{ font-size: .95em; opacity: .85; }
+
+/* Artilheiros de cada lado */
+#resumo-dia .match-line-fancy .scorers-left{
+  grid-area: scA; text-align: left; font-size: 13px; color: #475569; min-width: 0;
+}
+#resumo-dia .match-line-fancy .scorers-right{
+  grid-area: scB; text-align: right; font-size: 13px; color: #475569; min-width: 0;
+}
+
+/* Responsivo – no mobile, duas linhas: [bolinha | placar | bolinha] / [artilheiros] */
+@media (max-width: 700px){
+  #resumo-dia .fg-matches .match-line-fancy,
+  #resumo-dia .mm-matches .match-line-fancy{
+    grid-template-columns: 24px 1fr 24px;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "dotA score dotB"
+      "scA  scA  scB";
+    gap: 8px;
+  }
+  #resumo-dia .match-line-fancy .score-fancy{ font-size: 20px; }
+}
+
+/* Título das seções do mata-mata mais evidente */
+#resumo-dia .mm-matches .section-title.big{
+  font-weight: 800;
+  font-size: 18px;
+  margin: 6px 4px 12px;
+}
+
+/* Evita que o footer fixo cubra o final dos cards desta página */
+#resumo-dia { padding-bottom: calc(var(--footer-h, 56px) + 12px); }
+/* ================== RESUMO DO DIA — faixa 600–700 px (sem alterar o mobile) ================== */
+@media (min-width: 600px) and (max-width: 700px){
+  /* volta ao layout em linha (desktop) só nessa faixa */
+  #resumo-dia .fg-matches .match-line-fancy,
+  #resumo-dia .mm-matches .match-line-fancy{
+    grid-template-columns: minmax(0,1fr) 22px auto 22px minmax(0,1fr);
+    grid-template-rows: auto;
+    grid-template-areas: "scA dotA score dotB scB";
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  /* dots um pouco menores p/ caber folgado */
+  #resumo-dia .match-line-fancy .dot .team-dot{
+    width: 16px; height: 16px; min-width:16px; min-height:16px;
+  }
+
+  /* placar levemente reduzido */
+  #resumo-dia .match-line-fancy .score-fancy{
+    font-size: 20px;
+    gap: 8px;
+  }
+
+  /* textos de artilheiros com fonte menor e sem quebra */
+  #resumo-dia .match-line-fancy .scorers-left,
+  #resumo-dia .match-line-fancy .scorers-right{
+    font-size: 12.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+}
