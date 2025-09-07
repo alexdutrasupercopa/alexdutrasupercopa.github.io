@@ -46,7 +46,7 @@ function populateDaySelect(days, current){
 /* ---------- Dados do dia / resumo ---------- */
 async function loadPartidasDia(n){
   const { data, error } = await db.from(TBL_PARTIDA)
-    .select("Identificador, Time1, Time2, GolsTime1, GolsTime2, Tipo")
+    .select("Identificador, Time1, Time2, GolsTime1, GolsTime2, Tipo, FoiProsPenaltis, PenaltisTime1, PenaltisTime2")
     .like("Identificador",`D${n}-%`);
   if (error) throw error;
   return {
@@ -158,12 +158,20 @@ function renderMmMatches(container, matches, golsMap){
       const s = splitScorers(p, golsMap[p.Identificador] || []);
       const g1 = Number.isFinite(+p.GolsTime1) ? +p.GolsTime1 : "–";
       const g2 = Number.isFinite(+p.GolsTime2) ? +p.GolsTime2 : "–";
-      return `
-        <div class="match-line-fancy cardish">
+      const pens = p.FoiProsPenaltis
+      ? `<div class="pen-box">
+              <span class="ga">( ${p.PenaltisTime1 ?? 0} )</span><span class="sep">×</span><span class="gb">( ${p.PenaltisTime2 ?? 0} )</span>
+          </div>`
+      : "";
+       return `
+        <div class="match-line-fancy cardish ${p.FoiProsPenaltis ? 'has-pens' : ''}">
           <div class="dot dot-a">${teamDot(p.Time1)}</div>
-          <div class="score-fancy">
-            <span class="ga">${g1}</span><span class="sep">×</span><span class="gb">${g2}</span>
-          </div>
+           <div class="score-fancy">
+             <div class="score-line">
+               <span class="ga">${g1}</span><span class="sep">×</span><span class="gb">${g2}</span>
+             </div>
+             ${pens}
+           </div>
           <div class="dot dot-b">${teamDot(p.Time2)}</div>
 
           <div class="scorers-left">${s.A.join(", ") || "&nbsp;"}</div>
@@ -186,8 +194,13 @@ function renderMmMatches(container, matches, golsMap){
 
 /* ---------- Pódio ---------- */
 function computeDayPodium(mm){
-  const win = p => +p.GolsTime1 > +p.GolsTime2 ? p.Time1 : p.Time2;
-  const lose= p => +p.GolsTime1 > +p.GolsTime2 ? p.Time2 : p.Time1;
+ const win = p => {
+   if (+p.GolsTime1 !== +p.GolsTime2) return +p.GolsTime1 > +p.GolsTime2 ? p.Time1 : p.Time2;
+   if (p.FoiProsPenaltis) return (+p.PenaltisTime1 >= +p.PenaltisTime2) ? p.Time1 : p.Time2;
+   return p.Time1; // fallback neutro
+ };
+ const lose = p => (win(p) === p.Time1 ? p.Time2 : p.Time1);
+
   const s1=mm.find(m=>/S1$/.test(m.Identificador));
   const s2=mm.find(m=>/S2$/.test(m.Identificador));
   const dt=mm.find(m=>/-DT$/.test(m.Identificador));

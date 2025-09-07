@@ -79,3 +79,4 @@ async function injectLigaNavbar(targetId = "ligaNavBar", url = "ligaNavBar.html"
 document.addEventListener("DOMContentLoaded", () => {
   injectLigaNavbar("ligaNavBar", "ligaNavBar.html");
 });
+

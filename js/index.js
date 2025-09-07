@@ -28,36 +28,58 @@ async function montarDestaques() {
   const elArtilheiro = document.getElementById('card-artilheiro')
   const elGoleiro   = document.getElementById('card-goleiro')
   if (!elArtilheiro && !elGoleiro) return
-  console.log('elArtilheiro, elGoleiro' +elArtilheiro + ' - ' + elGoleiro);  
+
   try {
     const listaBruta = await obterListaJogadores()
     const lista = listaBruta.map(mapearJogadorSupabase)
 
-    const artilheiro   = obterArtilheiro(lista)
-    const melhorGol    = obterMelhorGoleiro(lista)
+    const artilheiros = obterArtilheiros(lista)        // ← agora lista
+    const melhoresGks = obterMelhoresGoleiros(lista)   // ← agora lista
 
-    if (elArtilheiro && artilheiro) {
-    renderizarCard(elArtilheiro, artilheiro, {
-      tipo: 'art',                 // ⟵ novo
-      labelEsq: 'Gols',
-      valorEsq: artilheiro.gols,
-      labelDir: 'Jogos',
-      valorDir: artilheiro.jogos
-    })
-  }
-      if (elGoleiro && melhorGol) {
-    renderizarCard(elGoleiro, melhorGol, {
-      tipo: 'gk',                  // ⟵ novo
-      labelEsq: 'Gols Sofridos',
-      valorEsq: melhorGol.golsS,
-      labelDir: 'Jogos',
-      valorDir: melhorGol.jogos
-    })
-  }
+    // limpa os contêineres
+    if (elArtilheiro) elArtilheiro.innerHTML = ''
+    if (elGoleiro)    elGoleiro.innerHTML    = ''
+
+    // renderiza todos os artilheiros empatados
+    if (elArtilheiro && artilheiros.length) {
+      artilheiros
+        .sort((a,b) => (b.jogos||0)-(a.jogos||0) || normalizar(a.nome).localeCompare(normalizar(b.nome)))
+        .forEach(j => {
+          const card = document.createElement('article')
+          card.className = 'player-highlight'
+          elArtilheiro.appendChild(card)
+          renderizarCard(card, j, {
+            tipo: 'art',
+            labelEsq: 'Gols',
+            valorEsq: j.gols,
+            labelDir: 'Jogos',
+            valorDir: j.jogos
+          })
+        })
+    }
+
+    // renderiza todos os goleiros empatados
+    if (elGoleiro && melhoresGks.length) {
+      melhoresGks
+        .sort((a,b) => (a.jogos||0)-(b.jogos||0) || normalizar(a.nome).localeCompare(normalizar(b.nome)))
+        .forEach(j => {
+          const card = document.createElement('article')
+          card.className = 'player-highlight'
+          elGoleiro.appendChild(card)
+          renderizarCard(card, j, {
+            tipo: 'gk',
+            labelEsq: 'Gols Sofridos',
+            valorEsq: j.golsS,
+            labelDir: 'Jogos',
+            valorDir: j.jogos
+          })
+        })
+    }
   } catch (e) {
     console.error('Erro ao montar destaques:', e)
   }
 }
+
 
 // =========================
 // Busca de dados
@@ -113,6 +135,22 @@ function obterMelhorGoleiro(lista) {
     return normalizar(a.nome).localeCompare(normalizar(b.nome))
   })[0]
 }
+  function obterArtilheiros(lista) {
+    if (!lista?.length) return []
+    const max = Math.max(...lista.map(j => j.gols || 0))
+    if (!isFinite(max)) return []
+    return lista.filter(j => (j.gols || 0) === max)
+  }
+
+  function obterMelhoresGoleiros(lista) {
+    const goleiros = (lista || []).filter(j => /goleir/i.test(j.posicao || ''))
+    if (!goleiros.length) return []
+    const min = Math.min(...goleiros.map(j => j.golsS ?? Infinity))
+    if (!isFinite(min)) return []
+    // mostra TODOS os com o menor número de gols sofridos (empate)
+    return goleiros.filter(j => (j.golsS ?? Infinity) === min)
+  }
+
 
 // =========================
 // Renderização dos cards
