@@ -2218,12 +2218,7 @@ body.interna .hero {
   .fg-table .teamcell{ gap: 6px; }
   .fg-table .row.item{ margin-top: 8px; }
 
-  /* Muito estreito? esconder +FG para não quebrar */
-  @media (max-width: 420px){
-    .fg-table .row{ grid-template-columns: 1fr 58px 54px 54px; }
-    .fg-table .row.header > :last-child,
-    .fg-table .row.item   > :last-child{ display:none; }
-  }
+
 }
 /* ================= MOBILE FIXES & POLISH ================= */
 
@@ -2308,11 +2303,7 @@ body.interna .hero {
   .fg-table .teamcell{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
   /* Muito estreito? esconde +FG para não quebrar as colunas */
-  @media (max-width: 420px){
-    .fg-table .row{ grid-template-columns: 1fr 56px 54px 54px; }
-    .fg-table .row.header > :last-child,
-    .fg-table .row.item   > :last-child{ display:none; }
-  }
+
 }
 
 /* ====== Ajustes gerais (todas as larguras) ====== */
@@ -2835,4 +2826,18 @@ main, .main, .page, .content, .container, .container-page, .wrapper, .wrap{
 /* Apenas o card com pênaltis cresce um pouco */
 #resumo-dia .mm-matches .match-line-fancy.has-pens{
   padding-top:10px; padding-bottom:10px;
+}
+/* FG — mobile compacto: só bolinha, PTS e +FG */
+@media (max-width: 520px){
+
+  /* some o NOME do time, mantendo a bolinha visível e no tamanho normal */
+  #resumo-dia .fg-table .teamcell{
+    font-size: 0;                 /* “apaga” o texto sem mexer no dot */
+  }
+  #resumo-dia .fg-table .teamcell .team-dot{
+    width: 18px; height: 18px;    /* não encolhe */
+    display: inline-block;
+    flex: 0 0 18px;
+    font-size: initial;           /* neutraliza o font-size:0 do pai */
+  }
 }
