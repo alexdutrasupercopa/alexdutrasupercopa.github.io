@@ -26,7 +26,7 @@ const teamDot = t => `<span class="team-dot" style="background:${TEAM_COLORS[tea
 /* ---------- Seletor de dia: busca todas as Datas ---------- */
 async function getAvailableDays(){
   // Tabela "Data" é a fonte da verdade
-  const { data, error } = await db.from(TBL_DATA).select("Numero").order("Numero", { ascending: false });
+  const { data, error } = await db.from(TBL_DATA).select("Numero").order("Numero", { ascending: true });
   if (!error && data?.length){
     return data.map(r => Number(r.Numero)).filter(Number.isFinite);
   }
