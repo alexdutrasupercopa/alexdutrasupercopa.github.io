@@ -3344,3 +3344,43 @@ main, .main, .page, .content, .container, .container-page, .wrapper, .wrap{
   #card-artilheiro,
   #card-goleiro{ gap: 15px; }
 }
+/* ====== Tabela da Liga — legenda ====== */
+.tabela-legenda{
+  display:flex; flex-wrap:wrap; gap:10px 16px;
+  align-items:center; color:#666; font-size:.9rem; margin:6px 0 4px;
+}
+.tabela-legenda span{
+  display:inline-flex; gap:6px; align-items:center;
+  background:#f7f7f9; border:1px solid #ececf1; border-radius:10px;
+  padding:6px 10px;
+}
+.tabela-legenda b{ color:#333; font-weight:800 }
+
+/* ====== Tabela da Liga — alinhamento e responsivo ====== */
+/* centraliza TODAS as colunas numéricas no head e nas linhas */
+.tabela-times .tabela-row > .col:nth-child(n+3),
+.tabela-times .tabela-head .th:nth-child(n+3){ text-align:center; }
+
+/* mantém o cabeçalho visível no responsivo com scroll horizontal */
+@media (max-width: 1280px){
+  .tabela-times{
+    overflow-x:auto; -webkit-overflow-scrolling:touch;
+  }
+  .tabela-times .tabela-head,
+  .tabela-times .tabela-row{
+    /* mesma malha do grid usada no restante do CSS */
+    min-width: calc(
+      var(--col-pos) + var(--col-time) + var(--col-pts) +
+      var(--col-1o)  + var(--col-2o)   + var(--col-vit) +
+      var(--col-saldo) + var(--col-gpro) + var(--col-gcon)
+    );
+    grid-template-columns:
+      var(--col-pos) var(--col-time) var(--col-pts)
+      var(--col-1o)  var(--col-2o)   var(--col-vit)
+      var(--col-saldo) var(--col-gpro) var(--col-gcon);
+  }
+  /* força o head a aparecer (alguns estilos móveis antigos escondiam .tabela-head) */
+  .tabela-times .tabela-head{ display:grid !important; position:sticky; top:0; z-index:7; background:#fff; }
+  .tabela-times .tabela-head .th,
+  .tabela-times .tabela-row > .col{ display:block !important; }
+}
