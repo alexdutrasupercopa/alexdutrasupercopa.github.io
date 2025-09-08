@@ -11,73 +11,73 @@ const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const nav = document.querySelector('.navbar')
 const btn = document.querySelector('.nav-toggle')
 if (nav && btn) {
-  btn.addEventListener('click', () => {
-    const open = nav.classList.toggle('open')
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false')
-  })
+    btn.addEventListener('click', () => {
+        const open = nav.classList.toggle('open')
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false')
+    })
 }
 
 // =========================================================================
 // Destaques (Home) - Artilheiro e Melhor Goleiro
 // =========================================================================
 document.addEventListener('DOMContentLoaded', () => {
-  montarDestaques()
+    montarDestaques()
 })
 
 async function montarDestaques() {
-  const elArtilheiro = document.getElementById('card-artilheiro')
-  const elGoleiro   = document.getElementById('card-goleiro')
-  if (!elArtilheiro && !elGoleiro) return
+    const elArtilheiro = document.getElementById('card-artilheiro')
+    const elGoleiro = document.getElementById('card-goleiro')
+    if (!elArtilheiro && !elGoleiro) return
 
-  try {
-    const listaBruta = await obterListaJogadores()
-    const lista = listaBruta.map(mapearJogadorSupabase)
+    try {
+        const listaBruta = await obterListaJogadores()
+        const lista = listaBruta.map(mapearJogadorSupabase)
 
-    const artilheiros = obterArtilheiros(lista)        // ← agora lista
-    const melhoresGks = obterMelhoresGoleiros(lista)   // ← agora lista
+        const artilheiros = obterArtilheiros(lista)        // ← agora lista
+        const melhoresGks = obterMelhoresGoleiros(lista)   // ← agora lista
 
-    // limpa os contêineres
-    if (elArtilheiro) elArtilheiro.innerHTML = ''
-    if (elGoleiro)    elGoleiro.innerHTML    = ''
+        // limpa os contêineres
+        if (elArtilheiro) elArtilheiro.innerHTML = ''
+        if (elGoleiro) elGoleiro.innerHTML = ''
 
-    // renderiza todos os artilheiros empatados
-    if (elArtilheiro && artilheiros.length) {
-      artilheiros
-        .sort((a,b) => (b.jogos||0)-(a.jogos||0) || normalizar(a.nome).localeCompare(normalizar(b.nome)))
-        .forEach(j => {
-          const card = document.createElement('article')
-          card.className = 'player-highlight'
-          elArtilheiro.appendChild(card)
-          renderizarCard(card, j, {
-            tipo: 'art',
-            labelEsq: 'Gols',
-            valorEsq: j.gols,
-            labelDir: 'Presenças',
-            valorDir: j.jogos
-          })
-        })
+        // renderiza todos os artilheiros empatados
+        if (elArtilheiro && artilheiros.length) {
+            artilheiros
+                .sort((a, b) => (b.jogos || 0) - (a.jogos || 0) || normalizar(a.nome).localeCompare(normalizar(b.nome)))
+                .forEach(j => {
+                    const card = document.createElement('article')
+                    card.className = 'player-highlight'
+                    elArtilheiro.appendChild(card)
+                    renderizarCard(card, j, {
+                        tipo: 'art',
+                        labelEsq: 'Gols',
+                        valorEsq: j.gols,
+                        labelDir: 'Presenças',
+                        valorDir: j.jogos
+                    })
+                })
+        }
+
+        // renderiza todos os goleiros empatados
+        if (elGoleiro && melhoresGks.length) {
+            melhoresGks
+                .sort((a, b) => (a.jogos || 0) - (b.jogos || 0) || normalizar(a.nome).localeCompare(normalizar(b.nome)))
+                .forEach(j => {
+                    const card = document.createElement('article')
+                    card.className = 'player-highlight'
+                    elGoleiro.appendChild(card)
+                    renderizarCard(card, j, {
+                        tipo: 'gk',
+                        labelEsq: 'Gols Sofridos',
+                        valorEsq: j.golsS,
+                        labelDir: 'Presenças',
+                        valorDir: j.jogos
+                    })
+                })
+        }
+    } catch (e) {
+        console.error('Erro ao montar destaques:', e)
     }
-
-    // renderiza todos os goleiros empatados
-    if (elGoleiro && melhoresGks.length) {
-      melhoresGks
-        .sort((a,b) => (a.jogos||0)-(b.jogos||0) || normalizar(a.nome).localeCompare(normalizar(b.nome)))
-        .forEach(j => {
-          const card = document.createElement('article')
-          card.className = 'player-highlight'
-          elGoleiro.appendChild(card)
-          renderizarCard(card, j, {
-            tipo: 'gk',
-            labelEsq: 'Gols Sofridos',
-            valorEsq: j.golsS,
-            labelDir: 'Presenças',
-            valorDir: j.jogos
-          })
-        })
-    }
-  } catch (e) {
-    console.error('Erro ao montar destaques:', e)
-  }
 }
 
 
@@ -85,91 +85,91 @@ async function montarDestaques() {
 // Busca de dados
 // =========================
 async function obterListaJogadores() {
-  const { data, error } = await db
-    .from('Jogador')
-    .select('Nome,Time,Posicao,Gols,GolsSofridos,Jogos,Foto')
+    const { data, error } = await db
+        .from('Jogador')
+        .select('Nome,Time,Posicao,Gols,GolsSofridos,Jogos,Foto')
 
-  if (error) {
-    console.error('Erro Supabase:', error)
-    return []
-  }
-  return data || []
+    if (error) {
+        console.error('Erro Supabase:', error)
+        return []
+    }
+    return data || []
 }
 
 // =========================
 // Mapeamento (campos exatos)
 // =========================
 function mapearJogadorSupabase(raw) {
-  return {
-    id: raw.Nome,
-    nome: raw.Nome || '',
-    time: raw.Time || '',
-    posicao: raw.Posicao || '',
-    gols: Number(raw.Gols || 0),
-    golsS: Number(raw.GolsSofridos || 0),
-    jogos: Number(raw.Jogos || 0),
-    foto: raw.Foto || ''
-  }
+    return {
+        id: raw.Nome,
+        nome: raw.Nome || '',
+        time: raw.Time || '',
+        posicao: raw.Posicao || '',
+        gols: Number(raw.Gols || 0),
+        golsS: Number(raw.GolsSofridos || 0),
+        jogos: Number(raw.Jogos || 0),
+        foto: raw.Foto || ''
+    }
 }
 
 // =========================
 // Lógicas de seleção
 // =========================
 function obterArtilheiro(lista) {
-  return [...lista].sort((a, b) => {
-    if (b.gols !== a.gols) return b.gols - a.gols
-    if (b.jogos !== a.jogos) return b.jogos - a.jogos
-    return normalizar(a.nome).localeCompare(normalizar(b.nome))
-  })[0]
+    return [...lista].sort((a, b) => {
+        if (b.gols !== a.gols) return b.gols - a.gols
+        if (b.jogos !== a.jogos) return b.jogos - a.jogos
+        return normalizar(a.nome).localeCompare(normalizar(b.nome))
+    })[0]
 }
 
 function obterMelhorGoleiro(lista) {
-  const goleiros = lista.filter(j => /goleir/i.test(j.posicao || ''))
-  if (!goleiros.length) return null
+    const goleiros = lista.filter(j => /goleir/i.test(j.posicao || ''))
+    if (!goleiros.length) return null
 
-  return goleiros.sort((a, b) => {
-    if (a.golsS !== b.golsS) return a.golsS - b.golsS
-    const ma = a.jogos ? a.golsS / a.jogos : a.golsS
-    const mb = b.jogos ? b.golsS / b.jogos : b.golsS
-    if (ma !== mb) return ma - mb
-    return normalizar(a.nome).localeCompare(normalizar(b.nome))
-  })[0]
+    return goleiros.sort((a, b) => {
+        if (a.golsS !== b.golsS) return a.golsS - b.golsS
+        const ma = a.jogos ? a.golsS / a.jogos : a.golsS
+        const mb = b.jogos ? b.golsS / b.jogos : b.golsS
+        if (ma !== mb) return ma - mb
+        return normalizar(a.nome).localeCompare(normalizar(b.nome))
+    })[0]
 }
-  function obterArtilheiros(lista) {
+function obterArtilheiros(lista) {
     if (!lista?.length) return []
     const max = Math.max(...lista.map(j => j.gols || 0))
     if (!isFinite(max)) return []
     return lista.filter(j => (j.gols || 0) === max)
-  }
+}
 
-  function obterMelhoresGoleiros(lista) {
+function obterMelhoresGoleiros(lista) {
     const goleiros = (lista || []).filter(j => /goleir/i.test(j.posicao || ''))
     if (!goleiros.length) return []
     const min = Math.min(...goleiros.map(j => j.golsS ?? Infinity))
     if (!isFinite(min)) return []
     // mostra TODOS os com o menor número de gols sofridos (empate)
     return goleiros.filter(j => (j.golsS ?? Infinity) === min)
-  }
+}
 
 
 // =========================
 // Renderização dos cards
 // =========================
 function renderizarCard(el, jogador, info) {
-  if (!el || !jogador) return
-  const placeholder = 'assets/img/placeholder-user.png'
-  const foto = jogador.foto && jogador.foto.trim() ? jogador.foto : placeholder
+    if (!el || !jogador) return
+    const placeholder = 'assets/img/placeholder-user.png'
+    const foto = jogador.foto && jogador.foto.trim() ? jogador.foto : placeholder
 
-  const isArt = info?.tipo === 'art'
-  const badgeHtml = `
+    const isArt = info?.tipo === 'art'
+    const badgeHtml = `
     
     <div class="hl-badge ${isArt ? 'art' : 'gk'}">
       <span class="ico">${isArt ? '🥇' : '🧤'}</span>
       <span>${isArt ? 'Artilheiro' : 'Luva de Ouro'}</span>
     </div>`
 
-  el.classList.remove('skeleton')
-  el.innerHTML = `
+    el.classList.remove('skeleton')
+    el.innerHTML = `
     ${badgeHtml}
     <div class="top">
       <img class="avatar"
@@ -193,12 +193,12 @@ function renderizarCard(el, jogador, info) {
     </div>
   `
 
-  el.style.cursor = 'pointer'
-  el.addEventListener('click', () => {
-    if (typeof window.abrirModalJogador === 'function') {
-      window.abrirModalJogador(jogador.id || jogador.nome)
-    }
-  })
+    el.style.cursor = 'pointer'
+    el.addEventListener('click', () => {
+        if (typeof window.abrirModalJogador === 'function') {
+            window.abrirModalJogador(jogador.id || jogador.nome)
+        }
+    })
 }
 
 
@@ -206,8 +206,8 @@ function renderizarCard(el, jogador, info) {
 // Helpers
 // =========================
 function normalizar(v) {
-  return String(v || '')
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '')
-    .toLowerCase()
+    return String(v || '')
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '')
+        .toLowerCase()
 }
