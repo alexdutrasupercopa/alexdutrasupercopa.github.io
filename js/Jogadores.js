@@ -406,7 +406,7 @@ function renderModalJogador(j) {
     <div class="kpi-grid">
       ${kpiExtraHtml}
       <div class="kpi-card">
-        <div class="kpi-label">Jogos</div>
+        <div class="kpi-label">Presenças</div>
         <div class="kpi-value">${totalJogos}</div>
       </div>
     </div>
