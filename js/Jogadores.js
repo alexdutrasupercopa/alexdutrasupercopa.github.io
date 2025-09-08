@@ -37,24 +37,67 @@ const limparEl = document.getElementById('limpar');
 const headBtns = document.querySelectorAll('.tabela-head .sort');
 const bodyEl   = document.querySelector('.tabela-body');
 const tabelaWrap = document.querySelector('.tabela-jogadores');
+const isGkMode = () => tabelaWrap?.classList.contains('gk-mode');
+
+const GK_ORDER_OPTIONS = `
+  <option value="gs-desc">Gols Sofridos (↓)</option>
+  <option value="gs-asc">Gols Sofridos (↑)</option>
+  <option value="pr-desc">Pênaltis Contra (↓)</option>
+  <option value="pr-asc">Pênaltis Contra (↑)</option>
+  <option value="dp-desc">Pênaltis Defendidos (↓)</option>
+  <option value="dp-asc">Pênaltis Defendidos (↑)</option>
+  <option value="nome-asc">Nome (A–Z)</option>
+  <option value="nome-desc">Nome (Z–A)</option>
+  <option value="datas-desc">Presenças (↓)</option>
+  <option value="datas-asc">Presenças (↑)</option>
+`;
+
+const DEFAULT_ORDER_OPTIONS = `
+  <option value="gols-desc">Gols (↓)</option>
+  <option value="gols-asc">Gols (↑)</option>
+  <option value="nome-asc">Nome (A–Z)</option>
+  <option value="nome-desc">Nome (Z–A)</option>
+  <option value="datas-desc">Jogos (↓)</option>
+  <option value="datas-asc">Jogos (↑)</option>
+`;
+
+function refreshOrderOptions(preserve = true) {
+  if (!ordEl) return;
+  const previous = ordEl.value;
+
+  ordEl.innerHTML = isGkMode() ? GK_ORDER_OPTIONS : DEFAULT_ORDER_OPTIONS;
+
+  const hasPrev = Array.from(ordEl.options).some(o => o.value === previous);
+
+  // No gk-mode, default = "gs-asc" (menor Gols Sofridos primeiro)
+  ordEl.value = preserve && hasPrev
+    ? previous
+    : (isGkMode() ? 'gs-asc' : 'gols-desc');
+}
+
+
 const btnGk = document.getElementById('toggle-gk');
 
 btnGk?.addEventListener('click', () => {
   const ativa = tabelaWrap.classList.toggle('gk-mode');
   btnGk.setAttribute('aria-pressed', ativa ? 'true' : 'false');
   btnGk.textContent = ativa ? 'Estatísticas padrão' : 'Estatísticas de Goleiro';
-  aplicaFiltrosOrdenacao(); // reaplica exibindo só goleiros
+
+  // troca opções e força default correto no novo modo
+  refreshOrderOptions(false);
+  aplicaFiltrosOrdenacao();
 });
+
 
 // Sempre pegue as linhas no DOM atual (são criadas depois do fetch)
 const getRows = () => Array.from(document.querySelectorAll('.tabela-body .tabela-row'));
 
 function aplicaFiltrosOrdenacao() {
   const rows = getRows();
-  const q   = norm(buscaEl?.value);
-  const pos = posEl ? norm(posEl.value) : '';
-  const tim = timeEl ? norm(timeEl.value) : '';
-  const onlyGk = tabelaWrap?.classList.contains('gk-mode'); // << novo
+  const q    = norm(buscaEl?.value);
+  const pos  = posEl ? norm(posEl.value) : '';
+  const tim  = timeEl ? norm(timeEl.value) : '';
+  const onlyGk = isGkMode();
 
   // 1) Filtrar
   rows.forEach(r => {
@@ -65,30 +108,46 @@ function aplicaFiltrosOrdenacao() {
     const passaBusca = !q || nome.includes(q) || time.includes(q);
     const passaPos   = isAll(pos) || pos === posi;
     const passaTime  = isAll(tim) || tim === time;
-    const passaGk    = !onlyGk || posi === 'goleiro';       // << novo
+    const passaGk    = !onlyGk || posi === 'goleiro';
 
     r.style.display = (passaBusca && passaPos && passaTime && passaGk) ? '' : 'none';
   });
 
   // 2) Ordenar apenas os visíveis
-  const [campo, dir] = (ordEl?.value || 'nome-asc').split('-');
-  const mult = dir === 'desc' ? -1 : 1;
-  const visiveis = getRows().filter(r => r.style.display !== 'none');
+  const [campoRaw, dirRaw] = (ordEl?.value || (onlyGk ? 'gs-asc' : 'nome-asc')).split('-');
+  const campo = campoRaw || (onlyGk ? 'gs' : 'nome');
+  const dir   = dirRaw || (onlyGk ? 'asc' : 'asc');
+  const mult  = dir === 'desc' ? -1 : 1;
+
+  const visiveis = rows.filter(r => r.style.display !== 'none');
+
+  const getNum = (r, key) => parseInt(r.dataset[key] || '0', 10) || 0;
 
   visiveis.sort((a, b) => {
-    if (campo === 'nome')  return a.dataset.nome.localeCompare(b.dataset.nome) * mult;
-    if (campo === 'datas') return (parseInt(a.dataset.datas || 0, 10) - parseInt(b.dataset.datas || 0, 10)) * mult;
-    if (campo === 'gols')  return (parseInt(a.dataset.gols  || 0, 10) - parseInt(b.dataset.gols  || 0, 10)) * mult;
-    return 0;
+    switch (campo) {
+      case 'nome':  return a.dataset.nome.localeCompare(b.dataset.nome) * mult;
+      case 'datas': return (getNum(a, 'datas') - getNum(b, 'datas')) * mult
+                      || a.dataset.nome.localeCompare(b.dataset.nome);
+      case 'gols':  return (getNum(a, 'gols')  - getNum(b, 'gols'))  * mult
+                      || a.dataset.nome.localeCompare(b.dataset.nome);
+      case 'gs':    return (getNum(a, 'gs')    - getNum(b, 'gs'))    * mult
+                      || a.dataset.nome.localeCompare(b.dataset.nome);
+      case 'pr':    return (getNum(a, 'pr')    - getNum(b, 'pr'))    * mult
+                      || a.dataset.nome.localeCompare(b.dataset.nome);
+      case 'dp':    return (getNum(a, 'dp')    - getNum(b, 'dp'))    * mult
+                      || a.dataset.nome.localeCompare(b.dataset.nome);
+      default:      return a.dataset.nome.localeCompare(b.dataset.nome);
+    }
   });
 
   visiveis.forEach(r => bodyEl.appendChild(r));
 
-  // 3) Feedback visual no cabeçalho
+  // 3) Feedback visual no cabeçalho (só aplica se existir o botão correspondente)
   headBtns.forEach(b => b.classList.remove('asc', 'desc'));
   const hbtn = Array.from(headBtns).find(b => b.dataset.sort === campo);
   if (hbtn) hbtn.classList.add(dir === 'asc' ? 'asc' : 'desc');
 }
+
 
 // Eventos dos filtros
 [buscaEl, posEl, timeEl, ordEl].forEach(el => {
@@ -141,19 +200,23 @@ async function carregarJogadores() {
     const time    = j.Time || '';                                      // "Preto", "Branco", ...
     const gols    = Number(j.Gols || 0);
     const datas   = Number(j.Jogos ?? 0); 
-    const gs = Number(j.GolsSofridos || 0);
-    const pr = Number(j.PenaltisRecebidos || 0);
-    const dp = Number(j.DefesasPenalti || 0);
+    const gs = Number(j.GolsSofridos ?? 0);
+    const pr = Number(j.PenaltisRecebidos ?? 0);
+    const dp = Number(j.DefesaPenalti ?? j.DefesasPenalti ?? 0);
 
-
-    const row = document.createElement('div');
+    const row = document.createElement('div');   // << crie a row antes de usar
     row.className = 'tabela-row';
     row.dataset.nome    = nome;
     row.dataset.posicao = posicao;
     row.dataset.time    = time;
     row.dataset.datas   = String(datas);
     row.dataset.gols    = String(gols);
-    row.dataset.nomeKey = nome;
+
+    // NOVO: datasets para ordenação no gk-mode
+    row.dataset.gs = String(gs);
+    row.dataset.pr = String(pr);
+    row.dataset.dp = String(dp);
+
 
     // cache para abrir modal sem nova query
     JOGADORES_BY_NOME.set(nome, j);
@@ -162,7 +225,7 @@ async function carregarJogadores() {
       <div class="col col-jogador">
         <div class="jogador-cell">
           <div class="avatar"><img src="${j.Foto || 'img/Placeholder.png'}" alt="${nome}" /></div>
-          <div class="jogador-info data-time="${time}">
+          <div class="jogador-info" data-time="${time}">
             <div class="jogador-nome">${nome}</div>
             <div class="jogador-sub">${posicao} • ${time}</div>
           </div>
@@ -197,6 +260,7 @@ async function carregarJogadores() {
 
   bodyEl.appendChild(frag);
   aplicaFiltrosOrdenacao();
+  refreshOrderOptions();
 }
 
 // Carrega na entrada
