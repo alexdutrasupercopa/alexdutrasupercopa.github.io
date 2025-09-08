@@ -995,7 +995,7 @@ body.interna .hero {
   /* Mostre só Jogador, Jogos e Gols (os dias viram painel mobile) */
   .tabela-row,
   .tabela-head {
-    grid-template-columns: minmax(0, 1fr) 0px 56px;
+    grid-template-columns: minmax(0, 1fr) 0px 90px;
     column-gap: 10px;
   }
   .col-dia { display: none !important; }
@@ -1035,7 +1035,7 @@ body.interna .hero {
 .jogador-nome {
   display: block;
   min-width: 0;
-  max-width: 100%;              /* garante limite */
+  max-width: max-content;              /* garante limite */
   white-space: nowrap;          /* uma linha só */
   overflow: hidden;             /* corta excedente */
   text-overflow: ellipsis;      /* … */
@@ -2839,5 +2839,494 @@ main, .main, .page, .content, .container, .container-page, .wrapper, .wrap{
     display: inline-block;
     flex: 0 0 18px;
     font-size: initial;           /* neutraliza o font-size:0 do pai */
+  }
+}
+/* ===== MODO GOLEIRO – ADIÇÕES ===== */
+
+/* Botão modo goleiro (herda look do tema) */
+#toggle-gk{
+  padding: 8px 12px;
+  border: 1px solid var(--grad-top);
+  background: #fff;
+  color: var(--grad-top);
+  font-weight: 700;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background .2s, color .2s, transform .15s;
+}
+#toggle-gk[aria-pressed="true"]{
+  background: var(--grad-top);
+  color: #fff;
+}
+#toggle-gk:hover{ transform: translateY(-2px); }
+
+/* Colunas extras inicialmente ocultas */
+.gk-only { display: none; }
+
+/* Quando ativo, esconda “Gols” padrão e mostre colunas de goleiro */
+.tabela-jogadores.gk-mode .col-gols { display: none !important; }
+.tabela-jogadores.gk-mode .gk-only { display: flex; }
+
+/* Mobile: no layout compacto, o grid continua com Jogador + 1 coluna numérica.
+   Mostramos KPIs próprios do goleiro no "painel" do topo-direito. */
+@media (max-width: 830px){
+  /* Não muda o grid; apenas troca os chips mostrados no painel */
+  .tabela-jogadores.gk-mode .kpi-panel .kpi-item:not(.kpi-gk){ display: none; }
+  .tabela-jogadores.gk-mode .kpi-panel .kpi-item.kpi-gk{ display: inline-flex; }
+}
+
+/* Por padrão, os novos chips ficam escondidos */
+.kpi-item.kpi-gk{ display: none; }
+/* Esconde "Gols" quando estiver no modo goleiro */
+.tabela-jogadores.gk-mode .tabela-head [data-sort="gols"] { 
+  display: none !important; /* cabeçalho */
+}
+.tabela-jogadores.gk-mode .tabela-row .col-gols { 
+  display: none !important; /* células/linhas */
+}
+
+/* No mobile, o 2º KPI do painel é "Gols" — esconda-o no modo goleiro */
+@media (max-width: 830px){
+  .tabela-jogadores.gk-mode .tabela-row .kpi-panel .kpi-item:nth-child(2){
+    display: none !important;
+  }
+}
+/* ===== Ajuste do grid no modo goleiro ===== */
+.tabela-jogadores.gk-mode .tabela-head,
+.tabela-jogadores.gk-mode .tabela-row {
+  /* colunas: Jogador | Jogos | GS | Pên. Contra | Pên. Def. | Dia1..Dia4 | Final */
+  grid-template-columns: 
+    minmax(0, 1fr)   /* Jogador */
+    72px            /* Jogos */
+    72px            /* Gols Sofridos */
+    72px           /* Pênaltis Contra */
+    72px           /* Pênaltis Defendidos */
+    repeat(5, 54px);/* Dia1, Dia2, Dia3, Dia4, Final */
+  column-gap: 12px;
+}
+
+/* Centralizar os números */
+.tabela-jogadores.gk-mode .col,
+.tabela-jogadores.gk-mode .tabela-head > *:not(:first-child) {
+  justify-content: center;
+  text-align: center;
+}
+
+/* ===== MODO GOLEIRO — MOBILE FIX ===== */
+@media (max-width: 830px){
+  /* 1) No mobile, esconda as colunas de goleiro “de mesa”
+        (usaremos os chips do painel) */
+  .tabela-jogadores.gk-mode .tabela-head .head-gk,
+  .tabela-jogadores.gk-mode .tabela-row .col-gk{
+    display: none !important;
+  }
+
+  /* 2) Também esconda os rótulos automáticos (data-label::before)
+        dessas colunas, que estavam vazando no bloco do jogador */
+  .tabela-jogadores.gk-mode .tabela-row .col-gk[data-label]::before{
+    display: none !important;
+    content: none !important;
+  }
+
+  /* 3) Mostre apenas os chips de goleiro no painel mobile
+        (GS / Pên. Rec. / Pên. Def.) */
+  .tabela-jogadores.gk-mode .kpi-panel .kpi-item{ display: none; }
+  .tabela-jogadores.gk-mode .kpi-panel .kpi-gk{ display: inline-flex; }
+
+  /* 4) Deixe o grid mais compacto no mobile mantendo: Jogador | Jogos | Dia1..Dia4 | Final */
+  .tabela-jogadores.gk-mode .tabela-head,
+  .tabela-jogadores.gk-mode .tabela-row{
+    grid-template-columns:
+      200px  /* Jogador */
+      64px           /* Jogos  */
+      repeat(5,40px) /* Dia1..Dia4 + Final */
+    ;
+    column-gap: 10px;
+  }
+
+  /* 5) Pequenos ajustes visuais para caber melhor */
+  .tabela-jogadores .kpi-panel .kpi-item{
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .tabela-jogadores .jogador-info .jogador-sub{
+    white-space: normal; /* evita sobreposição sob o avatar */
+  }
+}
+
+
+/* Tablet estreito (entre 831px e ~1100px): estreita um pouco as colunas do gk-mode */
+
+
+@media (min-width: 830px) and (max-width: 1000px){
+  .tabela-jogadores.gk-mode .tabela-head,
+  .tabela-jogadores.gk-mode .tabela-row{
+    grid-template-columns:
+      minmax(0, 1fr) /* Jogador */
+      60px          /* Jogos   */
+      60px          /* GS      */
+      60px         /* Pên. Contra */
+      90px         /* Pên. Def.   */
+      repeat(5,48px);
+    column-gap: 10px;
+  }
+}
+/* ===== GK MODE: esconder dias abaixo de 900px ===== */
+@media (max-width: 900px){
+  /* some com as colunas de dias (cabeçalho e linhas) */
+  .tabela-jogadores.gk-mode .tabela-head .col-dia,
+  .tabela-jogadores.gk-mode .tabela-row  .col-dia{
+    display: none !important;
+  }
+}
+
+/* 831–900px: grade com Jogador | Jogos | GS | Pên. Contra | Pên. Def. */
+@media (min-width: 831px) and (max-width: 900px){
+  .tabela-jogadores.gk-mode .tabela-head,
+  .tabela-jogadores.gk-mode .tabela-row{
+    grid-template-columns:
+      minmax(0, 1fr) /* Jogador */
+      90px          /* Jogos   */
+      150px          /* GS      */
+      106px         /* Pên. Contra */
+      150px;        /* Pên. Def.   */
+  }
+}
+
+
+/* ===== GK MODE — telas muito pequenas: chips abaixo do nome, sem sobrepor ===== */
+
+/* ultra-estreito: encurta os chips pra caber melhor */
+@media (max-width: 380px){
+  .tabela-jogadores.gk-mode .kpi-panel .kpi-item{
+    padding: 4px 8px;
+    font-size: 11px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  /* se o segundo chip for "Gols" do layout padrão, esconda-o no gk-mode */
+  .tabela-jogadores.gk-mode .kpi-panel .kpi-item:nth-child(2){
+    display: none !important;
+  }
+}
+/* ===== GK MODE — correção de sobreposição em telas pequenas ===== */
+@media (max-width: 600px){
+  /* cabeçalho fora no mobile do gk-mode */
+  .tabela-jogadores.gk-mode .tabela-head{ display:none !important; }
+
+  /* chips deixam de ser absolutos e passam a ocupar uma linha própria */
+  .tabela-jogadores.gk-mode .kpi-panel.mobile-only{
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    width: 100%;
+    margin-top: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    z-index: 0; /* garante que não fique sobre o nome */
+  }
+
+  /* cartão com mais respiro e o bloco do jogador ocupando a largura toda */
+  .tabela-jogadores.gk-mode .tabela-row{
+    row-gap: 10px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+  .tabela-jogadores.gk-mode .tabela-row .col-jogador{
+    grid-column: 1 / -1 !important;
+  }
+
+  /* só usamos os chips no mobile: esconda colunas numéricas de GK */
+  .tabela-jogadores.gk-mode .tabela-row .col-gk{ display:none !important; }
+
+  /* e mostre apenas os chips de GK (GS / Pên. Rec. / Pên. Def.) */
+  .tabela-jogadores.gk-mode .kpi-panel .kpi-item{ display:none; }
+  .tabela-jogadores.gk-mode .kpi-panel .kpi-gk{ display:inline-flex; }
+
+  .tabela-jogadores.gk-mode .kpi-panel.mobile-only{
+  /* ...o que você já tem... */
+  justify-content: flex-end;   /* alinha os chips à direita dentro do painel  */
+  align-self: flex-start;      /* prende o painel ao TOPO da célula do grid   */
+  justify-self: end;           /* ancora o painel no lado direito da célula   */
+}
+
+}
+/* ===== GK MODE — alinhar avatar/nome à esquerda no mobile ===== */
+@media (max-width: 600px){
+  .tabela-jogadores.gk-mode .tabela-row .col-jogador{
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+  .tabela-jogadores.gk-mode .tabela-row .jogador-cell{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start !important;
+    gap: 10px;
+  }
+  .tabela-jogadores.gk-mode .tabela-row .avatar{
+    margin: 0;               /* sem centralização */
+  }
+  .tabela-jogadores.gk-mode .tabela-row .jogador-info{
+    text-align: left !important;
+    align-items: flex-start;
+  }
+}
+/* Esconde os cabeçalhos da tabela em telas menores que 600px */
+@media (max-width: 830px){
+  .tabela-jogadores .tabela-head{
+    display: none !important;
+  }
+}
+
+@media (max-width: 400px){
+  /* cabeçalho fora no mobile do gk-mode */
+  .tabela-jogadores .tabela-head{ display:none !important; }
+
+  /* chips deixam de ser absolutos e passam a ocupar uma linha própria */
+  .tabela-jogadores .kpi-panel.mobile-only{
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    width: 100%;
+    margin-top: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    z-index: 0; /* garante que não fique sobre o nome */
+  }
+
+  /* cartão com mais respiro e o bloco do jogador ocupando a largura toda */
+  .tabela-jogadores .tabela-row{
+    row-gap: 10px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+  .tabela-jogadores .tabela-row .col-jogador{
+    grid-column: 1 / -1 !important;
+  }
+
+  /* só usamos os chips no mobile: esconda colunas numéricas de GK */
+  .tabela-jogadores .tabela-row .col-gk{ display:none !important; }
+
+  /* e mostre apenas os chips de GK (GS / Pên. Rec. / Pên. Def.) */
+  .tabela-jogadores .kpi-panel .kpi-item{ display:none; }
+  .tabela-jogadores .kpi-panel .kpi-gk{ display:inline-flex; }
+
+  .tabela-jogadores .kpi-panel.mobile-only{
+  /* ...o que você já tem... */
+  justify-content: flex-end;   /* alinha os chips à direita dentro do painel  */
+  align-self: flex-start;      /* prende o painel ao TOPO da célula do grid   */
+  justify-self: end;           /* ancora o painel no lado direito da célula   */
+}
+}
+@media (max-width: 400px){
+  .tabela-jogadores .tabela-row .col-jogador{
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+  .tabela-jogadores .tabela-row .jogador-cell{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start !important;
+    gap: 10px;
+  }
+  .tabela-jogadores .tabela-row .avatar{
+    margin: 0;               /* sem centralização */
+  }
+  .tabela-jogadores .tabela-row .jogador-info{
+    text-align: left !important;
+    align-items: flex-start;
+  }
+}
+@media (max-width: 400px){
+  /* chips deixam de ser absolutos e passam a ocupar uma linha própria */
+  .tabela-jogadores .kpi-panel.mobile-only{
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    width: 100%;
+    margin-top: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    z-index: 0; /* garante que não fique sobre o nome */
+  }
+
+  /* cartão com mais respiro e o bloco do jogador ocupando a largura toda */
+  .tabela-jogadores .tabela-row{
+    row-gap: 10px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+  .tabela-jogadores .tabela-row .col-jogador{
+    grid-column: 1 / -1 !important;
+  }
+
+  /* só usamos os chips no mobile: esconda colunas numéricas de GK */
+  .tabela-jogadores .tabela-row .col-gk{ display:none !important; }
+
+
+
+  .tabela-jogadores .kpi-panel.mobile-only{
+  /* ...o que você já tem... */
+  justify-content: flex-end;   /* alinha os chips à direita dentro do painel  */
+  align-self: flex-start;      /* prende o painel ao TOPO da célula do grid   */
+  justify-self: end;           /* ancora o painel no lado direito da célula   */
+}
+}
+/* ===== Jogadores "padrão" (sem gk-mode) — mobile igual ao goleiro ===== */
+@media (max-width: 400px){
+  /* 1) Painel de chips abaixo do nome, alinhado à direita */
+  .tabela-jogadores:not(.gk-mode) .kpi-panel.mobile-only{
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    width: 100%;
+    margin-top: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    z-index: 0;
+    justify-content: flex-end;  /* ⇠ mesma linha dos goleiros */
+    align-self: flex-start;
+    justify-self: end;
+    grid-column: 1 / -1;        /* se a linha for grid, ocupa toda a largura */
+  }
+
+  /* 2) Card com mais respiro e bloco do jogador em largura total */
+  .tabela-jogadores:not(.gk-mode) .tabela-row{
+    row-gap: 10px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+  .tabela-jogadores:not(.gk-mode) .tabela-row .col-jogador{
+    grid-column: 1 / -1 !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+
+  /* 3) MOSTRAR chips normais e ESCONDER chips de goleiro no modo padrão */
+  .tabela-jogadores:not(.gk-mode) .kpi-panel .kpi-item{
+    display: inline-flex !important;   /* garante que os chips apareçam */
+  }
+  .tabela-jogadores:not(.gk-mode) .kpi-panel .kpi-gk{
+    display: none !important;          /* não mostra GS / Pên. Rec. / Pên. Def. */
+  }
+}
+
+/* ===== Correção de vazamento em telas muito estreitas (regras antigas ≤400px) ===== */
+@media (max-width: 400px){
+  .tabela-jogadores:not(.gk-mode) .kpi-panel .kpi-item{
+    display: inline-flex !important;
+  }
+  .tabela-jogadores:not(.gk-mode) .kpi-panel .kpi-gk{
+    display: none !important;
+  }
+}
+/* ===== GK MODE — alinhamentos como na tabela padrão ===== */
+
+/* Cabeçalho: tudo centralizado, exceto "Jogador" que é à esquerda */
+.tabela-jogadores.gk-mode .tabela-head > *{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.tabela-jogadores.gk-mode .tabela-head > *:first-child{
+  justify-content: flex-start;
+  text-align: left;
+}
+
+/* Linhas: todas as colunas centralizadas… */
+.tabela-jogadores.gk-mode .tabela-row > .col{
+  justify-content: center;
+  text-align: center;
+}
+
+/* …exceto a coluna do jogador (foto + nome), que fica à esquerda */
+.tabela-jogadores.gk-mode .tabela-row > .col-jogador{
+  justify-content: flex-start;
+  text-align: left;
+}
+.tabela-jogadores.gk-mode .tabela-row .jogador-cell{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+/* ===== GK MODE < 600px — chips na coluna da direita ===== */
+@media (max-width: 600px){
+  /* 2 colunas: esquerda = jogador | direita = chips */
+  .tabela-jogadores.gk-mode .tabela-row{
+    grid-template-columns: 1fr minmax(150px, 45%);
+    row-gap: 8px;
+    align-items: start;
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+
+  /* bloco do jogador fica na coluna esquerda */
+  .tabela-jogadores.gk-mode .tabela-row .col-jogador{
+    grid-column: 1;
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+
+  /* painel de chips ocupa a coluna direita, na primeira linha */
+  .tabela-jogadores.gk-mode .kpi-panel.mobile-only{
+    grid-column: 2;
+    grid-row: 1;
+    position: static !important;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;   /* empilha os chips verticalmente */
+    gap: 8px;
+    justify-content: flex-start;
+    align-items: stretch;
+  }
+  .tabela-jogadores.gk-mode .kpi-panel .kpi-item{
+    justify-content: space-between;   /* label à esquerda, valor à direita */
+  }
+
+  /* escondemos colunas que não usamos nesse breakpoint */
+  .tabela-jogadores.gk-mode .tabela-row .col-gk,
+  .tabela-jogadores.gk-mode .tabela-row .col-gols,
+  .tabela-jogadores.gk-mode .tabela-row .col-datas,
+  .tabela-jogadores.gk-mode .tabela-row .col-dia{
+    display: none !important;
+  }
+
+  /* cabeçalho não é necessário nesse layout */
+  .tabela-jogadores.gk-mode .tabela-head{ display:none !important; }
+}
+/* GK mode <600px: jogador na esquerda (1ª linha) e chips na direita (1ª linha) */
+@media (max-width: 600px){
+  .tabela-jogadores.gk-mode .tabela-row{
+    grid-template-columns: 1fr minmax(150px,45%);
+    align-items: start;
+  }
+
+  /* Sobrescreve qualquer regra anterior que colocava o jogador em 1 / -1 */
+  .tabela-jogadores.gk-mode .tabela-row .col-jogador{
+    grid-column: 1 / 2 !important;
+    grid-row: 1 !important;
+    align-self: start;
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  .tabela-jogadores.gk-mode .kpi-panel.mobile-only{
+    grid-column: 2 / 3 !important;
+    grid-row: 1 !important;
+    position: static !important;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: flex-start;
+    align-items: stretch;
   }
 }

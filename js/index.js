@@ -52,7 +52,7 @@ async function montarDestaques() {
             tipo: 'art',
             labelEsq: 'Gols',
             valorEsq: j.gols,
-            labelDir: 'Jogos',
+            labelDir: 'Presenças',
             valorDir: j.jogos
           })
         })
@@ -70,7 +70,7 @@ async function montarDestaques() {
             tipo: 'gk',
             labelEsq: 'Gols Sofridos',
             valorEsq: j.golsS,
-            labelDir: 'Jogos',
+            labelDir: 'Presenças',
             valorDir: j.jogos
           })
         })

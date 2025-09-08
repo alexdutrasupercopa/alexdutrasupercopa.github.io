@@ -36,6 +36,15 @@ const ordEl    = document.getElementById('ordenar');
 const limparEl = document.getElementById('limpar');
 const headBtns = document.querySelectorAll('.tabela-head .sort');
 const bodyEl   = document.querySelector('.tabela-body');
+const tabelaWrap = document.querySelector('.tabela-jogadores');
+const btnGk = document.getElementById('toggle-gk');
+
+btnGk?.addEventListener('click', () => {
+  const ativa = tabelaWrap.classList.toggle('gk-mode');
+  btnGk.setAttribute('aria-pressed', ativa ? 'true' : 'false');
+  btnGk.textContent = ativa ? 'Estatísticas padrão' : 'Estatísticas de Goleiro';
+  aplicaFiltrosOrdenacao(); // reaplica exibindo só goleiros
+});
 
 // Sempre pegue as linhas no DOM atual (são criadas depois do fetch)
 const getRows = () => Array.from(document.querySelectorAll('.tabela-body .tabela-row'));
@@ -45,6 +54,7 @@ function aplicaFiltrosOrdenacao() {
   const q   = norm(buscaEl?.value);
   const pos = posEl ? norm(posEl.value) : '';
   const tim = timeEl ? norm(timeEl.value) : '';
+  const onlyGk = tabelaWrap?.classList.contains('gk-mode'); // << novo
 
   // 1) Filtrar
   rows.forEach(r => {
@@ -55,8 +65,9 @@ function aplicaFiltrosOrdenacao() {
     const passaBusca = !q || nome.includes(q) || time.includes(q);
     const passaPos   = isAll(pos) || pos === posi;
     const passaTime  = isAll(tim) || tim === time;
+    const passaGk    = !onlyGk || posi === 'goleiro';       // << novo
 
-    r.style.display = (passaBusca && passaPos && passaTime) ? '' : 'none';
+    r.style.display = (passaBusca && passaPos && passaTime && passaGk) ? '' : 'none';
   });
 
   // 2) Ordenar apenas os visíveis
@@ -113,7 +124,7 @@ async function carregarJogadores() {
 
   const { data, error } = await db
     .from('Jogador')
-    .select('Nome, Posicao, Time, Gols, Jogos, Foto, Dia1, Dia2, Dia3, Dia4, Final,ObservacaoFA, GolsSofridos')
+    .select('Nome, Posicao, Time, Gols, Jogos, Foto, Dia1, Dia2, Dia3, Dia4, Final,ObservacaoFA, GolsSofridos, PenaltisRecebidos, DefesasPenalti')
     .order('Nome', { ascending: true });
 
   if (error) {
@@ -130,6 +141,9 @@ async function carregarJogadores() {
     const time    = j.Time || '';                                      // "Preto", "Branco", ...
     const gols    = Number(j.Gols || 0);
     const datas   = Number(j.Jogos ?? 0); 
+    const gs = Number(j.GolsSofridos || 0);
+    const pr = Number(j.PenaltisRecebidos || 0);
+    const dp = Number(j.DefesasPenalti || 0);
 
 
     const row = document.createElement('div');
@@ -148,7 +162,7 @@ async function carregarJogadores() {
       <div class="col col-jogador">
         <div class="jogador-cell">
           <div class="avatar"><img src="${j.Foto || 'img/Placeholder.png'}" alt="${nome}" /></div>
-          <div class="jogador-info">
+          <div class="jogador-info data-time="${time}">
             <div class="jogador-nome">${nome}</div>
             <div class="jogador-sub">${posicao} • ${time}</div>
           </div>
@@ -157,13 +171,20 @@ async function carregarJogadores() {
 
       <!-- Painel KPI (mobile) -->
       <div class="kpi-panel mobile-only">
-        <div class="kpi-item"><span class="kpi-label">Jogos</span><span class="kpi">${datas}</span></div>
+        <div class="kpi-item"><span class="kpi-label">Presenças</span><span class="kpi">${datas}</span></div>
         <div class="kpi-item"><span class="kpi-label">Gols</span><span class="kpi">${gols}</span></div>
+        <div class="kpi-item kpi-gk kpi-gs mobile-only"><span class="kpi-label">Presenças</span><span class="kpi">${datas}</span></div>
+        <div class="kpi-item kpi-gk kpi-gs mobile-only"><span class="kpi-label">Gols Sofridos</span><span class="kpi">${gs}</span></div>
+        <div class="kpi-item kpi-gk kpi-dp mobile-only"><span class="kpi-label">Defesas Pênalti</span><span class="kpi">${dp}</span></div>
       </div>
+      <div class="kpi-panel mobile-only"></div>
 
       <!-- Colunas desktop -->
       <div class="col col-datas" data-label="Jogos"><span class="kpi">${datas}</span></div>
       <div class="col col-gols"  data-label="Gols"><span class="kpi">${gols}</span></div>
+      <div class="col col-gk gk-only center" data-label="GS"><span class="kpi">${gs}</span></div>
+      <div class="col col-gk gk-only center" data-label="Pên. Receb."><span class="kpi">${pr}</span></div>
+      <div class="col col-gk gk-only center" data-label="Pên. Def."><span class="kpi">${dp}</span></div>
       <div class="col col-dia" data-label="Dia 1">${statusHtml(j.Dia1)}</div>
       <div class="col col-dia" data-label="Dia 2">${statusHtml(j.Dia2)}</div>
       <div class="col col-dia" data-label="Dia 3">${statusHtml(j.Dia3)}</div>
@@ -200,6 +221,15 @@ const TEAM_COLORS = {
   'Amarelo':'#f2c94c',
   'FA':'#cd0808c6'
 };
+// Nomes de display para os campos extras do modal
+const EXTRA_LABELS = {
+  ObservacaoFA: 'Observação de Free Agent',
+  PenaltisRecebidos: 'Pênaltis Contra',
+  DefesasPenalti: 'Defesas de Pênalti',
+  // Adicione mais chaves se quiser renomear outros campos que apareçam no "extras"
+  // Ex.: OutroCampo: 'Meu Nome Bonito'
+};
+
 
 function ensureModalRoot() {
   let overlay = document.querySelector('.modal-overlay');
@@ -265,6 +295,7 @@ function renderModalJogador(j) {
 
   const nome    = j.Nome || '';
   const posicao = String(j.Posicao || '').toUpperCase();
+  const isGoleiro = posicao === 'GOLEIRO';
   const time    = j.Time || '';
   const gols    = Number(j.Gols || 0);
   const golsSofridos = Number(j.GolsSofridos || 0); // coluna vinda do banco
@@ -335,24 +366,53 @@ function renderModalJogador(j) {
     </div>
   `;
 
-  // Render dinâmico dos extras
-  const extras = overlay.querySelector('#extras');
-  const ignorar = new Set([
-    'Nome','Posicao','Time','Gols','Foto', 'Jogos','GolsSofridos',
-    'Dia1','Dia2','Dia3','Dia4','Final',
-    'created_at','updated_at','id' // caso exista
-  ]);
+// ---------- Render dinâmico dos extras ----------
+const extras = overlay.querySelector('#extras');
+const penContra   = Number(j.PenaltisRecebidos ?? 0);
 
-  Object.entries(j).forEach(([k, v]) => {
-    if (ignorar.has(k)) return;
-    const div = document.createElement('div');
-    div.className = 'extra-item';
-    div.innerHTML = `
-      <div class="extra-key">${k}</div>
-      <div class="extra-val">${v === null || v === undefined ? '—' : String(v)}</div>
-    `;
-    extras.appendChild(div);
-  });
+// Campos que nunca entram na grade de extras
+const HIDE_ALWAYS = new Set([
+  'Nome','Posicao','Time','Foto',
+  'Gols','Jogos','GolsSofridos',
+  'Dia1','Dia2','Dia3','Dia4','Final',
+  'created_at','updated_at','id'
+]);
+
+// Chaves relacionadas a pênaltis (cubra ambas variações de nome)
+const PEN_KEYS = new Set(['PenaltisRecebidos','DefesaPenalti','DefesasPenalti']);
+
+Object.entries(j).forEach(([key, val]) => {
+  if (HIDE_ALWAYS.has(key)) return;
+
+  // 1) ObservacaoFA só se tiver valor
+  if (key === 'ObservacaoFA') {
+    const txt = (val ?? '').toString().trim();
+    if (!txt) return; // não renderiza
+  }
+
+  // 2) Infos de pênalti só se for goleiro E tiver pênalti contra > 0
+  if (PEN_KEYS.has(key)) {
+    if (!isGoleiro) return;
+    if (penContra <= 0) return;
+  }
+
+  // Rótulo de display
+  const label = EXTRA_LABELS[key] || key;
+
+  // Valor exibido
+  const shown = (val === null || val === undefined || (typeof val === 'string' && val.trim() === ''))
+    ? '—'
+    : String(val);
+
+  const div = document.createElement('div');
+  div.className = 'extra-item';
+  div.innerHTML = `
+    <div class="extra-key">${label}</div>
+    <div class="extra-val">${shown}</div>
+  `;
+  extras.appendChild(div);
+});
+
 
   openModal();
 }

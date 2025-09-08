@@ -54,6 +54,9 @@
                         <option value="datas-asc">Jogos (↑)</option>
                     </select>
                     <button id="limpar" type="button">Limpar</button>
+                    <button id="toggle-gk" type="button" aria-pressed="false" title="Mostrar estatísticas de goleiro">
+                    Estatísticas de Goleiro
+                    </button>
                 </div>
             </div>
 
@@ -61,8 +64,11 @@
                 <!-- Cabeçalho -->
                 <div class="tabela-head">
                     <button class="th sort" data-sort="nome">Jogador</button>
-                    <button class="th sort center" data-sort="datas">Jogos</button>
+                    <button class="th sort center" data-sort="datas">Presenças</button>
                     <button class="th sort center" data-sort="gols">Gols</button>
+                    <div class="col col-gk gk-only center">Gols Sofridos</div>
+                    <div class="col col-gk gk-only center">Pênaltis Contra</div>
+                    <div class="col col-gk gk-only center">Pênaltis Defendidos</div>
                     <div class="col col-dia">Dia 1</div>
                     <div class="col col-dia">Dia 2</div>
                     <div class="col col-dia">Dia 3</div>
