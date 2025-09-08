@@ -3330,3 +3330,17 @@ main, .main, .page, .content, .container, .container-page, .wrapper, .wrap{
     align-items: stretch;
   }
 }
+/* Highlights – mais espaço entre cards do MESMO tipo */
+#card-artilheiro,
+#card-goleiro{
+  display: grid;          /* empilha os cards dessa seção */
+  grid-auto-rows: min-content;
+  gap: 15px;              /* ↑ espaço vertical entre cards do mesmo tipo */
+  align-content: start;   /* mantém a seção “grudada” no topo da coluna */
+}
+
+/* (opcional) ainda mais respiro no mobile */
+@media (max-width: 860px){
+  #card-artilheiro,
+  #card-goleiro{ gap: 15px; }
+}
