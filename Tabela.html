@@ -3,9 +3,9 @@
 <script src="js/ligaNavBar.js" defer></script>
 
 <head>
-  <meta charset="UTF-8" />
-  <title>Tabela • SuperCopa B.C.F.C</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <title>Tabela • SuperCopa B.C.F.C</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- CSS geral do site -->
   <link rel="stylesheet" href="css/global.css" />
@@ -20,41 +20,41 @@
   <!-- Navbar principal (injetada) -->
   <div id="navbar"></div>
 
-  <!-- Conteúdo -->
-  <main class="conteudo">
-    <section class="lista-container">
-      <h2 class="lista-titulo">Tabela da Liga</h2>
+    <!-- Conteúdo -->
+    <main class="conteudo">
+        <section class="lista-container">
+            <h2 class="lista-titulo">Tabela da Liga</h2>
 
-      <!-- Filtros / ordenação (segue o mesmo padrão visual) -->
-      <div class="filtros">
-        <div class="filtro-esq">
-          <!-- <input id="tab-busca" type="search" placeholder="Buscar time…" aria-label="Buscar time" /> -->
-        </div>
-        <div class="filtro-dir">
-          <label class="lbl-ordenar" for="tab-ordenar">Ordenar:</label>
-          <select id="tab-ordenar" aria-label="Ordenar por">
-            <option value="pos-asc">Posição (↑)</option>
-            <option value="pos-desc">Posição (↓)</option>
-            <option value="nome-asc">Time (A–Z)</option>
-            <option value="nome-desc">Time (Z–A)</option>
-            <option value="pontos-desc">Pontos (↓)</option>
-            <option value="pontos-asc">Pontos (↑)</option>
-            <option value="primeiro-desc">1º (↓)</option>
-            <option value="primeiro-asc">1º (↑)</option>
-            <option value="segundo-desc">2º (↓)</option>
-            <option value="segundo-asc">2º (↑)</option>
-            <option value="vitorias-desc">Vitórias (↓)</option>
-            <option value="vitorias-asc">Vitórias (↑)</option>
-            <option value="saldo-desc">Saldo (↓)</option>
-            <option value="saldo-asc">Saldo (↑)</option>
-            <option value="golsPro-desc">Gols Pró (↓)</option>
-            <option value="golsPro-asc">Gols Pró (↑)</option>
-            <option value="golsSofridos-desc">Gols Sofridos (↓)</option>
-            <option value="golsSofridos-asc">Gols Sofridos (↑)</option>
-          </select>
-          <button id="tab-limpar" type="button">Limpar</button>
-        </div>
-      </div>
+            <!-- Filtros / ordenação (segue o mesmo padrão visual) -->
+            <div class="filtros">
+                <div class="filtro-esq">
+                    <!-- <input id="tab-busca" type="search" placeholder="Buscar time…" aria-label="Buscar time" /> -->
+                </div>
+                <div class="filtro-dir">
+                    <label class="lbl-ordenar" for="tab-ordenar">Ordenar:</label>
+                    <select id="tab-ordenar" aria-label="Ordenar por">
+                        <option value="pos-asc">Posição (↑)</option>
+                        <option value="pos-desc">Posição (↓)</option>
+                        <option value="nome-asc">Time (A–Z)</option>
+                        <option value="nome-desc">Time (Z–A)</option>
+                        <option value="pontos-desc">Pontos (↓)</option>
+                        <option value="pontos-asc">Pontos (↑)</option>
+                        <option value="primeiro-desc">1º (↓)</option>
+                        <option value="primeiro-asc">1º (↑)</option>
+                        <option value="segundo-desc">2º (↓)</option>
+                        <option value="segundo-asc">2º (↑)</option>
+                        <option value="vitorias-desc">Vitórias (↓)</option>
+                        <option value="vitorias-asc">Vitórias (↑)</option>
+                        <option value="saldo-desc">Saldo (↓)</option>
+                        <option value="saldo-asc">Saldo (↑)</option>
+                        <option value="golsPro-desc">Gols Pró (↓)</option>
+                        <option value="golsPro-asc">Gols Pró (↑)</option>
+                        <option value="golsSofridos-desc">Gols Sofridos (↓)</option>
+                        <option value="golsSofridos-asc">Gols Sofridos (↑)</option>
+                    </select>
+                    <button id="tab-limpar" type="button">Limpar</button>
+                </div>
+            </div>
 
 
 
@@ -73,29 +73,30 @@
           <button class="th center" data-sort="golsSofridos">GC</button>
         </div>
 
-        <!-- Corpo: será renderizado via JS -->
-        <div id="tabela-body" class="tabela-body">
-          <div class="tabela-row tabela-row-ghost"></div>
-          <div class="tabela-row tabela-row-ghost"></div>
-          <div class="tabela-row tabela-row-ghost"></div>
-        </div>
-      </div>
+                <!-- Corpo: será renderizado via JS -->
+                <div id="tabela-body" class="tabela-body">
+                    <div class="tabela-row tabela-row-ghost"></div>
+                    <div class="tabela-row tabela-row-ghost"></div>
+                    <div class="tabela-row tabela-row-ghost"></div>
+                </div>
+            </div>
 
-                  <!-- Legenda das colunas -->
-      <div class="tabela-legenda" aria-label="Legenda da tabela">
-        <span><b>#</b> Posição</span>
-        <span><b>Time</b> Nome do time</span>
-        <span><b>Pts</b> Pontos</span>
-        <span><b>V. 1º</b> Vezes em 1º</span>
-        <span><b>V. 2º</b> Vezes em 2º</span>
-        <span><b>V</b> Vitórias</span>
-        <span><b>SG</b> Saldo de gols</span>
-        <span><b>GP</b> Gols pró</span>
-        <span><b>GC</b> Gols sofridos</span>
-      </div>
-  </section>
-  </main>
+            <!-- Legenda das colunas -->
+            <div class="tabela-legenda" aria-label="Legenda da tabela">
+                <span><b>#</b> Posição</span>
+                <span><b>Time</b> Nome do time</span>
+                <span><b>Pts</b> Pontos</span>
+                <span><b>V. 1º</b> Vezes em 1º</span>
+                <span><b>V. 2º</b> Vezes em 2º</span>
+                <span><b>V</b> Vitórias</span>
+                <span><b>SG</b> Saldo de gols</span>
+                <span><b>GP</b> Gols pró</span>
+                <span><b>GC</b> Gols sofridos</span>
+            </div>
+        </section>
+    </main>
     <!-- Rodapé -->
     <div id="footer"></div>
 </body>
+
 </html>
