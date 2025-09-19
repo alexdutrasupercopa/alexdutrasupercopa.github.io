@@ -8,20 +8,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- CSS geral do site -->
-  <link rel="stylesheet" href="css/style.css" />
-
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/tabela.css" />
   <!-- Supabase e JS -->
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script defer src="js/Tabela.js"></script>
   <script defer src="js/layout.js"></script>
 </head>
 
-<body class="interna">
+<body>
   <!-- Navbar principal (injetada) -->
   <div id="navbar"></div>
-
-    <!-- Navbar interna da Liga -->
-    <!-- <div id="ligaNavBar"></div> -->
 
   <!-- Conteúdo -->
   <main class="conteudo">
@@ -62,7 +59,7 @@
 
 
       <!-- “Tabela” no mesmo estilo de cartões/linhas -->
-      <div class="tabela-jogadores tabela-times">
+      <div class="tabela-times">
         <!-- Cabeçalho -->
         <div class="tabela-head tabela-times-head">
           <button class="th center col-pos" data-sort="pos">#</button>

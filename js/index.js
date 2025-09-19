@@ -46,7 +46,7 @@ async function montarDestaques() {
         .sort((a,b) => (b.jogos||0)-(a.jogos||0) || normalizar(a.nome).localeCompare(normalizar(b.nome)))
         .forEach(j => {
           const card = document.createElement('article')
-          card.className = 'player-highlight'
+          card.className = 'cardDestaques'
           elArtilheiro.appendChild(card)
           renderizarCard(card, j, {
             tipo: 'art',
@@ -64,7 +64,7 @@ async function montarDestaques() {
         .sort((a,b) => (a.jogos||0)-(b.jogos||0) || normalizar(a.nome).localeCompare(normalizar(b.nome)))
         .forEach(j => {
           const card = document.createElement('article')
-          card.className = 'player-highlight'
+          card.className = 'cardDestaques'
           elGoleiro.appendChild(card)
           renderizarCard(card, j, {
             tipo: 'gk',
@@ -163,32 +163,32 @@ function renderizarCard(el, jogador, info) {
   const isArt = info?.tipo === 'art'
   const badgeHtml = `
     
-    <div class="hl-badge ${isArt ? 'art' : 'gk'}">
-      <span class="ico">${isArt ? '🥇' : '🧤'}</span>
+    <div class="badgeDestaque ${isArt ? 'artilheiro' : 'luvaDeOuro'}">
+      <span class="badgeIcon">${isArt ? '🥇' : '🧤'}</span>
       <span>${isArt ? 'Artilheiro' : 'Luva de Ouro'}</span>
     </div>`
 
   el.classList.remove('skeleton')
   el.innerHTML = `
     ${badgeHtml}
-    <div class="top">
-      <img class="avatar"
+    <div class="topoCard">
+      <img class="fotoJogador"
            src="${foto}"
            alt="${jogador.nome}"
            onerror="this.onerror=null;this.src='${placeholder}'">
       <div>
-        <div class="name">${jogador.nome || '—'}</div>
-        <div class="sub">${(jogador.posicao || '').toUpperCase()} • ${jogador.time || ''}</div>
+        <div class="jogadorNome">${jogador.nome || '—'}</div>
+        <div class="timePosicaoJogador">${(jogador.posicao || '').toUpperCase()} • ${jogador.time || ''}</div>
       </div>
     </div>
-    <div class="stats">
-      <div class="stat">
-        <div class="label">${info.labelEsq}</div>
-        <div class="val">${info.valorEsq ?? 0}</div>
+    <div class="statsJogador">
+      <div class="statJogador">
+        <div class="nomeStatJogador">${info.labelEsq}</div>
+        <div class="valorStatJogador">${info.valorEsq ?? 0}</div>
       </div>
-      <div class="stat">
-        <div class="label">${info.labelDir}</div>
-        <div class="val">${info.valorDir ?? 0}</div>
+      <div class="statJogador">
+        <div class="nomeStatJogador">${info.labelDir}</div>
+        <div class="valorStatJogador">${info.valorDir ?? 0}</div>
       </div>
     </div>
   `

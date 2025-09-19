@@ -1,0 +1,188 @@
+/* =====================================================================
+   Tabela —  CSS ESCOPO EXCLUSIVO (organizado)
+   ===================================================================== */
+
+.tabela-times{
+  --col-pos:   54px;   /* #        */
+  --col-time:  190px;  /* Time     */
+  --col-pts:    68px;  /* Pts      */
+  --col-1o:     64px;  /* 1º       */
+  --col-2o:     64px;  /* 2º       */
+  --col-vit:    64px;  /* Vit      */
+  --col-saldo:  76px;  /* Saldo    */
+  --col-gpro:   76px;  /* Gols Pró */
+  --col-gcon:   76px;  /* Gols Sof.*/
+
+  background: #fff;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  overflow-x: auto;
+}
+.tabela-times .tabela-head {
+  color: #666;
+  font-weight: 700;
+  border-bottom: 2px solid #eee;
+  padding: 12px 12px 14px;
+  margin-bottom: 8px;
+}
+.tabela-times .tabela-row {
+  background: #fff;
+  border-radius: 18px;
+  padding: 10px 12px;;
+  margin: 10px 0;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  transition: transform .2s ease, box-shadow .2s ease;
+  row-gap: 6px;
+}
+.tabela-times .tabela-row:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+}
+.tabela-times .tabela-head,
+.tabela-times .tabela-row {
+  display: grid;
+  grid-template-columns:
+    60px                /* # */
+    minmax(0, 1.2fr)    /* Time (nome + bolinha) */
+    80px 80px 90px      /* Pts | Vit | Saldo */
+    100px 110px         /* Gols Pró | Gols Sofridos */
+    70px 70px;          /* 1º | 2º */
+  align-items: center;
+  column-gap: 12px;
+  box-sizing: border-box;
+}
+.tabela-times .center {
+  text-align: center;
+}
+.tabela-times .col {
+  display: flex; align-items: center;
+}
+.tabela-times .col.center {
+  justify-content: center;
+}
+.tabela-times .col-pos {
+  font-weight: 800;
+}
+.tabela-times .time-dot{
+  width: 28px; height: 28px; border-radius: 50%;
+  flex: 0 0 28px;
+  border: 2px solid rgba(0,0,0,.08);
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.06);
+}
+.tabela-times .time-cell{
+  gap: 8px;
+}
+.tabela-times .tabela-row > .col:nth-child(n+3),
+.tabela-times .tabela-head .th:nth-child(n+3){ text-align: center; }
+
+.tabela-times .tabela-row > .col:nth-child(n+3),
+.tabela-times .tabela-head .th:nth-child(n+3){ text-align:center; }
+
+.tabela-legenda{
+  display:flex; flex-wrap:wrap; gap:10px 16px;
+  align-items:center; color:#666; font-size:.9rem; margin:6px 0 4px;
+}
+.tabela-legenda span{
+  display:inline-flex; gap:6px; align-items:center;
+  background:#f7f7f9; border:1px solid #ececf1; border-radius:10px;
+  padding:6px 10px;
+}
+.tabela-legenda b{ color:#333; font-weight:800 }
+
+.time-nome {
+    font-weight: 800;
+    font-size: 1.05rem;
+    line-height: 1.2;
+    display: -webkit-box;       /* layout flexível */
+    -webkit-line-clamp: 2;      /* no máximo 2 linhas */
+    -webkit-box-orient: vertical;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+}
+
+.time-cell { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px;
+}
+
+.time-info { 
+  min-width: 0;
+}
+
+/* Responsividades */
+
+@media (max-width: 480px){
+  .tabela-times{
+    --col-time: 120px;   /* reduz o “vazio” entre time e próximas colunas */
+    --col-pts:   62px;
+    --col-1o:    60px;
+    --col-2o:    60px;
+    --col-vit:   60px;
+    --col-saldo: 68px;
+    --col-gpro:  68px;
+    --col-gcon:  68px;
+  }
+}
+
+@media (max-width: 900px){
+  .tabela-times .tabela-head,
+  .tabela-times .tabela-row{
+    min-width: calc(
+      var(--col-pos) + var(--col-time) + var(--col-pts) +
+      var(--col-1o)  + var(--col-2o)   + var(--col-vit) +
+      var(--col-saldo) + var(--col-gpro) + var(--col-gcon)
+    );
+    grid-template-columns:
+      var(--col-pos) var(--col-time) var(--col-pts)
+      var(--col-1o)  var(--col-2o)   var(--col-vit)
+      var(--col-saldo) var(--col-gpro) var(--col-gcon);
+    column-gap: 12px;   /* mais compacto */
+  }
+  .tabela-times{
+    --col-pos:   48px;  /* #        */
+    --col-time:  125px; /* Time (reduzido) */
+    --col-pts:    60px; /* Pts      */
+    --col-1o:     68px; /* 1º       */
+    --col-2o:     64px; /* 2º       */
+    --col-vit:    64px; /* Vit      */
+    --col-saldo:  76px; /* Saldo    */
+    --col-gpro:   76px; /* Gols Pró */
+    --col-gcon:   76px; /* Gols Sof */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tabela-times .tabela-head .th{ 
+    white-space: nowrap;
+  }
+  .tabela-times .tabela-row  > .col:nth-child(n+3){
+    text-align: center; 
+  }
+  .tabela-times .jogador-nome{
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+  }
+  .tabela-times .tabela-head,
+  .tabela-times .tabela-head .th:nth-child(1),
+  .tabela-times .tabela-head .th:nth-child(2),
+  .tabela-times .tabela-row  > .col:nth-child(1),
+  .tabela-times .tabela-row  > .col:nth-child(2){
+    position: static !important;
+    left: auto !important;
+    z-index: 1 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }  
+  .tabela-times .tabela-row{
+    background: #fff !important;                   /* o próprio fundo da linha */
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(16,24,40,.06);
+    padding: 10px 12px;                            /* um pouco mais enxuto */
+    row-gap: 6px;
+    width: fit-content;   
+  }
+  .tabela-times .tabela-head{
+    background: transparent;
+  }
+  
+}

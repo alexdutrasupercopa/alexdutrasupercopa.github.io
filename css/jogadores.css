@@ -1,0 +1,344 @@
+/* ==================================================================
+   Jogadores — CSS ESCOPO EXCLUSIVO (organizado)
+   ================================================================== */
+
+/* ---------- Wrapper ---------- */
+.tabela-jogadores{
+  background:#fff;
+  border-radius:24px;
+  padding:24px;
+  box-shadow:0 8px 30px rgba(0,0,0,.12);
+  overflow-x:auto;
+}
+
+/* ---------- Desktop (>= 931px) ---------- */
+/* Cabeçalho + linhas em grid: Jogador | Presenças | Gols | Dia1..Final */
+.tabela-jogadores .tabela-head,
+.tabela-jogadores .tabela-row{
+  display:grid;
+  grid-template-columns: 1.5fr .6fr .6fr repeat(5, .6fr);
+  align-items:center;
+  column-gap:16px;
+}
+.tabela-jogadores .tabela-head{
+  color:#666;
+  font-weight:700;
+  border-bottom:2px solid #eee;
+  padding:12px 12px 14px;
+  margin-bottom:8px;
+}
+.tabela-jogadores .tabela-row{
+  background:#fff;
+  border-radius:18px;
+  padding:12px;
+  margin:10px 0;
+  box-shadow:0 6px 14px rgba(0,0,0,.12);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.tabela-jogadores .tabela-row:hover{ transform: translateY(-2px); box-shadow:0 10px 20px rgba(0,0,0,.18); }
+
+/* Colunas */
+.tabela-jogadores .col{ display:flex; align-items:center; justify-content:center; }
+.tabela-jogadores .col-jogador{ justify-content:flex-start; text-align:left; }
+
+/* Avatar + infos */
+.tabela-jogadores .jogador-cell{ display:flex; align-items:center; gap:12px; }
+.tabela-jogadores .avatar{ width:56px; height:56px; border-radius:50%; overflow:hidden; flex-shrink:0; background:#ddd; box-shadow: inset 0 2px 6px rgba(0,0,0,.2); }
+.tabela-jogadores .avatar img{ width:100%; height:100%; object-fit:cover; }
+.tabela-jogadores .jogador-info{ display:flex; flex-direction:column; line-height:1.2; align-items:flex-start; min-width:0; }
+.tabela-jogadores .jogador-nome{ font-weight:800; font-size:1.05rem; line-height:1.2; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.tabela-jogadores .jogador-sub{ font-size:.78rem; color:#6b7280; }
+
+/* KPIs + chips */
+.tabela-jogadores .kpi{ font-weight:800; font-size:1.1rem; color:#222; }
+/* Esconde chips no desktop (serão exibidos só em mobile ou GK faixa intermediária) */
+.tabela-jogadores .mobile-only{ display:none !important; }
+
+/* Status (dias) */
+.tabela-jogadores .status{ display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:6px; font-weight:900; line-height:1; }
+.tabela-jogadores .status-ok{ background:#e9f9ec; color:#208a3c; box-shadow:0 0 0 1px #cce8d4 inset; }
+.tabela-jogadores .status-bad{ background:#ffefef; color:#c23b3b; box-shadow:0 0 0 1px #f2c9c9 inset; }
+.tabela-jogadores .status-null{ background:#f3f3f3; color:#bdbdbd; box-shadow:0 0 0 1px #e5e5e5 inset; }
+
+/* Sem rótulos automáticos (data-label) no desktop */
+.tabela-jogadores .tabela-row .col[data-label]::before{ content:none !important; }
+
+/* ---------- Mobile padrão (<= 830px) ---------- */
+/* Esconde cabeçalho e colunas numéricas/dias; mostra chips padrão (Presenças/Gols) */
+@media (max-width: 830px){
+  .tabela-jogadores .tabela-head{ display:none !important; }
+  .tabela-jogadores .tabela-row{
+    position:relative;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px 12px;
+    padding:12px 12px 14px;
+    border-radius:14px;
+  }
+  .tabela-jogadores .tabela-row .col-jogador{
+    flex:0 0 100%;
+    display:flex; align-items:center;
+    margin-right:100px; /* espaço para as pílulas fixadas à direita */
+  }
+  .tabela-jogadores .avatar{ width:48px; height:48px; }
+  .tabela-jogadores .jogador-sub{ font-size:.72rem; }
+  .tabela-jogadores .tabela-row .col-datas,
+  .tabela-jogadores .tabela-row .col-gols,
+  .tabela-jogadores .tabela-row .col-dia{ display:none !important; }
+
+  /* chips padrão fixos no topo-direito */
+  .tabela-jogadores .kpi-panel.mobile-only{
+    display:flex !important;
+    align-items:center; gap:10px;
+    position:absolute; top:8px; right:10px;
+  }
+  .tabela-jogadores .kpi-item{
+    display:inline-flex; align-items:center; gap:8px;
+    background:#fff; padding:5px 10px; border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    border:1px solid #ececec;
+  }
+  .tabela-jogadores .kpi-label{ font-size:.8rem; color:#666; }
+  .tabela-jogadores .kpi{ font-size:1.05rem; font-weight:800; }
+}
+
+/* ---------- Ultra‑mobile (<= 420px) ---------- */
+/* Chips abaixo do nome, centralizados, podendo quebrar linha (2 por linha) */
+@media (max-width: 620px){
+  .tabela-jogadores .tabela-row{ overflow:hidden; padding:12px; border-radius:14px; }
+  .tabela-jogadores .avatar{ width:44px; height:44px; }
+  .tabela-jogadores .jogador-nome{ font-size:1rem; }
+  .tabela-jogadores .jogador-sub{ font-size:.70rem; }
+
+  .tabela-jogadores .kpi-panel.mobile-only{
+    position: static !important;
+    width: 100%;
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .tabela-jogadores .kpi-item{
+    padding:6px 8px;
+    border-radius:12px;
+    border:1px solid #ececec;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    background:#fff;
+    flex:1 1 calc(50% - 8px);
+    min-width:140px;
+    text-align:center;
+  }
+  .tabela-jogadores .kpi-panel.mobile-only .kpi-item:nth-child(3){
+    flex-basis:100%; min-width:0;
+  }
+}
+/* 1 por linha em telas extrema/pequenas */
+@media (max-width: 330px){
+  .tabela-jogadores .kpi-item{ flex-basis:100%; min-width:0; }
+}
+
+/* ---------- GK mode (Goleiros) ---------- */
+/* Estado base: esconder "Gols" e mostrar colunas de GK no desktop */
+.tabela-jogadores .gk-only{ display:none !important; }
+.tabela-jogadores.gk-mode .tabela-head [data-sort="gols"],
+.tabela-jogadores.gk-mode .tabela-row .col-gols{ display:none !important; }
+.tabela-jogadores.gk-mode .gk-only{ display:flex !important; }
+
+/* Desktop GK (>= 931px): Jogador | Jogos | GS | Pên. C. | Pên. D. | Dia1..Final */
+.tabela-jogadores.gk-mode .tabela-head,
+.tabela-jogadores.gk-mode .tabela-row {
+  grid-template-columns: minmax(0,1fr) .6fr .6fr .6fr .6fr repeat(5,.6fr);
+}
+
+/* Mobile GK (<= 830px): usar chips específicos de GK; esconder colunas numéricas */
+@media (max-width: 830px){
+  .tabela-jogadores.gk-mode .tabela-row .col-gk{ display:none !important; }
+  .tabela-jogadores.gk-mode .kpi-panel .kpi-item{ display:none !important; }
+  .tabela-jogadores.gk-mode .kpi-panel.mobile-only .kpi-gk{ display:inline-flex !important; }
+}
+
+/* GK — faixa intermediária (831–930px):
+   Jogador à esquerda e chips de GK à direita como pílulas */
+@media (min-width: 831px) and (max-width: 930px){
+  .tabela-jogadores.gk-mode .tabela-head{ display:none !important; }
+  .tabela-jogadores.gk-mode .tabela-row{
+    position: relative;
+    display:flex;
+    align-items:center;
+    gap:10px 12px;
+    padding-top:14px;
+    padding-bottom:14px;
+  }
+  .tabela-jogadores.gk-mode .tabela-row .col-jogador{
+    flex:1 1 auto;
+    padding-right:260px; /* espaço reservado para as pílulas de GK */
+    min-width:0;
+  }
+  /* esconder colunas numéricas/dias no meio-termo */
+  .tabela-jogadores.gk-mode .tabela-row .col-datas,
+  .tabela-jogadores.gk-mode .tabela-row .col-gk,
+  .tabela-jogadores.gk-mode .tabela-row .col-dia{ display:none !important; }
+
+  /* painel de chips no topo-direito: somente os de GK */
+  .tabela-jogadores.gk-mode .kpi-panel.mobile-only{
+    display:flex !important;
+    position:absolute; top:8px; right:12px; gap:10px;
+  }
+  .tabela-jogadores.gk-mode .kpi-panel .kpi-item{ display:none !important; }
+  .tabela-jogadores.gk-mode .kpi-panel .kpi-gk{
+    display:inline-flex !important;
+    align-items:center; gap:8px;
+    background:#fff; padding:5px 10px; border-radius:12px;
+    border:1px solid #ececec; box-shadow:0 2px 8px rgba(0,0,0,.08);
+  }
+  .tabela-jogadores.gk-mode .kpi-panel .kpi-gk .kpi-label{ font-size:.85rem; color:#666; }
+  .tabela-jogadores.gk-mode .kpi-panel .kpi-gk .kpi{ font-weight:800; }
+}
+
+/* ---------- Legenda (somente desta página) ---------- */
+.legenda{
+  display:flex; gap:18px; align-items:center;
+  color:#666; font-size:.9rem; margin-top:6px;
+}
+.legend-item{ display:inline-flex; gap:8px; align-items:center; }
+.legend-icon{
+  width:22px; height:22px; display:inline-flex;
+  align-items:center; justify-content:center; border-radius:6px; font-weight:900;
+}
+.status {
+    font-weight: 900;
+    font-size: 1.1rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    user-select: none;
+}
+.status-ok{ background:#e9f9ec; color:#208a3c; box-shadow:0 0 0 1px #cce8d4 inset; }
+.status-bad{ background:#ffefef; color:#c23b3b; box-shadow:0 0 0 1px #f2c9c9 inset; }
+.status-null{ background:#f3f3f3; color:#bdbdbd; box-shadow:0 0 0 1px #e5e5e5 inset; }
+
+/* ---------- Botão do modo GK (página Jogadores) ---------- */
+#toggle-gk{
+  padding:8px 12px; border:1px solid var(--grad-top); background:#fff;
+  color:var(--grad-top); font-weight:700; border-radius:10px; cursor:pointer;
+  transition: background .2s, color .2s, transform .15s;
+}
+#toggle-gk[aria-pressed="true"]{ background:var(--grad-top); color:#fff; }
+#toggle-gk:hover{ transform: translateY(-2px); }
+
+/* ===== Modal de jogador (compacto, foto à esquerda) ===== */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.5);
+  display:none; align-items:center; justify-content:center;
+  z-index:9999; padding:20px;
+}
+.modal-overlay.open{ display:flex; }
+
+.modal-dialog{
+  background:#fff; width:min(980px,96vw); max-height:92vh;
+  border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.35);
+  overflow:auto;
+}
+
+/* Cabeçalho */
+.modal-header{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 18px; border-bottom:1px solid #eee;
+}
+.modal-title{ font-size:1.3rem; font-weight:800; color:#222; }
+.modal-close{ background:transparent; border:0; font-size:1.6rem; cursor:pointer; line-height:1; }
+
+/* Conteúdo */
+.modal-body{ padding:18px; display:grid; gap:16px; }
+
+/* Topo: avatar à esquerda, infos à direita */
+.player-top{
+  display:grid;
+  grid-template-columns: 140px 1fr; /* FOTO | INFOS */
+  gap:14px; align-items:center;
+}
+.player-avatar{
+  width:150px; height:150px; border-radius:50%; overflow:hidden;
+  background:#eee; box-shadow:0 6px 16px rgba(0,0,0,.1) inset;
+}
+.player-avatar img{ width:100%; height:100%; object-fit:cover; }
+.player-meta{ display:grid; gap:6px; }
+.player-meta .modal-nome{ font-size:5.0rem; font-weight:800; color:#222; line-height:1.05; }
+.player-meta .sub{ color:#777; font-size:.95rem; }
+
+/* KPIs (abaixo do topo) */
+.kpi-grid{
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
+  gap:12px;
+}
+.kpi-card{
+  border:1px solid #eee; border-radius:12px; padding:12px;
+  display:grid; gap:4px; text-align:center; box-shadow:0 4px 14px rgba(0,0,0,.05);
+}
+.kpi-label{ color:#666; font-size:.9rem; }
+.kpi-value{ font-weight:900; font-size:1.4rem; color:#222; }
+
+/* Presença por dia (abaixo dos KPIs) */
+.days-grid{
+  display:grid; grid-template-columns: repeat(5, 1fr);
+  gap:10px;
+}
+.day-cell{
+  border:1px solid #eee; border-radius:10px; padding:10px;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.day-label{ color:#666; font-size:.95rem; }
+
+/* Campos extras (abaixo de tudo) */
+.extra-grid{
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap:10px;
+}
+.extra-item{ border:1px solid #eee; border-radius:10px; padding:10px; }
+.extra-key{ color:#777; font-size:.85rem; }
+.extra-val{ font-weight:600; }
+
+/* Faixa colorida no topo do modal (a cor é setada via JS) */
+.modal-banner{
+  height:30px; width:100%;
+  border-top-left-radius:16px; border-top-right-radius:16px;
+  background:#888;
+}
+
+/* --- Boas práticas de quebra/ellipsis --- */
+/* permita que as colunas de texto encolham sem quebrar o layout */
+.player-top { display:grid; grid-template-columns: 110px 1fr; gap:14px; } /* ajuste sutil do original */
+.player-top .player-meta{ min-width:0; }       /* crucial p/ ellipsis funcionar */
+.player-top .modal-nome{ overflow-wrap:anywhere; } /* quebra segura p/ nomes grandes */
+
+/* título do cabeçalho em uma linha com reticências, se necessário */
+.modal-title{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* Lista (linhas de jogadores): evita que nomes enormes estourem o layout */
+.jogador-info{ min-width:0; }
+.jogador-nome{
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+
+/* Responsivo do modal */
+@media (max-width: 640px){
+  .player-top{ grid-template-columns: 100px 1fr; gap:12px; }
+  .player-avatar{ width:90px; height:90px; }
+  .player-meta .modal-nome{ font-size:1.7rem; }
+  .kpi-value{ font-size:1.25rem; }
+  .days-grid{ grid-template-columns: repeat(3, 1fr); } /* quebra melhor no celular */
+}
+
+/* Animação */
+@keyframes modalFadeIn{ from{opacity:0} to{opacity:1} }

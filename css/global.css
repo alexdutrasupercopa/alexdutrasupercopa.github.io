@@ -1,0 +1,621 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --roxo-escuro: #200025;
+    --grad-top: #60036e;
+    --grad-bot: #430244;
+    --cinza-fundo: #f4f4f4;
+    --texto: #333;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: var(--cinza-fundo);
+    color: var(--texto);
+    text-align: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background: var(--roxo-escuro);
+    padding: 18px 30px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    gap: 40px;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navbar .logo {
+    max-height: 40px;
+}
+
+.titulo-site {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.nav-center {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+.nav-center li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: opacity .3s;
+}
+
+.nav-center li a.ativo {
+    opacity: .7;
+}
+
+.nav-toggle {
+    display: none;
+    background: transparent;
+    border: 0;
+    color: #fff;
+    font-size: 1.4rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+main.conteudo {
+    margin: 30px auto;
+    max-width: 1100px;
+    /* maior para caber a tabela */
+    padding: 40px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: left;
+    flex: 0;
+}
+
+.page-wrapper {
+    flex: 1;
+    /* essa div ocupa o espaço sobrando */
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    background: #222;
+    color: #aaa;
+    padding: 10px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.lista-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.lista-titulo {
+    text-align: left;
+    color: #888;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: -8px;
+}
+
+.tabela-row {
+    display: grid;
+    grid-template-columns: 1.5fr .6fr .6fr repeat(5, .6fr);
+    align-items: center;
+    column-gap: 16px;
+}
+
+.tabela-head {
+    color: #666;
+    font-weight: 700;
+    border-bottom: 2px solid #eee;
+    padding: 12px 12px 14px;
+    margin-bottom: 8px;
+}
+
+
+.tabela-row {
+    background: #fff;
+    border-radius: 18px;
+    padding: 12px;
+    margin: 10px 0;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.tabela-row:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+}
+
+.tabela-row-ghost {
+    height: 56px;
+    background: #f7f7f7;
+    box-shadow: inset 0 0 0 1px #eee;
+}
+
+.col {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #ddd;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) inset;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+@media (max-width: 720px) {
+    main.conteudo {
+        max-width: 100%;
+        margin: 16px auto;
+        padding: 18px;
+        border-radius: 14px;
+    }
+
+    main.conteudo h2 {
+        font-size: 1.25rem;
+    }
+
+    main.conteudo p {
+        font-size: 1rem;
+    }
+
+    .navbar {
+        justify-content: space-between;
+        padding: 10px 16px;
+        gap: 12px;
+    }
+
+    .nav-left .logo {
+        max-height: 32px;
+    }
+
+    .titulo-site {
+        font-size: 1rem;
+    }
+
+    .nav-toggle {
+        display: block;
+    }
+
+    .nav-center {
+        position: absolute;
+        top: 56px;
+        left: 0;
+        right: 0;
+        background: var(--roxo-escuro);
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px 16px;
+        display: none;
+        border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .navbar.open .nav-center {
+        display: flex;
+    }
+
+    .nav-center li a {
+        font-size: 1rem;
+        padding: 4px 0;
+    }
+
+    footer {
+        font-size: .85rem;
+        padding: 12px;
+    }
+}
+
+.filtros {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 720px) {
+    .filtros {
+        gap: 8px;
+    }
+    .filtros input[type="search"] {
+    min-width: 160px;
+    }
+    .lbl-ordenar {
+        display: none;
+    }
+
+}
+
+.filtros input[type="search"] {
+    min-width: 220px;
+}
+.filtros input[type="search"],
+.filtros select {
+    background: #fff;
+    border: 1px solid #e7e7e7;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 0.95rem;
+    outline: 0;
+}
+.filtros button#limpar {
+    padding: 8px 12px;
+    border: 1px solid #e7e7e7;
+    background: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.filtros button#limpar,
+.filtros button#tab-limpar {
+    padding: 8px 14px;
+    border: 1px solid var(--grad-top);
+    background: var(--grad-top);
+    color: #fff;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.25s, transform 0.15s;
+}
+
+.filtros button#limpar:hover,
+.filtros button#tab-limpar:hover {
+    background: var(--grad-bot);
+    transform: translateY(-2px);
+}
+
+.filtros button#limpar:active,
+.filtros button#tab-limpar:active {
+    transform: translateY(0);
+}
+.filtro-esq,
+.filtro-dir {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+
+
+.tabela-head .th {
+    background: transparent;
+    border: 0;
+    text-align: left;
+    font-weight: 700;
+    color: #555;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tabela-head .th.center {
+    justify-content: center;
+}
+
+.tabela-head .th::after {
+    content: "";
+    border: 5px solid transparent;
+    margin-left: 4px;
+    opacity: .4;
+}
+
+.tabela-head .th.asc::after {
+    border-bottom-color: #555;
+    transform: translateY(-2px);
+}
+
+.tabela-head .th.desc::after {
+    border-top-color: #555;
+    transform: translateY(2px);
+}
+
+@media (min-width: 800px){
+  .tabela-row{
+    display: grid;
+    grid-template-columns: minmax(0,1fr) 72px 72px repeat(5, 46px);
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+.tabela-row {
+  display: grid;
+  /* Colunas: [Jogador | Jogos | Gols | Dia1..Dia4 | Final] */
+  grid-template-columns: minmax(0, 1fr) 72px 72px repeat(5, 54px);
+  align-items: center;
+  column-gap: 12px; /* altere aqui e no head para manter igual */
+  box-sizing: border-box;
+}
+
+.tabela-head > *:not(:first-child) {
+  text-align: center;
+}
+
+.tabela-row, .tabela-head {
+  /* já deve ter seu grid-template-columns; deixe como está */
+  column-gap: 12px;
+}
+
+.time-dot{
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex: 0 0 28px;
+  border: 2px solid rgba(0,0,0,.08);
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.06);
+  background: #999; /* fallback */
+}
+
+.pill{
+  display:inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background:#f0f6ff;
+  color:#1b4b9b;
+  border:1px solid #d8e7ff;
+  font-weight:700;
+  font-size:.9rem;
+}
+
+.tabela-row .btn-save-linha{
+  padding:6px 12px; border-radius:10px; border:1px solid #dfe6ff;
+  background:#eef3ff; color:#1b4b9b; font-weight:700; cursor:pointer;
+}
+
+.tabela-row .btn-save-linha:hover{ filter: brightness(0.97); }
+
+#grupos-card .tabela-body .tabela-row {
+  display: grid;               /* se já houver flex, use !important */
+  grid-template-columns: 1fr minmax(150px, 220px) 140px 110px;
+  align-items: center;
+  column-gap: 16px;
+}
+
+#grupos-card .badge { 
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  #grupos-card .tabela-head { display: none; }
+  #grupos-card .tabela-body .tabela-row {
+    grid-template-columns: 1fr;
+    row-gap: 12px;
+  }
+  #grupos-card .col.center { justify-content: flex-start; }
+  #grupos-card .match-score { grid-template-columns: 56px auto 56px; }
+}
+
+#grupos-card .tabela-body .tabela-row {
+  display: grid !important;
+  grid-template-columns: 1fr 220px 150px 120px; /* Partidas | Placar | Status | Ações */
+  column-gap: 16px;
+  align-items: center;
+}
+
+#grupos-card .tabela-head .th.center { text-align: center; }
+
+#grupos-card .tabela-body .tabela-row .col.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#grupos-card .badge { white-space: nowrap; }
+
+@media (max-width: 720px) {
+  #grupos-card .tabela-head { display: none; }
+  #grupos-card .tabela-body .tabela-row {
+    grid-template-columns: 1fr;
+    row-gap: 12px;
+  }
+  #grupos-card .match-score { grid-template-columns: 64px 20px 64px; }
+  #grupos-card .in-score { width: 64px; }
+}
+
+.skeleton{ position: relative; overflow: hidden; }
+
+.skeleton::after{
+  content:""; position:absolute; inset:0;
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,.04), transparent);
+  animation: shimmer 1.2s infinite;
+}
+
+.painel-dia .badge{
+	color:#000;
+	background: var(--grad-top);
+	background: linear-gradient(to right, var(--grad-top), var(--grad-bot));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	font-weight:800;
+	font-size:12px;
+	white-space:nowrap;
+}
+
+#grupos-card .tabela-body .tabela-row{
+      display:grid!important;
+      grid-template-columns:max-content 200px 130px 100px;
+      column-gap:12px; align-items:center; justify-content:start;
+    }
+
+#grupos-card .tabela-body .tabela-row .col.center{display:flex;align-items:center;justify-content:center}
+
+@media (max-width:900px){.resumo-grid{grid-template-columns:1fr}#grupos-card .tabela-head{display:none}#grupos-card .tabela-body .tabela-row{grid-template-columns:1fr;row-gap:12px}}
+
+#grupos-card .tabela-body .tabela-row{
+  display:grid;
+  grid-template-columns: 1fr 200px 130px 110px; /* Partidas | Placar | Status | Ações */
+  gap:12px;
+  align-items:center;
+}
+
+#grupos-card .tabela-body .tabela-row .center{
+  display:flex; justify-content:center; align-items:center;
+}
+
+@media (max-width: 980px){
+  .resumo-grid{ grid-template-columns:1fr; }
+  #grupos-card .tabela-head{ display:none; }
+  #grupos-card .tabela-body .tabela-row{ grid-template-columns:1fr; row-gap:10px; }
+}
+
+#grupos-card .tabela-body .tabela-row{
+  display: grid !important;
+  grid-template-columns: 1fr 200px 130px !important;
+  column-gap: 12px;
+  align-items: center;
+}
+
+#grupos-card .tabela-body .tabela-row .col.center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#grupos-card .badge{ white-space: nowrap; }
+
+#grupos-card .tabela-body .tabela-row{
+  margin: 8px 0;
+}
+
+@media (max-width: 720px){
+  #grupos-card .tabela-head{ display: none !important; }
+  #grupos-card .tabela-body .tabela-row{
+    grid-template-columns: 1fr !important;
+    row-gap: 10px;
+  }
+  #grupos-card .match-score{
+    grid-template-columns: 48px 16px 48px;
+    justify-content: flex-start;
+  }
+}
+
+.page-dia .lista-container { max-width: 1160px; margin: 0 auto 24px; }
+
+#grupos-card .tabela-body .tabela-row{
+  display:grid;
+  grid-template-columns: 1fr 240px 140px; /* Partidas | Placar | Status */
+  gap:14px;
+  align-items:center;
+}
+
+#grupos-card .tabela-body .tabela-row .col.center{ display:flex; justify-content:center; align-items:center; }
+
+#grupos-card .badge{ white-space:nowrap; }
+
+@media (max-width: 980px){
+  .page-dia .lista-container, .toolbar-dia .toolbar-inner { max-width: 100%; padding: 0 12px; }
+  #grupos-card .tabela-head{ display:none; }
+  #grupos-card .tabela-body .tabela-row{ grid-template-columns: 1fr; row-gap:8px; }
+  #grupos-card .match-score{ justify-content:flex-start; }
+  .resumo-grid{ grid-template-columns: 1fr; }
+  .match-line{ grid-template-columns: 1fr 72px 1fr; }
+  .match-line .score{ font-size:16px; }
+}
+
+.page-dia .lista-container { max-width: 1180px; margin: 0 auto 24px; }
+
+.page-dia .lista-container { max-width: 1180px; margin: 0 auto 28px; }
+
+html, body{
+  height: 100%;
+}
+
+body{
+  min-height: 100svh;          /* garante altura mínima = viewport (iOS safe) */
+  display: flex;
+  flex-direction: column;       /* empilha: header, conteúdo, footer */
+}
+
+body::after{
+  content: "";
+  flex: 1 0 auto;
+}
+
+footer, .footer, .site-footer, #footer{
+  flex-shrink: 0;
+  width: 100%;
+  margin-top: 0;                /* evita “degrau” se havia margin-top */
+}
+
+main, .main, .page, .content, .container-page{
+  /* se algum desses existir no seu layout, eles continuam naturais;
+     não é obrigatório, só um reforço para layouts variados */
+  overflow: visible;
+}
+
+:root{
+  --footer-h: 48px; /* ex.: 48, 56, 64px */
+}
+
+body{ display:block !important; min-height:100svh; }
+
+body::after{ content:none !important; }
+
+html, body{ height:auto; }
+
+body{
+  padding-bottom: calc(var(--footer-h) + env(safe-area-inset-bottom, 0px));
+}
+
+footer, .footer, .site-footer, #footer{
+  position: fixed !important;
+  left: 0; right: 0; bottom: 0;
+  height: var(--footer-h);
+  z-index: 50;
+  /* aparência (ajuste ao seu tema) */
+  background: #1f1f1f;       /* cor do seu footer */
+  color: #eaeaea;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 -4px 14px rgba(0,0,0,.12);
+  /* para iOS com notch */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+main, .main, .page, .content, .container, .container-page, .wrapper, .wrap{
+  overflow: visible !important;
+}
