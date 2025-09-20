@@ -95,13 +95,13 @@ function sortRows(rows, key, dir) {
 }
 
 // Constrói a célula de time (bolinha + texto)
-function teamCell(nome){
-  return `
+function teamCell(nome) {
+    return `
     <div class="time-cell">
       <div class="time-dot" style="width:28px;height:28px;border-radius:50%;background:${getTeamColor(nome)};
            border:2px solid rgba(0,0,0,.08);box-shadow:inset 0 0 0 2px rgba(0,0,0,.06)"></div>
       <div class="time-info">
-        <div class="time-nome" title="${nome||""}">${nome||"-"}</div>
+        <div class="time-nome" title="${nome || ""}">${nome || "-"}</div>
       </div>
     </div>`;
 }

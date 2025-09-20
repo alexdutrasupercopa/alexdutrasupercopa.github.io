@@ -40,44 +40,44 @@ async function montarDestaques() {
         if (elArtilheiro) elArtilheiro.innerHTML = ''
         if (elGoleiro) elGoleiro.innerHTML = ''
 
-    // renderiza todos os artilheiros empatados
-    if (elArtilheiro && artilheiros.length) {
-      artilheiros
-        .sort((a,b) => (b.jogos||0)-(a.jogos||0) || normalizar(a.nome).localeCompare(normalizar(b.nome)))
-        .forEach(j => {
-          const card = document.createElement('article')
-          card.className = 'cardDestaques'
-          elArtilheiro.appendChild(card)
-          renderizarCard(card, j, {
-            tipo: 'art',
-            labelEsq: 'Gols',
-            valorEsq: j.gols,
-            labelDir: 'Presenças',
-            valorDir: j.jogos
-          })
-        })
-    }
+        // renderiza todos os artilheiros empatados
+        if (elArtilheiro && artilheiros.length) {
+            artilheiros
+                .sort((a, b) => (b.jogos || 0) - (a.jogos || 0) || normalizar(a.nome).localeCompare(normalizar(b.nome)))
+                .forEach(j => {
+                    const card = document.createElement('article')
+                    card.className = 'cardDestaques'
+                    elArtilheiro.appendChild(card)
+                    renderizarCard(card, j, {
+                        tipo: 'art',
+                        labelEsq: 'Gols',
+                        valorEsq: j.gols,
+                        labelDir: 'Presenças',
+                        valorDir: j.jogos
+                    })
+                })
+        }
 
-    // renderiza todos os goleiros empatados
-    if (elGoleiro && melhoresGks.length) {
-      melhoresGks
-        .sort((a,b) => (a.jogos||0)-(b.jogos||0) || normalizar(a.nome).localeCompare(normalizar(b.nome)))
-        .forEach(j => {
-          const card = document.createElement('article')
-          card.className = 'cardDestaques'
-          elGoleiro.appendChild(card)
-          renderizarCard(card, j, {
-            tipo: 'gk',
-            labelEsq: 'Gols Sofridos',
-            valorEsq: j.golsS,
-            labelDir: 'Presenças',
-            valorDir: j.jogos
-          })
-        })
+        // renderiza todos os goleiros empatados
+        if (elGoleiro && melhoresGks.length) {
+            melhoresGks
+                .sort((a, b) => (a.jogos || 0) - (b.jogos || 0) || normalizar(a.nome).localeCompare(normalizar(b.nome)))
+                .forEach(j => {
+                    const card = document.createElement('article')
+                    card.className = 'cardDestaques'
+                    elGoleiro.appendChild(card)
+                    renderizarCard(card, j, {
+                        tipo: 'gk',
+                        labelEsq: 'Gols Sofridos',
+                        valorEsq: j.golsS,
+                        labelDir: 'Presenças',
+                        valorDir: j.jogos
+                    })
+                })
+        }
+    } catch (e) {
+        console.error('Erro ao montar destaques:', e)
     }
-  } catch (e) {
-    console.error('Erro ao montar destaques:', e)
-  }
 }
 
 

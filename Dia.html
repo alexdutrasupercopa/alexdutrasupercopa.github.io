@@ -1,59 +1,62 @@
 <!doctype html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SuperCopa B.C.F.C — Dia</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SuperCopa B.C.F.C — Dia</title>
 
-  <link rel="stylesheet" href="css/global.css" />
-  <link rel="stylesheet" href="css/dia.css" />
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/dia.css" />
 
-  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script defer src="js/layout.js"></script>
-  <script defer src="js/Dia.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script defer src="js/layout.js"></script>
+    <script defer src="js/Dia.js"></script>
 </head>
+
 <body class="interna">
-  <div id="navbar"></div>
-  <main class="conteudo page-dia">
-    <!-- Topo minimalista: texto-resumo + seletor de dia -->
-    <section class="toolbar-dia">
-      <div class="toolbar-inner">
-       
-        <div class="dia-picker">
-          <label for="dia-select">DATA</label>
-          <select id="dia-select" aria-label="Selecionar dia"></select>
-        </div>
-      </div>
-    </section>
+    <div id="navbar"></div>
+    <main class="conteudo page-dia">
+        <!-- Topo minimalista: texto-resumo + seletor de dia -->
+        <section class="toolbar-dia">
+            <div class="toolbar-inner">
 
-    <!-- Resumo visual -->
-    <section class="lista-container" id="resumo-dia">
-      <h2 class="lista-titulo" style = "padding-bottom: 10px">Resumo da Data</h2>
+                <div class="dia-picker">
+                    <label for="dia-select">DATA</label>
+                    <select id="dia-select" aria-label="Selecionar dia"></select>
+                </div>
+            </div>
+        </section>
 
-      <div class="resumo-grid">
-        <div class="col-esq">
-          <div class="card-resumo">
-            <div class="card-head">Fase de Grupos</div>
-            <div class="fg-matches" id="fg-matches"></div>
-            <div class="fg-table" id="fg-table"></div>
-          </div>
-        </div>
+        <!-- Resumo visual -->
+        <section class="lista-container" id="resumo-dia">
+            <h2 class="lista-titulo" style="padding-bottom: 10px">Resumo da Data</h2>
 
-        <div class="col-dir">
-          <div class="card-resumo">
-            <div class="mm-matches" id="mm-matches"></div>
-            <div class="day-podium" id="day-podium"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+            <div class="resumo-grid">
+                <div class="col-esq">
+                    <div class="card-resumo">
+                        <div class="card-head">Fase de Grupos</div>
+                        <div class="fg-matches" id="fg-matches"></div>
+                        <div class="fg-table" id="fg-table"></div>
+                    </div>
+                </div>
 
-  <div id="footer"></div>
+                <div class="col-dir">
+                    <div class="card-resumo">
+                        <div class="mm-matches" id="mm-matches"></div>
+                        <div class="day-podium" id="day-podium"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-  <script>
-    window.addEventListener("DOMContentLoaded", () => { if (typeof init === "function") init(); });
-  </script>
-  
+    <div id="footer"></div>
+
+    <script>
+        window.addEventListener("DOMContentLoaded", () => { if (typeof init === "function") init(); });
+    </script>
+
 </body>
+
 </html>

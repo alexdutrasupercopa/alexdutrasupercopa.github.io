@@ -7,18 +7,18 @@
     <title>Tabela • SuperCopa B.C.F.C</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- CSS geral do site -->
-  <link rel="stylesheet" href="css/global.css" />
-  <link rel="stylesheet" href="css/tabela.css" />
-  <!-- Supabase e JS -->
-  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script defer src="js/Tabela.js"></script>
-  <script defer src="js/layout.js"></script>
+    <!-- CSS geral do site -->
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/tabela.css" />
+    <!-- Supabase e JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script defer src="js/Tabela.js"></script>
+    <script defer src="js/layout.js"></script>
 </head>
 
 <body>
-  <!-- Navbar principal (injetada) -->
-  <div id="navbar"></div>
+    <!-- Navbar principal (injetada) -->
+    <div id="navbar"></div>
 
     <!-- Conteúdo -->
     <main class="conteudo">
@@ -58,20 +58,20 @@
 
 
 
-      <!-- “Tabela” no mesmo estilo de cartões/linhas -->
-      <div class="tabela-times">
-        <!-- Cabeçalho -->
-        <div class="tabela-head tabela-times-head">
-          <button class="th center col-pos" data-sort="pos">#</button>
-          <button class="th" data-sort="nome">Time</button>
-          <button class="th center" data-sort="pontos">Pts</button>
-          <button class="th center" data-sort="primeiro">V. 1º</button>
-          <button class="th center" data-sort="segundo">V. 2º</button>
-          <button class="th center" data-sort="vitorias">V</button>
-          <button class="th center" data-sort="saldo">SG</button>
-          <button class="th center" data-sort="golsPro">GP</button>
-          <button class="th center" data-sort="golsSofridos">GC</button>
-        </div>
+            <!-- “Tabela” no mesmo estilo de cartões/linhas -->
+            <div class="tabela-times">
+                <!-- Cabeçalho -->
+                <div class="tabela-head tabela-times-head">
+                    <button class="th center col-pos" data-sort="pos">#</button>
+                    <button class="th" data-sort="nome">Time</button>
+                    <button class="th center" data-sort="pontos">Pts</button>
+                    <button class="th center" data-sort="primeiro">V. 1º</button>
+                    <button class="th center" data-sort="segundo">V. 2º</button>
+                    <button class="th center" data-sort="vitorias">V</button>
+                    <button class="th center" data-sort="saldo">SG</button>
+                    <button class="th center" data-sort="golsPro">GP</button>
+                    <button class="th center" data-sort="golsSofridos">GC</button>
+                </div>
 
                 <!-- Corpo: será renderizado via JS -->
                 <div id="tabela-body" class="tabela-body">
