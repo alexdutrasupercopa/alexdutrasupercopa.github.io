@@ -183,7 +183,7 @@ async function carregarJogadores() {
 
     const { data, error } = await db
         .from('Jogador')
-        .select('Nome, Posicao, Time, Gols, Jogos, Foto, Dia1, Dia2, Dia3, Dia4, Final,ObservacaoFA, GolsSofridos, PenaltisRecebidos, DefesasPenalti')
+        .select('Nome, Posicao, Time, Gols, Jogos, Foto, Dia1, Dia2, Dia3, Dia4, Final,ObservacaoFA, GolsSofridos, PenaltisRecebidos, DefesasPenalti,PenaltisCobrados, GolsPenalti')
         .order('Nome', { ascending: true });
 
     if (error) {
@@ -290,6 +290,8 @@ const EXTRA_LABELS = {
     ObservacaoFA: 'Observação de Free Agent',
     PenaltisRecebidos: 'Pênaltis Contra',
     DefesasPenalti: 'Defesas de Pênalti',
+    PenaltisCobrados: 'Pênaltis Cobrados',
+    GolsPenalti: 'Gols de Pênalti',
     // Adicione mais chaves se quiser renomear outros campos que apareçam no "extras"
     // Ex.: OutroCampo: 'Meu Nome Bonito'
 };
@@ -433,6 +435,8 @@ function renderModalJogador(j) {
     // ---------- Render dinâmico dos extras ----------
     const extras = overlay.querySelector('#extras');
     const penContra = Number(j.PenaltisRecebidos ?? 0);
+    const penCobrados = Number(j.PenaltisCobrados ?? 0);
+
 
     // Campos que nunca entram na grade de extras
     const HIDE_ALWAYS = new Set([
@@ -444,6 +448,8 @@ function renderModalJogador(j) {
 
     // Chaves relacionadas a pênaltis (cubra ambas variações de nome)
     const PEN_KEYS = new Set(['PenaltisRecebidos', 'DefesaPenalti', 'DefesasPenalti']);
+    const PEN_KEYS_Atacante = new Set(['PenaltisCobrados', 'GolsPenalti']);
+
 
     Object.entries(j).forEach(([key, val]) => {
         if (HIDE_ALWAYS.has(key)) return;
@@ -458,6 +464,9 @@ function renderModalJogador(j) {
         if (PEN_KEYS.has(key)) {
             if (!isGoleiro) return;
             if (penContra <= 0) return;
+        }
+        if (PEN_KEYS_Atacante.has(key)) {
+            if (penCobrados <= 0) return;
         }
 
         // Rótulo de display
