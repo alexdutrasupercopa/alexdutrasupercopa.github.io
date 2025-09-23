@@ -1,0 +1,136 @@
+/* Página Regulamento — só o necessário, respeitando variables e layout globais */
+
+/* Cabeçalho enxuto (páginas internas) */
+.sub-banner {
+  background: linear-gradient(to bottom, var(--grad-top), var(--grad-bot));
+  color: #fff;
+  padding: 18px 16px;
+}
+.sub-banner__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.sub-banner__logo {
+  max-width: 160px;
+  height: auto;
+}
+.sub-banner__title {
+  font-size: clamp(18px, 3.2vw, 26px);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+/* Título + ações */
+.reg-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.reg-title {
+  font-size: clamp(20px, 2.4vw, 28px);
+  margin: 0 0 2px 0;
+}
+
+.btn-ghost {
+  background: #fff;
+  color: #333;
+  border: 1px solid #e7e7e7;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, transform .15s;
+}
+.btn-ghost:hover { background: #f6f6f6; transform: translateY(-1px); }
+.btn-ghost:active { transform: translateY(0); }
+
+/* Acordeão */
+.accordion {
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+.acc-item + .acc-item { border-top: 1px solid #eee; }
+
+.acc-header {
+  margin: 0;
+  background: #fff;
+}
+.acc-trigger {
+  width: 100%;
+  padding: 14px 16px;
+  background: transparent;
+  border: 0;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  font-weight: 800;
+  cursor: pointer;
+}
+.acc-trigger:focus {
+  outline: 2px solid rgba(0,0,0,.2);
+  outline-offset: 2px;
+}
+.acc-icon {
+  transition: transform .18s ease;
+}
+.acc-trigger[aria-expanded="true"] .acc-icon { transform: rotate(90deg); }
+
+.acc-panel {
+  padding: 0 16px 14px;
+}
+.acc-panel[hidden] { display: none; }
+.acc-content > *:first-child { margin-top: 10px; }
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 12px;
+  margin: 12px 0;
+}
+@media (max-width: 720px){
+  .grid-2 { grid-template-columns: 1fr; }
+}
+
+/* Cards de pontuação */
+.card {
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: #fff;
+  padding: 12px;
+}
+.card h4 { margin: 0 0 8px; font-size: 1rem; }
+
+.list-rank { list-style: decimal; padding-left: 1.1rem; }
+.list-rank li { margin: 4px 0; }
+
+/* Rodapé da seção */
+.reg-footer-note {
+  margin-top: 10px;
+  color: #888;
+  text-align: right;
+  font-size: .9rem;
+}
+
+/* regulamento.css */
+.regulamento .card ul,
+.regulamento .acc-panel ul {
+  list-style: disc;
+  margin: 0;
+  padding-left: 1.1rem;      /* repõe a indentação */
+  list-style-position: outside; /* opcional; pode usar 'inside' se preferir */
+}
+
+/* Se quiser os bullets totalmente dentro da caixa: */
+.regulamento .card ul { 
+  list-style-position: inside; 
+  padding-left: .4rem;
+}

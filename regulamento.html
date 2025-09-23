@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Regulamento • SuperCopa B.C.F.C</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- estilos globais e desta página -->
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/regulamento.css" />
+
+  <!-- scripts desta página e layout comum (navbar/footer) -->
+  <script src="js/regulamento.js" defer></script>
+  <script src="js/layout.js" defer></script>
+</head>
+<body>
+  <!-- Navbar injetada -->
+  <div id="navbar"></div>
+
+  <!-- Cabeçalho visual simples (mantendo identidade de páginas internas) -->
+  <header class="sub-banner">
+    <div class="sub-banner__inner">
+      <h1 class="sub-banner__title">Regulamento — 2ª Super Copa</h1>
+    </div>
+  </header>
+
+  <div class="page-wrapper">
+    <main class="conteudo">
+      <section class="regulamento">
+        <div class="reg-head">
+          <div class="reg-head__left">
+            <h2 class="reg-title">Regras oficiais</h2>
+          </div>
+
+          <div class="reg-head__right">
+            <button id="btnExpandAll" class="btn-ghost" type="button">Expandir tudo</button>
+            <button id="btnCollapseAll" class="btn-ghost" type="button">Fechar tudo</button>
+          </div>
+        </div>
+
+        <!-- Acordeão renderizado via JS -->
+        <div id="regAccordion" class="accordion" aria-label="Seções do regulamento"></div>
+
+        <!-- Rodapé do conteúdo -->
+        <div class="reg-footer-note">
+          <small>Exceções serão decididas pelos capitães.</small>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Footer injetado -->
+  <div id="footer"></div>
+</body>
+</html>
