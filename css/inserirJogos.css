@@ -1,0 +1,131 @@
+/* ---------- Vars de tema (usa as do global.css quando existir) ---------- */
+:root{
+  --roxo-escuro: #200025;
+  --grad-top: #60036e;
+  --grad-bot: #430244;
+  --cinza-fundo: #f4f4f4;
+  --borda: #E7E9F0;
+  --txt: #1A1C23;
+}
+
+/* ---------- Toolbar do topo ---------- */
+.inserir-toolbar{
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:18px
+}
+.inserir-toolbar .dia-input{ width:110px; padding:8px 10px; border:1px solid var(--borda); border-radius:10px }
+
+/* ---------- Botões (globais) ---------- */
+.btn{
+  -webkit-appearance:none; appearance:none; border:1px solid var(--borda);
+  background:#fff; color:var(--txt); padding:10px 14px; border-radius:12px;
+  font-weight:700; line-height:1; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
+  box-shadow:0 2px 0 rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
+}
+.btn:hover{ transform:translateY(-1px) }
+.btn:active{ transform:translateY(0) }
+.btn:disabled{ opacity:.55; cursor:not-allowed }
+.btn.primary{
+  background:linear-gradient(135deg, var(--grad-top), var(--grad-bot));
+  color:#fff; border-color:transparent; box-shadow:0 6px 14px rgba(67,2,68,.25)
+}
+.btn.ghost{ background:#f7f7fb; border:1px solid #E7E7F2; color:#3a3961 }
+.btn.sm{ padding:8px 12px; border-radius:10px; font-size:.92rem }
+
+/* ---------- Lista de partidas ---------- */
+.match-list{ display:flex; flex-direction:column; gap:12px }
+
+.match-card{
+  display:grid; grid-template-columns:1fr 220px 80px 220px; gap:12px; align-items:center;
+  background:#fff; border-radius:16px; padding:14px; box-shadow:0 10px 24px rgba(16,24,40,.06);
+  border:1px solid #F0F1F6;
+}
+@media (max-width: 980px){
+  .match-card{ grid-template-columns:1fr; row-gap:10px }
+}
+
+.time-side{ display:flex; align-items:center; gap:10px; font-weight:800; color:#1f2430 }
+.vs{ opacity:.55; font-weight:800; margin:0 8px }
+
+.time-dot{
+  /* circulo perfeito, sem achatar */
+  --dot: 22px;
+  display:inline-block;
+  width:var(--dot);
+  aspect-ratio:1 / 1;              /* <- garante formato circular */
+  min-width:var(--dot);
+  max-width:var(--dot);
+  border-radius:50%;
+  border:2px solid rgba(0,0,0,.06);
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.05);
+  flex:0 0 var(--dot);
+}
+@media (max-width: 520px){
+  .time-dot{ --dot:18px }
+}
+
+.scorebox{
+  display:grid; grid-template-columns:72px 20px 72px; justify-content:center; align-items:center; gap:10px
+}
+.scorebox input{
+  width:72px; text-align:center; padding:10px; border:1px solid var(--borda); border-radius:12px; font-weight:800; font-size:20px;
+  box-shadow:0 1px 0 rgba(16,24,40,.04) inset;
+}
+.scorebox .x{ font-weight:800; opacity:.45; text-align:center }
+@media (max-width: 520px){
+  .scorebox{ grid-template-columns:60px 16px 60px; gap:8px }
+  .scorebox input{ width:60px; font-size:18px; padding:8px }
+}
+
+.badge{
+  display:inline-block; padding:4px 10px; border-radius:999px; background:#eef3ff; border:1px solid #d8e7ff; color:#1b4b9b; font-weight:800
+}
+
+.actions{ display:flex; gap:10px; justify-content:flex-end }
+.actions .btn{ min-width:120px }
+.actions .btn.btn-gols{ min-width:auto }
+
+/* estados */
+.line-disabled{ opacity:.55; pointer-events:none }
+.small{ font-size:.92rem }
+
+/* ---------- Modal ---------- */
+.modal-backdrop{ position:fixed; inset:0; background:rgba(17,17,20,.45); display:none; align-items:center; justify-content:center; z-index:60; padding:10px }
+.modal{
+  background:#fff; max-width:780px; width:100%; border-radius:16px; box-shadow:0 24px 60px rgba(0,0,0,.25); overflow:hidden; border:1px solid #F0F1F6
+}
+.modal-header{ display:flex; align-items:center; justify-content:space-between; padding:14px 16px; background:#fafafa; border-bottom:1px solid #eee }
+.modal-title{ font-weight:900 }
+.modal-body{ padding:14px 16px; display:flex; flex-direction:column; gap:12px }
+.modal-footer{ padding:12px 16px; border-top:1px solid #f0f0f0; display:flex; justify-content:flex-end; gap:10px }
+.close{ background:transparent; border:0; font-size:24px; cursor:pointer }
+
+.goal-form{ display:grid; grid-template-columns:140px 1fr 1fr 120px 140px; gap:10px; align-items:center }
+.goal-form select,.goal-form input[type="text"]{
+  width:100%; padding:10px; border:1px solid var(--borda); border-radius:10px
+}
+@media (max-width: 720px){
+  .goal-form{ grid-template-columns:1fr 1fr; }
+  .goal-form > *:last-child{ grid-column:1 / -1 }
+}
+
+.goal-list{ display:flex; flex-direction:column; gap:8px; margin-top:6px }
+.goal-item{
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center; background:#fafafa; border:1px solid #eee; border-radius:12px; padding:8px 10px
+}
+.goal-item .del{ margin-left:auto; background:#fff; border:1px solid #eee; border-radius:10px; padding:8px 10px; cursor:pointer }
+
+/* ---------- Toast ---------- */
+.toast{
+  position:fixed; right:14px; bottom:64px; background:#222; color:#fff; padding:10px 14px; border-radius:10px;
+  opacity:0; transform:translateY(6px); transition:opacity .2s, transform .2s; z-index:80
+}
+.toast.show{ opacity:1; transform:translateY(0) }
+
+/* ---------- Ajustes responsivos extras ---------- */
+@media (max-width:980px){
+  .actions{ justify-content:flex-start }
+}
+@media (max-width:420px){
+  .actions .btn{ min-width:auto }
+  .inserir-toolbar .btn{ padding:8px 12px }
+}
