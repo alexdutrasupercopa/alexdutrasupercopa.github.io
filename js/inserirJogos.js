@@ -25,6 +25,35 @@ function normalizeTimeRow(row){
   const nome = pick(row, ["Nome","nome","Time","time"]) || "";
   return { nome: String(nome), cor: getTeamColor(nome) };
 }
+function pidToIdx(pid){
+  // formato: D{dia}-FG{n}
+  const m = String(pid).match(/-FG(\d+)$/);
+  return m ? (parseInt(m[1],10)-1) : null;
+}
+
+async function carregarPartidasExistentes(dia){
+  ST.partidasExistentesById.clear();
+  ST.partidasExistentesByIdx.clear();
+
+  const prefix = `D${dia}-FG`;
+  const { data: parts, error } = await db
+    .from('Partida')
+    .select('Identificador,GolsTime1,GolsTime2')
+    .like('Identificador', `${prefix}%`)
+    .order('Identificador', { ascending: true });
+
+  if(error){ console.warn(error); return; }
+
+  (parts||[]).forEach(p=>{
+    const idx = pidToIdx(p.Identificador);
+    if(idx!=null){
+      const val = { g1: p.GolsTime1 ?? 0, g2: p.GolsTime2 ?? 0 };
+      ST.partidasExistentesById.set(p.Identificador, val);
+      ST.partidasExistentesByIdx.set(idx, val);
+    }
+  });
+}
+
 
 // ------------- Estado -------------
 const ST = {
@@ -32,7 +61,9 @@ const ST = {
   times: [],           // exatamente 4 (exclui FA)
   confrontos: [],      // 6 jogos
   golsPorPartida: {},  // idx -> [{side, jogador, goleiro, penalti}]
-  partidasSalvas: new Set()
+  partidasSalvas: new Set(),  
+  partidasExistentesById: new Map(),
+  partidasExistentesByIdx: new Map()
 };
 
 // ------------- UI -------------
@@ -110,6 +141,9 @@ function renderLista(){
   const wrap = $('#lista'); wrap.innerHTML = '';
   ST.confrontos.forEach((c, idx)=>{
     const pid = idPartida(ST.dia, idx);
+    const jaSalva = ST.partidasExistentesByIdx.has(idx);
+    const placar = ST.partidasExistentesByIdx.get(idx) || { g1:0, g2:0 };
+
     const row = document.createElement('div');
     row.className = 'match-card';
     row.dataset.idx = idx;
@@ -124,23 +158,40 @@ function renderLista(){
       </div>
 
       <div class="scorebox">
-        <input type="number" class="g1" min="0" step="1" value="0"/>
+        <input type="number" class="g1" min="0" step="1" value="${placar.g1}"/>
         <div class="x">x</div>
-        <input type="number" class="g2" min="0" step="1" value="0"/>
+        <input type="number" class="g2" min="0" step="1" value="${placar.g2}"/>
       </div>
 
-      <div class="small"><span class="badge">FG</span></div>
+      <div class="small">
+        ${jaSalva ? '<span class="badge">Salva</span>' : '<span class="badge">FG</span>'}
+      </div>
 
       <div class="actions">
-        <button class="btn btn-gols">Gols</button>
-        <button class="btn primary btn-salvar">Salvar partida</button>
+        <button class="btn btn-gols"${jaSalva?' disabled':''}>Gols</button>
+        <button class="btn primary btn-salvar"${jaSalva?' disabled':''}>${jaSalva?'Já salva':'Salvar partida'}</button>
       </div>
     `;
-    $('.btn-gols', row).addEventListener('click', ()=>abrirModal(idx));
-    $('.btn-salvar', row).addEventListener('click', ()=>salvarPartida(idx));
+
+    // eventos apenas se não estiver salva
+    if(!jaSalva){
+      $('.btn-gols', row).addEventListener('click', ()=>abrirModal(idx));
+      $('.btn-salvar', row).addEventListener('click', ()=>salvarPartida(idx));
+    }else{
+      // trava edição visualmente
+      $('.g1', row).disabled = true;
+      $('.g2', row).disabled = true;
+      row.classList.add('line-disabled');
+      ST.partidasSalvas.add(pid); // contabiliza como já salva
+    }
+
     wrap.appendChild(row);
   });
+
+  // revalida botão "Salvar Fase de Grupos"
+  $('#btn-salvar-fg').disabled = (ST.partidasSalvas.size !== 6);
 }
+
 
 function abrirModal(idx){
   const pid = idPartida(ST.dia, idx);
@@ -202,55 +253,39 @@ function gerar6Confrontos(times){
 
 // ---- NOVO: verifica se a data já foi realizada (FG ou partidas existentes) ----
 async function dataJaRealizada(dia){
-  // 1) Existe Fase de Grupos para esse dia?
-  let fgOk = false;
   try{
-    const { data: fg1, error: e1 } = await db.from('FaseGrupos').select('Numero').eq('Numero', dia).limit(1);
-    if(e1) console.warn(e1);
-    const { data: fg2, error: e2 } = await db.from('FaseGrupos').select('Data').eq('Data', dia).limit(1);
-    if(e2) console.warn(e2);
-    fgOk = (fg1 && fg1.length>0) || (fg2 && fg2.length>0);
-  }catch(_) {}
+    const { data, error } = await db
+      .from('Data')
+      .select('Concluida')
+      .eq('Numero', dia)
+      .maybeSingle(); // retorna 1 ou null
 
-  if(fgOk) return true;
-
-  // 2) Já existem partidas D{dia}-FG% ?
-  const prefix = `D${dia}-FG`;
-  try{
-    const { data: parts, error } = await db.from('Partida')
-      .select('Identificador')
-      .like('Identificador', `${prefix}%`)
-      .limit(1);
-    if(error) console.warn(error);
-    if(parts && parts.length>0) return true;
-  }catch(_) {}
-
-  return false;
+    if(error){ console.warn(error); return false; }
+    return !!(data && data.Concluida === true);
+  }catch(err){
+    console.warn(err);
+    return false;
+  }
 }
-
 async function onCarregar(){
   const dia = +$('#dia').value;
   if(!dia){ toast('Informe o número do dia'); return; }
 
-  // bloqueio de datas já realizadas
+  // 1) Se Data.Concluida = true, bloqueia tudo
   if(await dataJaRealizada(dia)){
-    setHint(`A Data ${dia} já foi realizada. Selecione uma data que ainda não foi realizada.`, 'error');
-    toast('Data já possui partidas salvas.');
+    setHint(`A Data ${dia} está concluída. Não é possível editar.`, 'error');
     $('#lista').innerHTML = '';
     $('#btn-salvar-fg').disabled = true;
     return;
   }
 
+  // 2) Data não concluída: pode haver partidas parciais
   ST.dia = dia;
 
+  // carrega times (ignora FA)
   const { data, error } = await db.from('Time').select('*');
   if(error){ console.error(error); toast('Erro ao buscar times'); return; }
-
-  // normaliza e ignora FA
-  const times = (data || [])
-    .map(normalizeTimeRow)
-    .filter(t => t.nome && t.nome.toLowerCase() !== 'fa');
-
+  const times = (data||[]).map(normalizeTimeRow).filter(t=>t.nome && t.nome.toLowerCase()!=='fa');
   if(times.length < 4){ toast('Preciso de 4 times (excluindo FA)'); return; }
 
   ST.times = times.slice(0,4);
@@ -258,10 +293,20 @@ async function onCarregar(){
   ST.golsPorPartida = {};
   ST.partidasSalvas.clear();
 
+  // 3) Busca partidas já existentes do dia (parciais)
+  await carregarPartidasExistentes(dia);
+
+  // 4) Renderiza lista já refletindo o que está salvo
   renderLista();
-  $('#btn-salvar-fg').disabled = true;
-  setHint(`Gerados ${ST.confrontos.length} confrontos`);
+
+  // habilita salvar FG apenas quando todas 6 estiverem salvas
+  const qtdSalvas = ST.partidasExistentesByIdx.size;
+  $('#btn-salvar-fg').disabled = (qtdSalvas !== 6);
+  setHint(qtdSalvas > 0
+    ? `Encontradas ${qtdSalvas}/6 partidas já registradas para a Data ${dia}.`
+    : `Gerados ${ST.confrontos.length} confrontos`);
 }
+
 
 // ------------- Persistência -------------
 async function salvarPartida(idx){
@@ -334,11 +379,23 @@ async function salvarPartida(idx){
     if(errG){ console.error(errG); toast(`Erro no gol ${golId}`); return; }
   }
 
-  ST.partidasSalvas.add(pid);
-  row.classList.add('line-disabled');
+    ST.partidasSalvas.add(pid);
+
+  // se a linha existir ainda, travar UI
+  if(row){
+    row.classList.add('line-disabled');
+    $('.g1', row).disabled = true;
+    $('.g2', row).disabled = true;
+    const btnG = $('.btn-gols', row);
+    const btnS = $('.btn-salvar', row);
+    if(btnG) btnG.disabled = true;
+    if(btnS){ btnS.disabled = true; btnS.textContent = 'Já salva'; }
+  }
+
   toast(`Partida ${pid} salva`);
 
-  if(ST.partidasSalvas.size === 6) $('#btn-salvar-fg').disabled = false;
+  // habilita salvar FG quando alcançar 6
+  $('#btn-salvar-fg').disabled = (ST.partidasSalvas.size !== 6);
 }
 
 async function salvarFaseDeGrupos(){
