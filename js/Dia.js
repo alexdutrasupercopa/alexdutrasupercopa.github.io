@@ -57,24 +57,52 @@ async function loadPartidasDia(n) {
 async function loadGolsByPartida(ids) {
     if (!ids.length) return {};
     const { data, error } = await db.from(TBL_GOL)
-        .select("Partida, Jogador, Goleiro, Time, TimeAdversario")
+        .select("Partida, Jogador, Goleiro, Time, TimeAdversario, Penalti")
         .in("Partida", ids);
     if (error) throw error;
-    const map = {}; (data || []).forEach(g => { (map[g.Partida] ||= []).push(g); });
+    const map = {};
+    (data || []).forEach(g => { (map[g.Partida] ||= []).push(g); });
     return map;
 }
+
 function splitScorers(partida, gols) {
-    const A = [], B = []; const t1 = partida.Time1, t2 = partida.Time2;
-    (gols || []).forEach(g => {
-        const lado = g.Time === t1 || g.TimeAdversario === t2 ? "A"
-            : g.Time === t2 || g.TimeAdversario === t1 ? "B"
-                : null;
-        if (lado === "A") A.push(g.Jogador); else if (lado === "B") B.push(g.Jogador);
+  const t1 = partida.Time1, t2 = partida.Time2;
+  const A = [], B = [];
+
+  (gols || []).forEach(g => {
+    const lado =
+      (g.Time === t1 || g.TimeAdversario === t2) ? "A" :
+      (g.Time === t2 || g.TimeAdversario === t1) ? "B" : null;
+    if (!lado) return;
+    const item = { nome: g.Jogador, p: !!g.Penalti };
+    if (lado === "A") A.push(item); else B.push(item);
+  });
+
+  const pack = (list) => {
+    const agg = {};
+    list.forEach(({ nome, p }) => {
+      if (!nome) return;
+      const key = String(nome);
+      if (!agg[key]) agg[key] = { normal: 0, pen: 0 };
+      if (p) agg[key].pen += 1;
+      else agg[key].normal += 1;
     });
-    const pack = list => Object.entries(list.reduce((a, n) => (a[n] = (a[n] || 0) + 1, a), {}))
-        .map(([n, c]) => c > 1 ? `${n} (${c})` : n);
-    return { A: pack(A), B: pack(B) };
+
+    const tokens = [];
+    Object.entries(agg).forEach(([nome, c]) => {
+      const safe = (typeof esc === 'function') ? esc(nome) : String(nome);
+      // Normais agregados (1 => "Nome"; >1 => "Nome (N)")
+      if (c.normal > 0) tokens.push(c.normal === 1 ? safe : `${safe} (${c.normal})`);
+      // Pênaltis *separados*, um token por gol
+      for (let i = 0; i < c.pen; i++) tokens.push(`${safe} (P)`);
+    });
+    return tokens;
+  };
+
+  return { A: pack(A), B: pack(B) };
 }
+
+
 
 /* ---------- Tabela FG (PTS 3-1-0 + bônus do dia) ---------- */
 function computeFgTable(matches) {
