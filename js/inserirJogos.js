@@ -107,7 +107,6 @@ function layout(){
       <label for="dia" class="small">Número da Data</label>
       <input id="dia" class="dia-input" type="number" min="1" step="1"/>
       <button id="btn-carregar" class="btn">Carregar confrontos</button>
-      <span class="badge">Tipo: FG</span>
       <span class="small" id="hint"></span>
       <button id="btn-salvar-fg" class="btn primary" disabled>Salvar Fase de Grupos</button>
     </div>
