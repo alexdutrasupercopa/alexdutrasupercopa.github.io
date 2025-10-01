@@ -59,9 +59,6 @@
   box-shadow:inset 0 0 0 2px rgba(0,0,0,.05);
   flex:0 0 var(--dot);
 }
-@media (max-width: 520px){
-  .time-dot{ --dot:18px }
-}
 
 .scorebox{
   display:grid; grid-template-columns:72px 20px 72px; justify-content:center; align-items:center; gap:10px
@@ -128,4 +125,89 @@
 @media (max-width:420px){
   .actions .btn{ min-width:auto }
   .inserir-toolbar .btn{ padding:8px 12px }
+}
+/* Mantém bolinhas SEM deformar */
+.time-dot{
+  --dot:22px;
+  width:var(--dot);
+  height:var(--dot);
+  border-radius:50%;
+  border:2px solid rgba(0,0,0,.06);
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.05);
+  flex:0 0 var(--dot);
+}
+
+/* Dá espaço pros botões e evita sobreposição do título */
+.match-card{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 220px 84px auto; /* times | placar | tipo | ações */
+  gap:12px; align-items:center;
+}
+@media (max-width:980px){ .match-card{ grid-template-columns:1fr; row-gap:10px } }
+.match-card .teams{ min-width:0; }
+.actions{ display:flex; gap:10px; justify-content:flex-end; align-items:center; flex-wrap:nowrap }
+.actions .btn{ white-space:nowrap }
+@media (max-width:980px){ .actions{ justify-content:flex-start; flex-wrap:wrap } }
+
+/* selects do mata-mata */
+.match-card select{
+  padding:8px 10px; border:1px solid var(--borda); border-radius:10px; background:#fff; font-weight:700; max-width:180px;
+}
+@media (max-width:520px){ .match-card select{ max-width:100% } }
+
+/* formulário da disputa de pênaltis */
+.pen-form{
+  display:grid; grid-template-columns:140px 1fr 1fr 130px 130px 160px; gap:10px; align-items:center
+}
+.pen-form select,.pen-form input[type="text"]{ padding:10px; border:1px solid var(--borda); border-radius:10px }
+@media (max-width:760px){
+  .pen-form{ grid-template-columns:1fr 1fr }
+  .pen-form > *:last-child{ grid-column:1 / -1 }
+}
+/* Modal de Disputa: grade mais flexível e com quebra antecipada */
+.pen-form{
+  display:grid;
+  grid-template-columns: 140px 1fr 1fr 120px 120px 160px; /* side | batedor | goleiro | convertido | defendido | add */
+  gap:10px; align-items:center;
+}
+
+/* --- QUEBRA MAIS CEDO (antes ficava fora da tela) --- */
+@media (max-width: 1120px){
+  .pen-form{ grid-template-columns: 1fr 1fr; }
+  /* Botão "Adicionar cobrança" ocupa a linha inteira e nunca some */
+  .pen-form > *:last-child{ grid-column: 1 / -1; justify-self: end; }
+}
+
+/* Garante scroll vertical caso a lista cresça muito */
+.modal-body{ overflow:auto; max-height: calc(80vh - 120px); }
+
+/* ====== Modal de Pênaltis MAIOR ====== */
+#pen-backdrop .modal{
+  width: min(1200px, 98vw);   /* bem mais largo */
+  max-width: 1200px;
+}
+
+/* sem rolagem interna do corpo do modal (a página rola, se precisar) */
+#pen-backdrop .modal-body{
+  overflow: visible;
+  max-height: none;
+}
+
+/* formulário em uma linha inteira (quebra só em telas menores) */
+#pen-backdrop .pen-form{
+  display:grid;
+  grid-template-columns: 180px 1fr 1fr 140px 140px 200px; /* side | batedor | goleiro | convertido | defendido | adicionar */
+  gap:12px; align-items:center;
+}
+
+/* quando a tela ficar menor, aí sim quebra em 2 colunas */
+@media (max-width: 1100px){
+  #pen-backdrop .pen-form{ grid-template-columns: 1fr 1fr; }
+  #pen-backdrop .pen-form > *:last-child{ grid-column:1 / -1; justify-self:end; }
+}
+
+/* se a lista de cobranças crescer demais, só a lista rola */
+#pen-backdrop #pen-list{
+  max-height: 48vh;     /* mantém o formulário sempre visível */
+  overflow: auto;
 }
