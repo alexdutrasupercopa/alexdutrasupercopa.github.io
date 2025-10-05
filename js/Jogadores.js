@@ -101,16 +101,24 @@ function aplicaFiltrosOrdenacao() {
 
     // 1) Filtrar
     rows.forEach(r => {
-        const nome = norm(r.dataset.nome);
-        const time = norm(r.dataset.time);
-        const posi = norm(r.dataset.posicao);
+    const nome = norm(r.dataset.nome);
+    const time = norm(r.dataset.time);
+    const posi = norm(r.dataset.posicao);
 
-        const passaBusca = !q || nome.includes(q) || time.includes(q);
-        const passaPos = isAll(pos) || pos === posi;
-        const passaTime = isAll(tim) || tim === time;
-        const passaGk = !onlyGk || posi === 'goleiro';
+    const passaBusca = !q || nome.includes(q) || time.includes(q);
+    const passaPos   = isAll(pos) || pos === posi;
+    const passaTime  = isAll(tim) || tim === time;
 
-        r.style.display = (passaBusca && passaPos && passaTime && passaGk) ? '' : 'none';
+    // >>> NOVO: em modo goleiro, além de GOLEIRO, inclui LINHA com stats de GK
+    const gsNum = parseInt(r.dataset.gs || '0', 10);
+    const dpNum = parseInt(r.dataset.dp || '0', 10);
+    const prNum = parseInt(r.dataset.pr || '0', 10);
+    const temEstGk = (gsNum > 0) || (dpNum > 0) || (prNum > 0);
+
+    const passaGk = !onlyGk || posi === 'goleiro' || temEstGk;
+    // <<<
+
+    r.style.display = (passaBusca && passaPos && passaTime && passaGk) ? '' : 'none';
     });
 
     // 2) Ordenar apenas os visíveis
