@@ -52,6 +52,36 @@
     padding-bottom: calc(var(--footer-h, 56px) + 12px);
 }
 
+#resumo-dia .lista-titulo {
+    padding-bottom: 10px;
+}
+
+/* Modo especial da Data Final (dia 5) */
+#resumo-dia.final-mode .lista-titulo {
+    text-align: center;
+    font-size: 26px;
+    padding-bottom: 24px;
+}
+
+#resumo-dia.final-mode .resumo-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    grid-template-columns: 1fr; /* só a coluna da direita */
+}
+
+#resumo-dia.final-mode .col-esq {
+    display: none; /* some Fase de Grupos inteira */
+}
+
+#resumo-dia.final-mode .col-dir {
+    grid-column: 1 / -1;
+}
+
+#resumo-dia.final-mode .day-podium {
+    display: none;
+}
+
+
 .resumo-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -606,4 +636,14 @@
         flex: 0 0 18px;
         font-size: initial;
     }
+}
+/* ===================================================================== */
+/* DATA FINAL - largura do card                                          */
+/* ===================================================================== */
+
+/* Só no modo Data Final (dia 5) */
+#resumo-dia.final-mode .card-resumo {
+    /* entre 320px e 900px, seguindo a largura da tela */
+    width: clamp(320px, 80vw, 900px);
+    margin: 0 auto; /* centraliza */
 }

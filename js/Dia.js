@@ -23,6 +23,11 @@ const TEAM_COLORS = { amarelo: "#f3c614", azul: "#2563eb", branco: "#ffffff", pr
 const teamKey = n => String(n || "").trim().toLowerCase();
 const teamDot = t => `<span class="team-dot" style="background:${TEAM_COLORS[teamKey(t)] || "#9ca3af"}"></span>`;
 
+/* Helpers de tipo de partida (MM) */
+const isSemi = p => /(semi)/i.test(p?.Tipo || "") || /S\d$/i.test(p?.Identificador || "");
+const isDT = p => /(disputa.*terceiro|terce)/i.test(p?.Tipo || "") || /-DT$/i.test(p?.Identificador || "");
+const isFinal = p => /(final)$/i.test(p?.Tipo || "") || /-F$/i.test(p?.Identificador || "");
+
 /* ---------- Seletor de dia: busca todas as Datas ---------- */
 async function getAvailableDays() {
     // Tabela "Data" é a fonte da verdade
@@ -172,10 +177,6 @@ function renderFgMatches(container, matches, golsMap) {
 function renderMmMatches(container, matches, golsMap) {
     const el = qs(`#${container}`); el.innerHTML = "";
 
-    const isSemi = p => /(semi)/i.test(p.Tipo || "") || /S\d$/i.test(p.Identificador);
-    const isDT = p => /(disputa.*terceiro|terce)/i.test(p.Tipo || "") || /-DT$/i.test(p.Identificador);
-    const isFinal = p => /(final)$/i.test(p.Tipo || "") || /-F$/i.test(p.Identificador);
-
     const semis = matches.filter(isSemi).sort((a, b) => a.Identificador.localeCompare(b.Identificador));
     const terceiro = matches.filter(isDT).sort((a, b) => a.Identificador.localeCompare(b.Identificador));
     const final = matches.filter(isFinal).sort((a, b) => a.Identificador.localeCompare(b.Identificador));
@@ -183,16 +184,17 @@ function renderMmMatches(container, matches, golsMap) {
     const section = (titulo, games) => {
         if (!games.length) return "";
         const lines = games.map(p => {
-            const s = splitScorers(p, golsMap[p.Identificador] || []);
-            const g1 = Number.isFinite(+p.GolsTime1) ? +p.GolsTime1 : "–";
-            const g2 = Number.isFinite(+p.GolsTime2) ? +p.GolsTime2 : "–";
-            const pens = p.FoiProsPenaltis
+            const isPlaceholder = !!p.isPlaceholder;
+            const s = isPlaceholder ? { A: [], B: [] } : splitScorers(p, golsMap[p.Identificador] || []);
+            const g1 = isPlaceholder ? "" : (Number.isFinite(+p.GolsTime1) ? +p.GolsTime1 : "–");
+            const g2 = isPlaceholder ? "" : (Number.isFinite(+p.GolsTime2) ? +p.GolsTime2 : "–");
+            const pens = (!isPlaceholder && p.FoiProsPenaltis)
                 ? `<div class="pen-box">
               <span class="ga">( ${p.PenaltisTime1 ?? 0} )</span><span class="sep">×</span><span class="gb">( ${p.PenaltisTime2 ?? 0} )</span>
           </div>`
                 : "";
             return `
-        <div class="match-line-fancy cardish ${p.FoiProsPenaltis ? 'has-pens' : ''}">
+        <div class="match-line-fancy cardish ${(!isPlaceholder && p.FoiProsPenaltis) ? 'has-pens' : ''}">
           <div class="dot dot-a">${teamDot(p.Time1)}</div>
            <div class="score-fancy">
              <div class="score-line">
@@ -202,8 +204,8 @@ function renderMmMatches(container, matches, golsMap) {
            </div>
           <div class="dot dot-b">${teamDot(p.Time2)}</div>
 
-          <div class="scorers-left">${s.A.join(", ") || "&nbsp;"}</div>
-          <div class="scorers-right">${s.B.join(", ") || "&nbsp;"}</div>
+          <div class="scorers-left">${isPlaceholder ? "&nbsp;" : (s.A.join(", ") || "&nbsp;")}</div>
+          <div class="scorers-right">${isPlaceholder ? "&nbsp;" : (s.B.join(", ") || "&nbsp;")}</div>
         </div>
       `;
         }).join("");
@@ -252,6 +254,133 @@ function renderDayPodium(container, podium) {
     </div>`).join("");
 }
 
+/* ---------- Modo normal x Data Final ---------- */
+function setFinalMode(isFinalDay) {
+    const resumo = qs("#resumo-dia");
+    if (!resumo) return;
+
+    // liga/desliga a classe no container
+    if (isFinalDay) {
+        resumo.classList.add("final-mode");
+    } else {
+        resumo.classList.remove("final-mode");
+    }
+
+    // muda o texto do título
+    const titulo = qs("#resumo-dia .lista-titulo");
+    if (titulo) {
+        titulo.textContent = isFinalDay ? "Data Final" : "Resumo da Data";
+    }
+}
+
+/* Render da Data Final (dia 5) */
+async function renderFinalDay(n) {
+    const { MM } = await loadPartidasDia(n);
+
+    // mesmas regras de classificação usadas no renderMmMatches
+    const isDT = p =>
+        /(disputa.*terceiro|terce|3º|3o|3°)/i.test(p.Tipo || "") ||
+        /-DT$/i.test(p.Identificador || "");
+
+    const isFinal = p =>
+        /(final)$/i.test(p.Tipo || "") ||
+        /-F$/i.test(p.Identificador || "");
+
+    let finalMatch   = (MM || []).find(isFinal);
+    let terceiroMatch = (MM || []).find(isDT);
+
+    // placeholders se não tiver no banco
+    if (!finalMatch) {
+        finalMatch = {
+            Identificador: `D${n}-F-placeholder`,
+            Time1: "Preto",
+            Time2: "Branco",
+            GolsTime1: null,
+            GolsTime2: null,
+            FoiProsPenaltis: false,
+            PenaltisTime1: null,
+            PenaltisTime2: null,
+            isPlaceholder: true
+        };
+    }
+
+    if (!terceiroMatch) {
+        terceiroMatch = {
+            Identificador: `D${n}-DT-placeholder`,
+            Time1: "Amarelo",
+            Time2: "Azul",
+            GolsTime1: null,
+            GolsTime2: null,
+            FoiProsPenaltis: false,
+            PenaltisTime1: null,
+            PenaltisTime2: null,
+            isPlaceholder: true
+        };
+    }
+
+    // só busca gols pros jogos que existem de verdade
+    const realIds = [finalMatch, terceiroMatch]
+        .filter(p => !p.isPlaceholder)
+        .map(p => p.Identificador);
+
+    const golsMap = await loadGolsByPartida(realIds);
+
+    // limpa FG e pódio (não usamos na Data Final)
+    const fgMatches = qs("#fg-matches");
+    const fgTable   = qs("#fg-table");
+    const podium    = qs("#day-podium");
+
+    if (fgMatches) fgMatches.innerHTML = "";
+    if (fgTable)   fgTable.innerHTML   = "";
+    if (podium)    podium.innerHTML    = "";
+
+    const container = qs("#mm-matches");
+    if (!container) return;
+
+    const buildSection = (p, titulo) => {
+        const isPlaceholder = !!p.isPlaceholder;
+        const s = isPlaceholder
+            ? { A: [], B: [] }
+            : splitScorers(p, golsMap[p.Identificador] || []);
+
+        const g1 = isPlaceholder
+            ? ""
+            : (Number.isFinite(+p.GolsTime1) ? +p.GolsTime1 : "–");
+        const g2 = isPlaceholder
+            ? ""
+            : (Number.isFinite(+p.GolsTime2) ? +p.GolsTime2 : "–");
+
+        const pens = (!isPlaceholder && p.FoiProsPenaltis)
+            ? `<div class="pen-box">
+                 <span class="pen-label">Pênaltis</span>
+                 <span class="pen-val">${p.PenaltisTime1 ?? 0}<span class="sep">×</span>${p.PenaltisTime2 ?? 0}</span>
+               </div>`
+            : "";
+
+        return `
+        <div class="section">
+            <div class="section-title big">${titulo}</div>
+            <div class="match-line-fancy cardish ${(!isPlaceholder && p.FoiProsPenaltis) ? "has-pens" : ""}">
+                <div class="dot dot-a">${teamDot(p.Time1)}</div>
+                <div class="score-fancy">
+                    <div class="score-line">
+                        <span class="ga">${g1}</span><span class="sep">×</span><span class="gb">${g2}</span>
+                    </div>
+                    ${pens}
+                </div>
+                <div class="dot dot-b">${teamDot(p.Time2)}</div>
+
+                <div class="scorers-left">${isPlaceholder ? "&nbsp;" : (s.A.join(", ") || "&nbsp;")}</div>
+                <div class="scorers-right">${isPlaceholder ? "&nbsp;" : (s.B.join(", ") || "&nbsp;")}</div>
+            </div>
+        </div>`;
+    };
+
+    container.innerHTML =
+        buildSection(finalMatch, "Final") +
+        buildSection(terceiroMatch, "Disputa de 3º");
+}
+
 /* ---------- Orquestração ---------- */
 async function renderResumoDia(n) {
     const { FG, MM } = await loadPartidasDia(n);
@@ -269,9 +398,18 @@ async function renderResumoDia(n) {
 
 /* ---------- INIT ---------- */
 async function renderDay(n) {
-    await renderResumoDia(n);
+    if (n === 5) {
+        // Data Final: só Final + Disputa de 3º
+        setFinalMode(true);
+        await renderFinalDay(n);
+    } else {
+        // Demais dias: comportamento normal
+        setFinalMode(false);
+        await renderResumoDia(n);
+    }
     setQueryParam(n);
 }
+
 async function init() {
     const days = await getAvailableDays();
     const fromURL = parseQueryParams().n;
