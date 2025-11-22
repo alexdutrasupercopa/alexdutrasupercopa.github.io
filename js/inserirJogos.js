@@ -495,102 +495,228 @@ async function dataJaRealizada(dia){
     return false;
   }
 }
-async function onCarregar(){
-  const dia = +$('#dia').value;
-  if(!dia){ toast('Informe o número do dia'); return; }
 
-  // 1) Se Data.Concluida = true, bloqueia tudo
-  if(await dataJaRealizada(dia)){
-    setHint(`A Data ${dia} está concluída. Não é possível editar.`, 'error');
-    $('#lista').innerHTML = '';
-    $('#btn-salvar-fg').disabled = true;
-    return;
-  }
+async function prepararDia5(){
+	// limpa estado de FG
+	ST.confrontos = [];
+	ST.golsPorPartida = {};
+	ST.partidasSalvas.clear();
+	ST.partidasExistentesById.clear();
+	ST.partidasExistentesByIdx.clear();
 
-  // 2) Data não concluída: pode haver partidas parciais
-  ST.dia = dia;
+	// Mensagem no lugar da Fase de Grupos
+	const listaFG = document.getElementById('lista');
+	listaFG.innerHTML = `
+		<div class="match-card line-disabled">
+			<div class="teams">
+				<div class="small">
+					<strong>Data 5</strong> não possui fase de grupos — apenas
+					Disputa de 3º lugar e Final.
+				</div>
+			</div>
+		</div>
+	`;
+	document.getElementById('btn-salvar-fg').disabled = true;
+	setHint('Data 5: apenas Disputa de 3º (Amarelo x Azul) e Final (Preto x Branco).');
 
-  // carrega times (ignora FA)
-  const { data, error } = await db.from('Time').select('*');
-  if(error){ console.error(error); toast('Erro ao buscar times'); return; }
-  const times = (data||[]).map(normalizeTimeRow).filter(t=>t.nome && t.nome.toLowerCase()!=='fa');
-  if(times.length < 4){ toast('Preciso de 4 times (excluindo FA)'); return; }
+	// garante que a lista de mata-mata será refeita
+	document.getElementById('lista-mata').innerHTML = '';
 
-  ST.times = times.slice(0,4);
-  ST.confrontos = gerar6Confrontos(ST.times);
-  ST.golsPorPartida = {};
-  ST.partidasSalvas.clear();
+	// pega times já carregados em ST.times e garante que os nomes existam
+	const find = (nm) => {
+		const lower = nm.toLowerCase();
+		return ST.times.find(t => t.nome.toLowerCase() === lower) || {
+			nome: nm,
+			cor: getTeamColor(nm)
+		};
+	};
 
-  // 3) Busca partidas já existentes do dia (parciais)
-  await carregarPartidasExistentes(dia);
+	const amarelo = find('Amarelo');
+	const azul    = find('Azul');
+	const preto   = find('Preto');
+	const branco  = find('Branco');
 
-  // 4) Renderiza lista já refletindo o que está salvo
-  renderLista();
+	// apenas dois jogos: disputa de 3º e final
+	ST.mata = [
+		{
+			key: 'DT',
+			label: 'Disputa do Terceiro',
+			tipo: 'DisputaDeTerceiro',
+			t1: amarelo.nome,
+			t2: azul.nome,
+			fp: false,
+			g1: 0,
+			g2: 0
+		},
+		{
+			key: 'F',
+			label: 'Final',
+			tipo: 'Final',
+			t1: preto.nome,
+			t2: branco.nome,
+			fp: false,
+			g1: 0,
+			g2: 0
+		}
+	];
 
-  // habilita salvar FG apenas quando todas 6 estiverem salvas
-  const qtdSalvas = ST.partidasExistentesByIdx.size;
-  $('#btn-salvar-fg').disabled = (qtdSalvas !== 6);
-  setHint(qtdSalvas > 0
-    ? `Encontradas ${qtdSalvas}/6 partidas já registradas para a Data ${dia}.`
-    : `Gerados ${ST.confrontos.length} confrontos`);
+	ST.golsMata = {};
+	ST.penMata = {};
+	ST.mataBloqueado = new Set();
+	ST.partidasMataSalvas = new Set();
 
-    // --- inicializa mata-mata ---
-  ST.mata = MATA_CFG.map(x => ({ ...x, t1:null, t2:null, fp:false, g1:0, g2:0 }));
-  ST.golsMata = {}; ST.penMata = {}; ST.partidasMataSalvas.clear();
+	// carrega partidas já existentes (D5-DT e D5-F) para travar se já tiver no banco
+	const ids = ST.mata.map(m => idMata(ST.dia, m.key));
+	const { data: partidasMM, error: errMM } = await db
+		.from('Partida')
+		.select('Identificador, GolsTime1, GolsTime2')
+		.in('Identificador', ids);
 
-  // bloqueia linhas que já existirem no banco
-  { // -- dentro de onCarregar(), substitui o bloco antigo --
-    const mkId = k => `D${ST.dia}-${k}`;
+	if (errMM) {
+		console.warn('Erro ao carregar partidas do mata-mata (dia 5):', errMM);
+	}
 
-    // 1) buscar partidas existentes do mata-mata para este dia
-    const ids = ["S1","S2","DT","F"].map(mkId);
-    const { data: partidasMM, error: errMM } = await db
-      .from('Partida')
-      .select('Identificador, Time1, Time2, GolsTime1, GolsTime2')
-      .in('Identificador', ids);
+	const byId = new Map((partidasMM || []).map(p => [p.Identificador, p]));
+	ST.mata.forEach(m => {
+		const pid = idMata(ST.dia, m.key);
+		const p = byId.get(pid);
+		if (p) {
+			m.g1 = p.GolsTime1 ?? 0;
+			m.g2 = p.GolsTime2 ?? 0;
+			ST.mataBloqueado.add(pid);
+			ST.partidasMataSalvas.add(pid);
+		}
+	});
 
-    if (errMM) console.warn('Erro ao carregar partidas do mata-mata:', errMM);
+	renderMata();
 
-    // 2) preparar estruturas de bloqueio/contagem
-    ST.mataBloqueado = new Set();
-    ST.partidasMataSalvas = ST.partidasMataSalvas || new Set();
-    const byId = new Map((partidasMM || []).map(p => [p.Identificador, p]));
+	// habilita/desabilita botão "Salvar Mata-Mata"
+	const { data: mm } = await db
+		.from('MataMata')
+		.select('Numero')
+		.eq('Numero', ST.dia)
+		.limit(1);
 
-    // 3) preencher placar/time nas linhas que já existem e marcar como salvas/bloqueadas
-    ST.mata.forEach(m => {
-      const pid = mkId(m.key);
-      const p = byId.get(pid);
-      if (p) {
-        m.t1 = p.Time1 ?? m.t1 ?? null;
-        m.t2 = p.Time2 ?? m.t2 ?? null;
-        m.g1 = p.GolsTime1 ?? 0;
-        m.g2 = p.GolsTime2 ?? 0;
-        ST.mataBloqueado.add(pid);
-        ST.partidasMataSalvas.add(pid);
-      }
-    });
-
-    // 4) renderizar com as linhas bloqueadas e placares corretos
-    renderMata();
-
-    // 5) habilitar/desabilitar "Salvar Mata-Mata"
-    const { data: mm } = await db
-      .from('MataMata')
-      .select('Numero')
-      .eq('Numero', ST.dia)
-      .limit(1);
-
-    const existeMM = !!(mm && mm.length);
-    const quatroSalvas = ST.partidasMataSalvas.size === 4;
-    (document.getElementById('btn-salvar-mm') || $('#btn-salvar-mm')).disabled = existeMM || !quatroSalvas;
-  }
-  // desabilita o botão final caso já exista registro MataMata
-  {
-    const { data } = await db.from('MataMata').select('Numero').eq('Numero', ST.dia).limit(1);
-    document.getElementById('btn-salvar-mm').disabled = !!(data && data.length);
-  }
-
+	const existeMM = !!(mm && mm.length);
+	const esperado = ST.mata.length; // 2 jogos no dia 5
+	document.getElementById('btn-salvar-mm').disabled =
+		existeMM || (ST.partidasMataSalvas.size !== esperado);
 }
+
+async function onCarregar(){
+	const dia = +$('#dia').value;
+	if(!dia){
+		toast('Informe o número do dia');
+		return;
+	}
+
+	// 1) Se Data.Concluida = true, bloqueia tudo
+	if(await dataJaRealizada(dia)){
+		setHint(`A Data ${dia} está concluída. Não é possível editar.`, 'error');
+		$('#lista').innerHTML = '';
+		$('#lista-mata').innerHTML = '';
+		$('#btn-salvar-fg').disabled  = true;
+		$('#btn-salvar-mm').disabled  = true;
+		return;
+	}
+
+	ST.dia = dia;
+
+	// 2) Carrega times (ignora FA)
+	const { data, error } = await db.from('Time').select('*');
+	if(error){
+		console.error(error);
+		toast('Erro ao buscar times');
+		return;
+	}
+	const times = (data || [])
+		.map(normalizeTimeRow)
+		.filter(t => t.nome && t.nome.toLowerCase() !== 'fa');
+
+	if(times.length < 4){
+		toast('Preciso de 4 times (excluindo FA)');
+		return;
+	}
+
+	ST.times = times.slice(0, 4);
+
+	// --- CASO ESPECIAL: DIA 5 (somente disputa de 3º e final) ---
+	if (dia === 5){
+		await prepararDia5();
+		return;
+	}
+
+	// ---------- Fluxo normal (demais dias) ----------
+
+	// Gera os 6 confrontos da fase de grupos
+	ST.confrontos = gerar6Confrontos(ST.times);
+	ST.golsPorPartida = {};
+	ST.partidasSalvas.clear();
+
+	// busca partidas de FG já existentes
+	await carregarPartidasExistentes(dia);
+
+	// renderiza FG
+	renderLista();
+
+	const qtdSalvas = ST.partidasExistentesByIdx.size;
+	$('#btn-salvar-fg').disabled = (qtdSalvas !== 6);
+	setHint(
+		qtdSalvas > 0
+			? `Encontradas ${qtdSalvas}/6 partidas já registradas para a Data ${dia}.`
+			: `Gerados ${ST.confrontos.length} confrontos`
+	);
+
+	// --- inicializa mata-mata padrão (4 jogos: S1, S2, DT, F) ---
+	ST.mata = MATA_CFG.map(x => ({ ...x, t1: null, t2: null, fp: false, g1: 0, g2: 0 }));
+	ST.golsMata = {};
+	ST.penMata = {};
+	ST.partidasMataSalvas = new Set();
+	ST.mataBloqueado = new Set();
+
+	// carrega partidas de mata-mata já existentes
+	const mkId = k => `D${ST.dia}-${k}`;
+	const ids = ['S1','S2','DT','F'].map(mkId);
+
+	const { data: partidasMM, error: errMM } = await db
+		.from('Partida')
+		.select('Identificador, Time1, Time2, GolsTime1, GolsTime2')
+		.in('Identificador', ids);
+
+	if (errMM){
+		console.warn('Erro ao carregar partidas do mata-mata:', errMM);
+	}
+
+	const byId = new Map((partidasMM || []).map(p => [p.Identificador, p]));
+
+	ST.mata.forEach(m => {
+		const pid = mkId(m.key);
+		const p = byId.get(pid);
+		if (p){
+			m.t1 = p.Time1 ?? m.t1 ?? null;
+			m.t2 = p.Time2 ?? m.t2 ?? null;
+			m.g1 = p.GolsTime1 ?? 0;
+			m.g2 = p.GolsTime2 ?? 0;
+			ST.mataBloqueado.add(pid);
+			ST.partidasMataSalvas.add(pid);
+		}
+	});
+
+	renderMata();
+
+	// habilita/desabilita botão "Salvar Mata-Mata"
+	const { data: mm } = await db
+		.from('MataMata')
+		.select('Numero')
+		.eq('Numero', ST.dia)
+		.limit(1);
+
+	const existeMM = !!(mm && mm.length);
+	const esperado = ST.mata.length; // 4 jogos nos dias normais
+	document.getElementById('btn-salvar-mm').disabled =
+		existeMM || (ST.partidasMataSalvas.size !== esperado);
+}
+
 
 
 // ------------- Persistência -------------
@@ -775,18 +901,33 @@ async function salvarPartidaMata(mKey){
 }
 
 async function salvarMataMata(){
-  if(ST.partidasMataSalvas.size !== 4){ toast('Salve as 4 partidas antes'); return; }
-  const rec = {
-    Numero: ST.dia, Data: ST.dia,
-    Semi1: idMata(ST.dia,'S1'),
-    Semi2: idMata(ST.dia,'S2'),
-    DisputaDeTerceiro: idMata(ST.dia,'DT'),
-    Final: idMata(ST.dia,'F')
-  };
-  const { error } = await db.from('MataMata').insert(rec);
-  if(error){ console.error(error); toast('Erro ao salvar Mata-Mata'); return; }
-  toast('Mata-Mata salvo!');
+	const totalEsperado = ST.mata ? ST.mata.length : 4;
+
+	if(ST.partidasMataSalvas.size !== totalEsperado){
+		toast(`Salve as ${totalEsperado} partidas antes`);
+		return;
+	}
+
+	const tem = (key) => ST.mata && ST.mata.some(m => m.key === key);
+
+	const rec = {
+		Numero: ST.dia,
+		Data: ST.dia,
+		Semi1: tem('S1') ? idMata(ST.dia, 'S1') : null,
+		Semi2: tem('S2') ? idMata(ST.dia, 'S2') : null,
+		DisputaDeTerceiro: tem('DT') ? idMata(ST.dia, 'DT') : null,
+		Final: tem('F') ? idMata(ST.dia, 'F') : null
+	};
+
+	const { error } = await db.from('MataMata').insert(rec);
+	if(error){
+		console.error(error);
+		toast('Erro ao salvar Mata-Mata');
+		return;
+	}
+	toast('Mata-Mata salvo!');
 }
+
 
 
 // ------------- Boot -------------
